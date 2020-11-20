@@ -5,14 +5,17 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Color extends Model
+class Supertype extends Model
 {
     use HasFactory;
 
     protected $guarded = ['id'];
+    protected $hidden = ['pivot', 'created_at', 'updated_at'];
+
+    use HasFactory;
 
     public function cards()
     {
-      return $this->belongsToMany('App\Models\Card', 'card_colors');
+      return $this->belongsToMany('App\Models\Card', 'card_supertypes');
     }
 }

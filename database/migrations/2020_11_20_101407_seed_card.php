@@ -5,7 +5,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 use App\Models\Card;
 
-class SeedCardTest extends Migration
+class SeedCard extends Migration
 {
     /**
      * Run the migrations.

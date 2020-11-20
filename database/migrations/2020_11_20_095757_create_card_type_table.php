@@ -13,7 +13,7 @@ class CreateCardTypeTable extends Migration
      */
     public function up()
     {
-        Schema::create('card_type', function (Blueprint $table) {
+        Schema::create('card_types', function (Blueprint $table) {
             $table->id();
             $table->integer('card_id');
             $table->integer('type_id');
@@ -28,6 +28,6 @@ class CreateCardTypeTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('card_type');
+        Schema::dropIfExists('card_types');
     }
 }

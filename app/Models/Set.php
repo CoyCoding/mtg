@@ -12,6 +12,6 @@ class Set extends Model
     protected $guarded = ['id'];
 
     public function cards(){
-      return $this->belongsToMany('App\Models\Set', 'card_set');
+      return $this->belongsToMany('App\Models\Set', 'card_sets');
     }
 }

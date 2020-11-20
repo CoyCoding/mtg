@@ -13,7 +13,7 @@ class CreateCardColorTable extends Migration
      */
     public function up()
     {
-        Schema::create('card_color', function (Blueprint $table) {
+        Schema::create('card_colors', function (Blueprint $table) {
             $table->id();
             $table->integer('card_id');
             $table->integer('color_id');
@@ -28,6 +28,6 @@ class CreateCardColorTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('card_color');
+        Schema::dropIfExists('card_colors');
     }
 }

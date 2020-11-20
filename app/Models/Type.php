@@ -8,11 +8,12 @@ use Illuminate\Database\Eloquent\Model;
 class Type extends Model
 {
     protected $guarded = ['id'];
+    protected $hidden = ['pivot', 'created_at', 'updated_at'];
 
     use HasFactory;
 
     public function cards()
     {
-      return $this->belongsToMany('App\Models\Card', 'card_type');
+      return $this->belongsToMany('App\Models\Card', 'card_types');
     }
 }

@@ -3,9 +3,8 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-use App\Models\Color;
 
-class SeedColor extends Migration
+class CreateCardSubtypeTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,18 +13,12 @@ class SeedColor extends Migration
      */
     public function up()
     {
-        $colors = [
-          ['name' => 'White'],
-          ['name' => 'Black'],
-          ['name' => 'Green'],
-          ['name' => 'Blue'],
-          ['name' => 'Red']
-        ];
-
-        foreach( $colors as $color)
-        {
-          Color::create($color);
-        }
+        Schema::create('card_subtype', function (Blueprint $table) {
+            $table->id();
+            $table->integer('card_id');
+            $table->integer('subtype_id');
+            $table->timestamps();
+        });
     }
 
     /**
@@ -35,6 +28,6 @@ class SeedColor extends Migration
      */
     public function down()
     {
-        Color::truncate();
+        Schema::dropIfExists('card_subtype');
     }
 }
