@@ -14,7 +14,7 @@ class SeedCard extends Migration
      */
     public function up()
     {
-        Card::create(['name'=>'test'])->types()->attach([1]);
+        //Card::create(['name'=>'test'])->types()->attach([1]);
     }
 
     /**
