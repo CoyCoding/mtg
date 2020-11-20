@@ -3,8 +3,9 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use App\Models\Card;
 
-class CreateCardColorsTable extends Migration
+class SeedCardTest extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +14,7 @@ class CreateCardColorsTable extends Migration
      */
     public function up()
     {
-        Schema::create('card_colors', function (Blueprint $table) {
-            $table->id();
-            $table->integer('card_id');
-            $table->integer('color_id');
-            $table->timestamps();
-        });
+        Card::create(['name'=>'test'])->types()->attach([1]);
     }
 
     /**
@@ -28,6 +24,6 @@ class CreateCardColorsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('card_colors');
+        //
     }
 }

@@ -5,7 +5,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 use App\Models\Type;
 
-class SeedTypes extends Migration
+class SeedType extends Migration
 {
     /**
      * Run the migrations.

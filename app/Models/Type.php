@@ -10,4 +10,9 @@ class Type extends Model
     protected $guarded = ['id'];
 
     use HasFactory;
+
+    public function cards()
+    {
+      return $this->belongsToMany('App\Models\Card', 'card_type');
+    }
 }
