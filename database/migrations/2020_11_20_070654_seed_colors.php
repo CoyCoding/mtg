@@ -3,8 +3,9 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use App\Models\Color;
 
-class CreateCardColorsTable extends Migration
+class SeedColors extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +14,18 @@ class CreateCardColorsTable extends Migration
      */
     public function up()
     {
-        Schema::create('card__colors', function (Blueprint $table) {
-            $table->id();
-            $table->integer('card_id');
-            $table->integer('color_id');
-            $table->timestamps();
-        });
+        $colors = [
+          ['name' => 'White'],
+          ['name' => 'Black'],
+          ['name' => 'Green'],
+          ['name' => 'Blue'],
+          ['name' => 'Red']
+        ];
+
+        foreach( $colors as $color)
+        {
+          Color::create($color);
+        }
     }
 
     /**
@@ -28,6 +35,6 @@ class CreateCardColorsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('card__colors');
+        Color::truncate();
     }
 }
