@@ -16,16 +16,17 @@ class CreateCardTable extends Migration
         Schema::create('cards', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            // $table->string('mana_cost');
-            // $table->string('type_text');
-            // $table->integer('converted_mana_cost');
-            // $table->integer('rarity_id');
-            // $table->text('text');
-            // $table->string('artist');
-            // $table->integer('power');
-            // $table->integer('toughness');
-            // $table->string('layout');
-            // $table->string('image_url');
+            $table->string('mana_cost');
+            $table->string('type_text');
+            $table->integer('converted_mana_cost');
+            $table->integer('rarity_id')->references('id')->on('rarities')
+        ->onDelete('cascade');
+            $table->text('text');
+            $table->string('artist');
+            $table->integer('power');
+            $table->integer('toughness');
+            $table->string('layout');
+            $table->string('image_url');
             $table->timestamps();
         });
     }
