@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateTypeTable extends Migration
+class CreateCardSetTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,10 @@ class CreateTypeTable extends Migration
      */
     public function up()
     {
-        Schema::create('types', function (Blueprint $table) {
+        Schema::create('card_sets', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->integer('card_id');
+            $table->integer('set_id');
             $table->timestamps();
         });
     }
@@ -27,6 +28,6 @@ class CreateTypeTable extends Migration
      */
     public function down()
     {
-        //Schema::dropIfExists('types');
+        Schema::dropIfExists('card_set');
     }
 }

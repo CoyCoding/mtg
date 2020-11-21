@@ -23,8 +23,8 @@ class CreateCardTable extends Migration
         ->onDelete('cascade');
             $table->text('text');
             $table->string('artist');
-            $table->integer('power');
-            $table->integer('toughness');
+            $table->integer('power')->nullable();
+            $table->integer('toughness')->nullable();
             $table->string('layout');
             $table->string('image_url');
             $table->timestamps();

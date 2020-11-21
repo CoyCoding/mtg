@@ -10,8 +10,8 @@ class Card extends Model
     use HasFactory;
 
     protected $guarded = ['id'];
-    protected $hidden = ['types->id'];
-    protected $with = ['colors','subtypes', 'types', 'supertypes'];
+    protected $hidden = [];
+    protected $with = ['colors','subtypes', 'types', 'supertypes', 'sets', 'rarity'];
 
     public function colors(){
       return $this->belongsToMany('App\Models\Color', 'card_colors');
@@ -71,4 +71,6 @@ class Card extends Model
           return $query->whereIn('name', $nameArr);
         });
     }
+
+
 }

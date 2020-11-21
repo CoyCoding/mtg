@@ -31,14 +31,14 @@ Artisan::command('attach', function () {
 })->purpose('Display an inspiring quote');
 
 Artisan::command('getcard', function () {
-    $card = Card::where('id', 2)->first();
+    $card = Card::get();
     $this->comment($card);
 })->purpose('Display an inspiring quote');
 
 //card where has
 Artisan::command('getcardwith', function () {
-    $card = Card::where('id', '1')->hasSubtypes(['adventure'])->get();
-    $this->comment($card);
+    $card = Card::where('id', '4')->hasSubtypes(['adventure'])->get();
+    $this->comment(!$card);
 })->purpose('Display an inspiring quote');
 
 Artisan::command('createwith', function () {
