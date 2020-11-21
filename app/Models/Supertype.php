@@ -4,8 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\NameOnlyModel;
 
-class Supertype extends Model
+class Supertype extends NameOnlyModel
 {
     use HasFactory;
 

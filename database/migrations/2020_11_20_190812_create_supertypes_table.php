@@ -27,6 +27,6 @@ class CreateSupertypesTable extends Migration
      */
     public function down()
     {
-        //Schema::dropIfExists('supertypes');
+        Schema::dropIfExists('supertypes');
     }
 }

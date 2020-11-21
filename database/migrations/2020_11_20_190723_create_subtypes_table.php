@@ -27,6 +27,6 @@ class CreateSubtypesTable extends Migration
      */
     public function down()
     {
-        //Schema::dropIfExists('subtypes');
+        Schema::dropIfExists('subtypes');
     }
 }

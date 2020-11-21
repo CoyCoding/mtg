@@ -27,6 +27,6 @@ class CreateRaritiesTable extends Migration
      */
     public function down()
     {
-        //Schema::dropIfExists('rarities');
+        Schema::dropIfExists('rarities');
     }
 }

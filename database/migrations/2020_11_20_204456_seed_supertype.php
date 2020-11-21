@@ -37,6 +37,6 @@ class SeedSupertype extends Migration
      */
     public function down()
     {
-        //
+        Supertype::truncate();
     }
 }

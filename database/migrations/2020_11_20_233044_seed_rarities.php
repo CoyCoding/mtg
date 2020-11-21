@@ -34,6 +34,6 @@ class SeedRarities extends Migration
      */
     public function down()
     {
-        //
+        Rarity::truncate();
     }
 }

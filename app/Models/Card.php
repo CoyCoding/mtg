@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Exception;
 
 class Card extends Model
 {
@@ -12,6 +13,49 @@ class Card extends Model
     protected $guarded = ['id'];
     protected $hidden = [];
     protected $with = ['colors','subtypes', 'types', 'supertypes', 'sets', 'rarity'];
+
+    public static function CreateFromArray($res){
+        // Find Relationship Ids
+        $rarity = Rarity::findIdFromNameOrCreate($res['rarity']);
+        $colorIds = Color::findIdsFromNamesOrCreate($res['colors']);
+        $typeIds = Type::findIdsFromNamesOrCreate($res['types']);
+        $subtypeIds = Subtype::findIdsFromNamesOrCreate($res['subtypes']);
+        $supertypeIds = Supertype::findIdsFromNamesOrCreate($res['supertypes']);
+        $setIds = Set::findIdsFromNamesOrCreate($res['printings']);
+
+        //
+        // There are duplicate cards
+        // Most I saw are missing images so this will compile them into one
+        //
+        $card = self::where('name', $res['name'])->first();
+        
+        if($card){
+          $card->image_url = $res['imageUrl'] ?? $card->image_url;
+          $card->save();
+        }else{
+          $card = self::Create([
+            'name' => $res['name'] ?? '',
+            'mana_cost' => $res['manaCost'] ?? '{0}',
+            'type_text' => $res['type'] ?? '',
+            'converted_mana_cost' => $res['cmc'] ?? 0,
+            'rarity_id' => $rarity,
+            'text' => $res['text'] ?? '',
+            'artist' => $res['artist'] ?? '',
+            'power' => $res['power'] ?? '',
+            'toughness' => $res['toughness'] ?? '',
+            'layout' => $res['layout'] ?? '',
+            'image_url' => $res['imageUrl'] ?? ''
+          ]);
+        }
+
+        $card->sets()->sync($setIds);
+        $card->supertypes()->sync($supertypeIds);
+        $card->subtypes()->sync($subtypeIds);
+        $card->types()->sync($typeIds);
+        $card->colors()->sync($colorIds);
+
+      return $card;
+    }
 
     public function colors(){
       return $this->belongsToMany('App\Models\Color', 'card_colors');
@@ -71,6 +115,5 @@ class Card extends Model
           return $query->whereIn('name', $nameArr);
         });
     }
-
 
 }

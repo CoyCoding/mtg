@@ -56,6 +56,6 @@ class SeedType extends Migration
      */
     public function down()
     {
-        //
+        Type::truncate();
     }
 }

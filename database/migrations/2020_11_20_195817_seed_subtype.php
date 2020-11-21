@@ -449,6 +449,6 @@ class SeedSubtype extends Migration
      */
     public function down()
     {
-        //
+        Subtype::truncate();
     }
 }

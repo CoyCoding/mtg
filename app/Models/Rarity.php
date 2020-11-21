@@ -4,8 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\NameOnlyModel;
 
-class Rarity extends Model
+class Rarity extends NameOnlyModel
 {
   use HasFactory;
 
@@ -16,15 +17,4 @@ class Rarity extends Model
       return $this->hasMany('App\Models\Cards');
   }
 
-  public static function findOrCreate($name){
-    $rarity = self::where('name', $name)->first();
-
-    if(!$rarity){
-      $rarity = self::Create([
-        'name' => $name,
-      ]);
-    }
-
-    return $rarity;
-  }
 }
