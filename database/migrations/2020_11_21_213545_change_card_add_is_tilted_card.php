@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class ChangeCardAddFlipedCardId extends Migration
+class ChangeCardAddIsTiltedCard extends Migration
 {
     /**
      * Run the migrations.
@@ -14,7 +14,7 @@ class ChangeCardAddFlipedCardId extends Migration
     public function up()
     {
       Schema::table('cards', function (Blueprint $table) {
-        $table->integer('flipcard_id')->references('id')->on('cards')->nullable();
+        $table->boolean('tilted')->default(false);
       });
     }
 
@@ -25,6 +25,8 @@ class ChangeCardAddFlipedCardId extends Migration
      */
     public function down()
     {
-        //
+      Schema::table('cards', function (Blueprint $table) {
+        $table->dropColumn('tilted');
+      });
     }
 }

@@ -11,7 +11,7 @@ class Card extends Model
     use HasFactory;
 
     protected $guarded = ['id'];
-    protected $hidden = [];
+    protected $hidden = ['flipcard_id', 'rarity_id'];
     protected $with = ['colors','subtypes', 'types', 'supertypes', 'sets', 'rarity'];
 
     public static function CreateFromArray($res){
@@ -28,7 +28,7 @@ class Card extends Model
         // Most I saw are missing images so this will compile them into one
         //
         $card = self::where('name', $res['name'])->first();
-        
+
         if($card){
           $card->image_url = $res['imageUrl'] ?? $card->image_url;
           $card->save();
@@ -47,7 +47,7 @@ class Card extends Model
             'image_url' => $res['imageUrl'] ?? ''
           ]);
         }
-
+        $card->fliped()->sync([]);
         $card->sets()->sync($setIds);
         $card->supertypes()->sync($supertypeIds);
         $card->subtypes()->sync($subtypeIds);
@@ -79,6 +79,10 @@ class Card extends Model
 
     public function rarity(){
       return $this->belongsTo('App\Models\Rarity');
+    }
+
+    public function flipcard(){
+      return $this->hasOne('App\Models\Card', 'flipcard_id');
     }
 
     // returns query with selected subtype names

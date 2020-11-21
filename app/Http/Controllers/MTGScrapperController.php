@@ -16,8 +16,6 @@ class MTGScrapperController extends Controller
 {
 
   public function index(){
-      $cards = Http::get('https://api.magicthegathering.io/v1/cards?page=60')->json()['cards'][0];
-      Card::CreateFromArray($cards);
-
+    
   }
 }

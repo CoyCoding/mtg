@@ -44,15 +44,32 @@ Artisan::command('detach', function () {
 })->purpose('Display an inspiring quote');
 //
 Artisan::command('getcard', function () {
-    $card = Card::where('name', 'test')->first();
+    $card = Card::first();
     $this->comment($card);
 })->purpose('Display an inspiring quote');
 
 // //card where has
-// Artisan::command('getcardwith', function () {
-//     $card = Card::where('id', '4')->hasSubtypes(['adventure'])->get();
-//     $this->comment(!$card);
-// })->purpose('Display an inspiring quote');
+Artisan::command('flip', function () {
+    $card1 = Card::find(2367);
+    $card2 = Card::find(2368);
+    $card1->flipcard()->save($card2);
+    $card2->flipcard()->save($card1);
+    $this->comment($card1);
+})->purpose('Display an inspiring quote');
+
+Artisan::command('tilt', function () {
+    $nottilted = [2290, 2302, 2310, 2320, 2330, 2368, 2382, 2406,
+2413, 2422, 2433, 2441, 2443, 2474, 2476, 2524, 2535, 2538, 2554, 2558, 2565, 2580,2605, 2607, 2627];
+    foreach ($nottilted as $tilt){
+      Card::find($tilt-1)->update(['tilted' => true]);
+      $card1 = Card::find($tilt-1);
+      $card2 = Card::find($tilt);
+      $card1->flipcard()->save($card2);
+      $card2->flipcard()->save($card1);
+    }
+    $this->comment('all tilted');
+})->purpose('Display an inspiring quote');
+
 //
 // Artisan::command('createwith', function () {
 //     $card = Card::create(['name' => 'test2']);
