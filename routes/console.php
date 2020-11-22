@@ -45,8 +45,7 @@ Artisan::command('detach', function () {
 
 // Get a card
 Artisan::command('getcard', function () {
-    $card = Card::first();
-    $this->comment($card);
+    $card = Card::get();
 })->purpose('Display an inspiring quote');
 
 // attach two flip cards
@@ -60,9 +59,10 @@ Artisan::command('flip', function () {
 
 // set tilt and attach two flip cards
 Artisan::command('tilt', function () {
-    $cards = Card::hasAllColors(['white','black'])->get();
+    DB::enableQueryLog();
+    $cards = Card::onlyHasColors(['white','black'])->get();
+    $this->comment(Card::onlyHasColors(['white','black'])->toSql());
     $this->comment(count($cards));
-
 
     // foreach ($cards as $card){
     //   // $card->mana_cost = '';

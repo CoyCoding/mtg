@@ -107,13 +107,22 @@ class Card extends Model
     }
 
     // returns query for all cards that have any of the selected colors
+    //
+    // ex. inupt [blue,black]
+    // return blue-black, blue, and black.
+    //
     public function scopeHasColors($q, $nameArr, $boolean = 'and', $not = false){
         return $q->whereHas('colors', function ($query) use($nameArr, $boolean, $not){
           $query->whereIn('name', $nameArr, $boolean, $not);
         });
     }
 
-    // returns query for all cards that have all of the selected colors
+    // returns query for all cards that contain all of the selected colors
+    //
+    // This query will include those that have other colors as as well
+    // ex. inupt [blue,black]
+    // return blue-black, blue-black-red, blue-black-white ect.
+    //
     public function scopeHasAllColors($q, $nameArr, $boolean = 'and', $not = false){
         foreach($nameArr as $color){
           $q->whereHas('colors', function ($query) use($color, $boolean, $not){
@@ -121,6 +130,23 @@ class Card extends Model
           });
         }
         return $q;
+    }
+
+
+    public function scopeOnlyHasColors($q, $colors){
+      // Filters out all cards with any chosen color
+      //Color::get();
+      // $q->whereDoesntHave('colors', function($query){
+      //   $query->whereIn('name', ['green','red','blue']);
+      // });
+      //
+      // //remaining colors selected
+      // foreach($colors as $color){
+      //   $q->whereHas('colors', function ($query) use($color){
+      //     $query->where('name', $color);
+      //   });
+      // }
+      return $q;
     }
 
     // returns query with selected set names
