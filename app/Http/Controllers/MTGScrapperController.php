@@ -14,8 +14,7 @@ use App\Models\Set;
 
 class MTGScrapperController extends Controller
 {
-
   public function index(){
-    
+
   }
 }

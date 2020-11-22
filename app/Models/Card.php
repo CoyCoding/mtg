@@ -35,7 +35,7 @@ class Card extends Model
         }else{
           $card = self::Create([
             'name' => $res['name'] ?? '',
-            'mana_cost' => $res['manaCost'] ?? '{0}',
+            'mana_cost' => $res['manaCost'] ?? '',
             'type_text' => $res['type'] ?? '',
             'converted_mana_cost' => $res['cmc'] ?? 0,
             'rarity_id' => $rarity,
@@ -86,37 +86,47 @@ class Card extends Model
     }
 
     // returns query with selected subtype names
-    public function scopeHasSubtypes($q, $nameArr){
-        return $q->whereHas('subtypes', function ($query) use($nameArr){
-          return $query->whereIn('name', $nameArr);
+    public function scopeHasSubtypes($q, $nameArr, $boolean = 'and', $not = false){
+        return $q->whereHas('subtypes', function ($query) use($nameArr, $boolean, $not){
+          $query->whereIn('name', $nameArr, $boolean, $not);
         });
     }
 
     // returns query with selected type names
-    public function scopeHasTypes($q, $nameArr){
-        return $q->whereHas('types', function ($query) use($nameArr){
-          return $query->whereIn('name', $nameArr);
+    public function scopeHasTypes($q, $nameArr, $boolean = 'and', $not = false){
+        return $q->whereHas('types', function ($query) use($nameArr, $boolean, $not){
+          $query->whereIn('name', $nameArr);
         });
     }
 
     // returns query with selected supertype names
-    public function scopeHasSupertypes($q, $nameArr){
-        return $q->whereHas('supertypes', function ($query) use($nameArr){
-          return $query->whereIn('name', $nameArr);
+    public function scopeHasSupertypes($q, $nameArr, $boolean = 'and', $not = false){
+        return $q->whereHas('supertypes', function ($query) use($nameArr, $boolean, $not){
+          $query->whereIn('name', $nameArr);
         });
     }
 
-    // returns query with selected color names
-    public function scopeHasColors($q, $nameArr){
-        return $q->whereHas('colors', function ($query) use($nameArr){
-          return $query->whereIn('name', $nameArr);
+    // returns query for all cards that have any of the selected colors
+    public function scopeHasColors($q, $nameArr, $boolean = 'and', $not = false){
+        return $q->whereHas('colors', function ($query) use($nameArr, $boolean, $not){
+          $query->whereIn('name', $nameArr, $boolean, $not);
         });
+    }
+
+    // returns query for all cards that have all of the selected colors
+    public function scopeHasAllColors($q, $nameArr, $boolean = 'and', $not = false){
+        foreach($nameArr as $color){
+          $q->whereHas('colors', function ($query) use($color, $boolean, $not){
+            $query->where('name', $color);
+          });
+        }
+        return $q;
     }
 
     // returns query with selected set names
-    public function scopeHasSets($q, $nameArr){
-        return $q->whereHas('sets', function ($query) use($nameArr){
-          return $query->whereIn('name', $nameArr);
+    public function scopeHasSets($q, $nameArr, $boolean = 'and', $not = false){
+        return $q->whereHas('sets', function ($query) use($nameArr, $boolean, $not){
+          return $query->whereIn('name', $nameArr, $boolean, $not);
         });
     }
 

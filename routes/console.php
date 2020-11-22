@@ -42,42 +42,38 @@ Artisan::command('detach', function () {
     $this->comment($card->delete());
   }
 })->purpose('Display an inspiring quote');
-//
+
+// Get a card
 Artisan::command('getcard', function () {
     $card = Card::first();
     $this->comment($card);
 })->purpose('Display an inspiring quote');
 
-// //card where has
+// attach two flip cards
 Artisan::command('flip', function () {
-    $card1 = Card::find(2367);
-    $card2 = Card::find(2368);
-    $card1->flipcard()->save($card2);
-    $card2->flipcard()->save($card1);
-    $this->comment($card1);
+    // $card1 = Card::find(2367);
+    // $card2 = Card::find(2368);
+    // $card1->flipcard()->save($card2);
+    // $card2->flipcard()->save($card1);
+    // $this->comment($card1);
 })->purpose('Display an inspiring quote');
 
+// set tilt and attach two flip cards
 Artisan::command('tilt', function () {
-    $nottilted = [2290, 2302, 2310, 2320, 2330, 2368, 2382, 2406,
-2413, 2422, 2433, 2441, 2443, 2474, 2476, 2524, 2535, 2538, 2554, 2558, 2565, 2580,2605, 2607, 2627];
-    foreach ($nottilted as $tilt){
-      Card::find($tilt-1)->update(['tilted' => true]);
-      $card1 = Card::find($tilt-1);
-      $card2 = Card::find($tilt);
-      $card1->flipcard()->save($card2);
-      $card2->flipcard()->save($card1);
-    }
-    $this->comment('all tilted');
+    $cards = Card::hasAllColors(['white','black'])->get();
+    $this->comment(count($cards));
+
+
+    // foreach ($cards as $card){
+    //   // $card->mana_cost = '';
+    //   // $card->save();
+    //   // $card1 = Card::find($card->id);
+    //   // $card2 = Card::find(($card->id+1));
+    //   // $card1->flipcard()->save($card2);
+    //   // $card2->flipcard()->save($card1);
+    // }
 })->purpose('Display an inspiring quote');
 
-//
-// Artisan::command('createwith', function () {
-//     $card = Card::create(['name' => 'test2']);
-//     $this->comment($card->supertypes()->attach(6));
-//     $this->comment($card->subtypes()->attach(5));
-//     $this->comment($card->types()->attach(5));
-//     $this->comment($card->colors()->attach(5));
-//     $this->comment($card);
-// })->purpose('Display an inspiring quote');
-//
-//
+Artisan::command('combine', function () {
+
+})->purpose('Display an inspiring quote');
