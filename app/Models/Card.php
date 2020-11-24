@@ -161,8 +161,13 @@ class Card extends Model
         });
     }
 
-    //
     public function format(){
-      dd($this);
+      $this->setRelation('colors', $this->colors->pluck('name'));
+      $this->setRelation('subtypes', $this->subtypes->pluck('name'));
+      $this->setRelation('types', $this->types->pluck('name'));
+      $this->setRelation('supertypes', $this->supertypes->pluck('name'));
+      $this->setRelation('sets', $this->sets->pluck('name'));
+      $this->setRelation('sets', $this->rarity->pluck('name'));
+      return $this;
     }
 }
