@@ -86,21 +86,21 @@ class Card extends Model
     }
 
     // returns query with selected subtype names
-    public function scopeHasSubtypes($q, $nameArr){
+    public function scopeHasSubtypes($q, $nameArr = []){
         return $q->whereHas('subtypes', function ($query) use($nameArr){
           $query->whereIn('name', $nameArr, $boolean, $not);
         });
     }
 
     // returns query with selected type names
-    public function scopeHasTypes($q, $nameArr){
+    public function scopeHasTypes($q, $nameArr = []){
         return $q->whereHas('types', function ($query) use($nameArr){
           $query->whereIn('name', $nameArr);
         });
     }
 
     // returns query with selected supertype names
-    public function scopeHasSupertypes($q, $nameArr){
+    public function scopeHasSupertypes($q, $nameArr = []){
         return $q->whereHas('supertypes', function ($query) use($nameArr){
           $query->whereIn('name', $nameArr);
         });
@@ -111,7 +111,7 @@ class Card extends Model
     // ex. inupt [blue,black]
     // return blue-black, blue, and black.
     //
-    public function scopeBothColors($q, $nameArr){
+    public function scopeBothColors($q, $nameArr =[]){
         return $q->whereHas('colors', function ($query) use($nameArr){
           $query->whereIn('name', $nameArr);
         });
@@ -123,7 +123,7 @@ class Card extends Model
     // ex. inupt [blue,black]
     // return blue-black, blue-black-red, blue-black-white ect.
     //
-    public function scopeContainsColors($q, $nameArr){
+    public function scopeContainsColors($q, $nameArr =[]){
         foreach($nameArr as $color){
           $q->whereHas('colors', function ($query) use($color){
             $query->where('name', $color);
@@ -133,7 +133,7 @@ class Card extends Model
     }
 
     // Retuns query-Cards that only have selected colors
-    public function scopeOnlyColors($q, $colorsToFind){
+    public function scopeOnlyColors($q, $colorsToFind = []){
       $colors = Color::get()->pluck('name')->toArray();
       $colorsToRemove = array_udiff($colors, $colorsToFind,'strcasecmp');
 
@@ -155,10 +155,14 @@ class Card extends Model
     }
 
     // returns query with selected set names
-    public function scopeHasSets($q, $nameArr){
+    public function scopeHasSets($q, $nameArr = []){
         return $q->whereHas('sets', function ($query) use($nameArr){
           return $query->whereIn('name', $nameArr);
         });
     }
 
+    //
+    public function format(){
+      dd($this);
+    }
 }

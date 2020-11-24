@@ -15,7 +15,8 @@ use App\Models\Set;
 class MTGScrapperController extends Controller
 {
   public function index(){
-    $cards = Card::onlyColors(['white','black'])->hasTypes(['creature'])->first();
-    return response()->json($cards, 200, [], JSON_UNESCAPED_SLASHES|JSON_PRETTY_PRINT);
+    $cards = Card::onlyColors(['white','black'])->hasTypes(['artifact'])->get();
+    $cards->format();
+    //return response()->json($cards->format(), 200, [], JSON_UNESCAPED_SLASHES|JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT);
   }
 }
