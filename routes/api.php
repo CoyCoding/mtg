@@ -15,5 +15,9 @@ use App\Models\Card;
 */
 
 Route::get('/get', function (Request $request) {
-    return response()->json(Card::take(2)->get(), 200, [], JSON_UNESCAPED_SLASHES|JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT);
+  $queries = $request->query();
+  $cards = Card::take(2)->get()->map(function($card) {
+    return $card->format();
+  });
+  return $queries;
 });

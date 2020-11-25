@@ -19338,39 +19338,65 @@ module.exports = function(module) {
 /*!*****************************!*\
   !*** ./resources/js/app.js ***!
   \*****************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/*! no exports provided */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _queryBuilder_queryStringBuilder__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./queryBuilder/queryStringBuilder */ "./resources/js/queryBuilder/queryStringBuilder.js");
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
 
 __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 
-var form = {
-  colors: {
-    white: false,
-    black: false,
-    blue: false,
-    red: false,
-    green: false
-  }
-};
 
-var sendRequest = function sendRequest() {
-  return axios.get('http://localhost:8000/api/get').then(function (res) {
-    console.log(res.data);
+
+var sendRequest = function sendRequest(query) {
+  return axios.get("http://localhost:8000/api/get?".concat(query)).then(function (res) {
+    console.log(res);
     appendToDOM(res.data);
   })["catch"](function (e) {
     console.log(e);
   });
 };
 
-var checkBoxClicked = function checkBoxClicked(e) {
-  var selection = e.target.name;
-  form.colors[selection] = !form.colors[selection];
-  console.log(form.colors[selection]);
+var checkBoxClicked = function checkBoxClicked(e) {};
+
+var findChecked = function findChecked(tag) {
+  var checked = _toConsumableArray(document.querySelectorAll("input[name=\"".concat(tag, "\"]"))).filter(function (input) {
+    return input.checked;
+  });
+
+  return checked;
 };
 
 var submitForm = function submitForm(e) {
   e.preventDefault();
-  sendRequest();
+  var queries = {};
+  var searchCondition = findChecked('conditional')[0].value;
+  var colors = findChecked('colors').map(function (input) {
+    return input.value;
+  });
+
+  if (searchCondition) {
+    queries['searchCondition'] = searchCondition;
+  }
+
+  if (colors.length) {
+    queries['colors'] = colors;
+  }
+
+  var query = Object(_queryBuilder_queryStringBuilder__WEBPACK_IMPORTED_MODULE_0__["default"])(queries);
+  sendRequest(query);
 };
 
 var appendToDOM = function appendToDOM(cards) {
@@ -19382,7 +19408,7 @@ var appendToDOM = function appendToDOM(cards) {
 
 var createCardDiv = function createCardDiv(card) {
   var div = document.createElement('div');
-  div.textContent = JSON.stringify(card);
+  div.textContent = card.name;
   return div;
 };
 
@@ -19434,6 +19460,41 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 //     cluster: process.env.MIX_PUSHER_APP_CLUSTER,
 //     forceTLS: true
 // });
+
+/***/ }),
+
+/***/ "./resources/js/queryBuilder/queryStringBuilder.js":
+/*!*********************************************************!*\
+  !*** ./resources/js/queryBuilder/queryStringBuilder.js ***!
+  \*********************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+var queryStringBuilder = function queryStringBuilder(queryObj) {
+  var esc = encodeURIComponent;
+  return Object.keys(queryObj).map(function (key) {
+    if (Array.isArray(queryObj[key])) {
+      console.log(queryObj[key]);
+      var arrayQs = '';
+
+      for (var i = 0; i < queryObj[key].length; i++) {
+        if (i + 1 === queryObj[key].length) {
+          arrayQs += "".concat(key, "[]=").concat(queryObj[key][i]);
+        } else {
+          arrayQs += "".concat(key, "[]=").concat(queryObj[key][i], "&");
+        }
+      }
+
+      return arrayQs;
+    } else {
+      return esc(key) + '=' + esc(queryObj[key]);
+    }
+  }).join('&');
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (queryStringBuilder);
 
 /***/ }),
 

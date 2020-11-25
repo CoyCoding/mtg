@@ -1,19 +1,10 @@
 require('./bootstrap');
+import queryStringBuilder from './queryBuilder/queryStringBuilder';
 
-const form = {
-  colors: {
-    white: false,
-    black: false,
-    blue: false,
-    red: false,
-    green: false,
-  },
-}
-
-const sendRequest = () => {
-  return axios.get('http://localhost:8000/api/get')
+const sendRequest = (query) => {
+  return axios.get(`http://localhost:8000/api/get?${query}`)
   .then(res => {
-    console.log(res.data);
+    console.log(res);
     appendToDOM(res.data);
   }).catch(e => {
     console.log(e);
@@ -21,14 +12,33 @@ const sendRequest = () => {
 }
 
 const checkBoxClicked = (e) => {
-  const selection = e.target.name;
-  form.colors[selection] = !form.colors[selection];
-  console.log(form.colors[selection]);
+
+}
+
+const findChecked = (tag) => {
+  const checked = [...document.querySelectorAll(`input[name="${tag}"]`)]
+  .filter((input) => {
+    return input.checked;
+  });
+  return checked;
 }
 
 const submitForm = (e) => {
   e.preventDefault();
-  sendRequest();
+  const queries = {};
+  const searchCondition = findChecked('conditional')[0].value;
+  const colors = findChecked('colors').map((input) => input.value);
+
+  if(searchCondition){
+    queries['searchCondition'] = searchCondition;
+  }
+
+  if(colors.length){
+    queries['colors'] = colors;
+  }
+
+  const query = queryStringBuilder(queries);
+  sendRequest(query);
 }
 
 const appendToDOM = (cards) => {
@@ -40,7 +50,7 @@ const appendToDOM = (cards) => {
 
 const createCardDiv = (card) =>{
   const div = document.createElement('div');
-  div.textContent = JSON.stringify(card);
+  div.textContent = card.name;
   return div;
 }
 
@@ -52,6 +62,8 @@ document.onreadystatechange = function () {
      const r = document.getElementById('red');
      const g = document.getElementById('green');
      const u = document.getElementById('blue');
+
+
      submitBtn.addEventListener("click", submitForm);
      w.addEventListener("click", checkBoxClicked);
      b.addEventListener("click", checkBoxClicked);

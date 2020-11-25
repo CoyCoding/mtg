@@ -11,7 +11,7 @@ class Card extends Model
     use HasFactory;
 
     protected $guarded = ['id'];
-    protected $hidden = ['flipcard_id', 'rarity_id'];
+    protected $hidden = ['flipcard_id', 'rarity_id', 'updated_at', 'created_at'];
     protected $with = ['colors','subtypes', 'types', 'supertypes', 'sets', 'rarity'];
 
     public static function CreateFromArray($res){
@@ -78,7 +78,7 @@ class Card extends Model
     }
 
     public function rarity(){
-      return $this->belongsTo('App\Models\Rarity');
+      return $this->belongsTo('App\Models\Rarity', 'rarity_id');
     }
 
     public function flipcard(){
@@ -111,7 +111,7 @@ class Card extends Model
     // ex. inupt [blue,black]
     // return blue-black, blue, and black.
     //
-    public function scopeBothColors($q, $nameArr =[]){
+    private function scopeBothColors($q, $nameArr =[]){
         return $q->whereHas('colors', function ($query) use($nameArr){
           $query->whereIn('name', $nameArr);
         });
@@ -123,7 +123,7 @@ class Card extends Model
     // ex. inupt [blue,black]
     // return blue-black, blue-black-red, blue-black-white ect.
     //
-    public function scopeContainsColors($q, $nameArr =[]){
+    private function scopeContainsColors($q, $nameArr =[]){
         foreach($nameArr as $color){
           $q->whereHas('colors', function ($query) use($color){
             $query->where('name', $color);
@@ -133,7 +133,7 @@ class Card extends Model
     }
 
     // Retuns query-Cards that only have selected colors
-    public function scopeOnlyColors($q, $colorsToFind = []){
+    private function scopeOnlyColors($q, $colorsToFind = []){
       $colors = Color::get()->pluck('name')->toArray();
       $colorsToRemove = array_udiff($colors, $colorsToFind,'strcasecmp');
 
@@ -167,7 +167,9 @@ class Card extends Model
       $this->setRelation('types', $this->types->pluck('name'));
       $this->setRelation('supertypes', $this->supertypes->pluck('name'));
       $this->setRelation('sets', $this->sets->pluck('name'));
-      $this->setRelation('sets', $this->rarity->pluck('name'));
+      $this->attributes['rarity'] = $this->rarity->attributes['name'];
+      $this->unsetRelation('rarity');
+
       return $this;
     }
 }
