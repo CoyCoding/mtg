@@ -111,10 +111,26 @@ class Card extends Model
     // ex. inupt [blue,black]
     // return blue-black, blue, and black.
     //
-    private function scopeBothColors($q, $nameArr =[]){
-        return $q->whereHas('colors', function ($query) use($nameArr){
-          $query->whereIn('name', $nameArr);
-        });
+    protected function scopeBothColors($q, $colorsToFind =[]){
+      $colors = Color::get()->pluck('name')->toArray();
+      $colorsToRemove = array_udiff($colors, $colorsToFind,'strcasecmp');
+
+      // Filters out ALL cards if it has chosen color
+      $q->whereHas('colors', function($query) use($colorsToFind){
+        $query->whereIn('name',  $colorsToFind);
+      });
+      $q->whereDoesntHave('colors', function($query) use($colorsToRemove){
+        $query->whereIn('name', $colorsToRemove);
+      });
+      // Must be foreach not whereIn
+      // Otherwise we get both colors seprate
+      // ex. [red-white] returns only red-php_strip_whitespace
+      // foreach($colorsToFind as $color){
+      //   $q->whereHas('colors', function ($query) use($color){
+      //     $query->where('name', $color);
+      //   });
+      // }
+      return $q;
     }
 
     // returns query for cards that contain all of the selected colors
@@ -123,17 +139,17 @@ class Card extends Model
     // ex. inupt [blue,black]
     // return blue-black, blue-black-red, blue-black-white ect.
     //
-    private function scopeContainsColors($q, $nameArr =[]){
-        foreach($nameArr as $color){
-          $q->whereHas('colors', function ($query) use($color){
-            $query->where('name', $color);
-          });
-        }
-        return $q;
+    protected function scopeContainsColors($q, $nameArr =[]){
+      foreach($nameArr as $color){
+        $q->whereHas('colors', function ($query) use($color){
+          $query->where('name', $color);
+        });
+      }
+      return $q;
     }
 
     // Retuns query-Cards that only have selected colors
-    private function scopeOnlyColors($q, $colorsToFind = []){
+    protected function scopeOnlyColors($q, $colorsToFind = []){
       $colors = Color::get()->pluck('name')->toArray();
       $colorsToRemove = array_udiff($colors, $colorsToFind,'strcasecmp');
 
@@ -159,6 +175,18 @@ class Card extends Model
         return $q->whereHas('sets', function ($query) use($nameArr){
           return $query->whereIn('name', $nameArr);
         });
+    }
+
+    public function scopeFilterColorsBy($q, $nameArr = [], $condition = 'or'){
+      if($condition == 'and'){
+        return $q->containsColors($nameArr);
+      } else if($condition == 'only'){
+        return $q->onlyColors($nameArr);
+      }else if($condition == 'or'){
+        return $q->bothColors($nameArr);
+      } else {
+        return $q;
+      }
     }
 
     public function format(){

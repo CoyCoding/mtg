@@ -15,9 +15,10 @@ use App\Models\Card;
 */
 
 Route::get('/get', function (Request $request) {
-  $queries = $request->query();
-  $cards = Card::take(2)->get()->map(function($card) {
+  $colors = $request->query('colors') ?? [];
+  $searchCondition = $request->query('searchCondition') ?? '';
+  $cards = Card::filterColorsBy($colors, $searchCondition)->get()->map(function($card) {
     return $card->format();
   });
-  return $queries;
+  return $cards;
 });
