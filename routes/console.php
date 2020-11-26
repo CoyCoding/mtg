@@ -4,6 +4,7 @@ use Illuminate\Foundation\Inspiring;
 use Illuminate\Support\Facades\Artisan;
 use App\Models\Card;
 use Illuminate\Support\Facades\Http;
+use App\Helpers\QueryStringParser;
 /*
 |--------------------------------------------------------------------------
 | Console Routes
@@ -59,14 +60,15 @@ Artisan::command('flip', function () {
 
 // set tilt and attach two flip cards
 Artisan::command('tilt', function () {
-    // foreach ($cards as $card){
-    //   // $card->mana_cost = '';
-    //   // $card->save();
-    //   // $card1 = Card::find($card->id);
-    //   // $card2 = Card::find(($card->id+1));
-    //   // $card1->flipcard()->save($card2);
-    //   // $card2->flipcard()->save($card1);
-    // }
+  $query = QueryStringParser::Card(['colors' => ['red']]);
+  return $query;
+
+  return Card::filterColorsBy($query->colors, $query->searchCondition)
+    ->hasColumnId('rarity', $query->rarity)->hasColumnId('type', $query->type)
+    ->hasColumnId('subtype', $query->subtype)->hasColumnId('supertype', $query->supertype)
+    ->get()->map(function($card) {
+      return $card->format();
+  });
 })->purpose('Display an inspiring quote');
 
 Artisan::command('combine', function () {
