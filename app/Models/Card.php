@@ -182,13 +182,6 @@ class Card extends Model
       }
     }
 
-    public function scopeFilterByRarity($q, $rarityId){
-      if(!$rarity) return $q;
-      return $q->whereHas('rarity', function ($query) use($rarity){
-        $query->where('id', $rarity);
-      });
-    }
-
     public function scopeHasColumnId($q, $column, $typeId){
       if(!$typeId) return $q;
       return $q->whereHas($column, function ($query) use($typeId){
