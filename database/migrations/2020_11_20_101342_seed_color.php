@@ -19,7 +19,8 @@ class SeedColor extends Migration
         ['name' => 'Black'],
         ['name' => 'Green'],
         ['name' => 'Blue'],
-        ['name' => 'Red']
+        ['name' => 'Red'],
+        ['name' => 'Colorless']
       ];
 
       foreach( $colors as $color)

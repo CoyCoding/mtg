@@ -18,7 +18,7 @@ class SeedRarities extends Migration
         ["name" =>"Common"],
         ["name" =>"Uncommon"],
         ["name" =>"Rare"],
-        ["name" =>"Mythic Rare"]
+        ["name" =>"Mythic"]
       ];
 
       foreach($rs as $rarity)

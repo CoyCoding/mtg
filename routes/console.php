@@ -59,10 +59,6 @@ Artisan::command('flip', function () {
 
 // set tilt and attach two flip cards
 Artisan::command('tilt', function () {
-    $cards = Card::onlyColors(['white','black'])->hasTypes(['creature'])->first();
-    $cards->types = $cards->types->pluck('name');
-    $this->comment(json_encode($cards));
-
     // foreach ($cards as $card){
     //   // $card->mana_cost = '';
     //   // $card->save();

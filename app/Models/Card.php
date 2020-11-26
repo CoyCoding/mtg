@@ -115,21 +115,14 @@ class Card extends Model
       $colors = Color::get()->pluck('name')->toArray();
       $colorsToRemove = array_udiff($colors, $colorsToFind,'strcasecmp');
 
-      // Filters out ALL cards if it has chosen color
       $q->whereHas('colors', function($query) use($colorsToFind){
         $query->whereIn('name',  $colorsToFind);
       });
+
       $q->whereDoesntHave('colors', function($query) use($colorsToRemove){
         $query->whereIn('name', $colorsToRemove);
       });
-      // Must be foreach not whereIn
-      // Otherwise we get both colors seprate
-      // ex. [red-white] returns only red-php_strip_whitespace
-      // foreach($colorsToFind as $color){
-      //   $q->whereHas('colors', function ($query) use($color){
-      //     $query->where('name', $color);
-      //   });
-      // }
+
       return $q;
     }
 

@@ -10,22 +10,22 @@
         <form>
 
           <input type="checkbox" id="white" name="colors" value="white">
-          <label for="white">white</label><br>
-
+          <label for="colors">white</label><br>
 
           <input type="checkbox" id="black" name="colors" value="black">
-          <label for="black">black</label><br>
-
+          <label for="colors">black</label><br>
 
           <input type="checkbox" id="red" name="colors" value="red">
-          <label for="red">red</label><br>
+          <label for="colors">red</label><br>
 
           <input type="checkbox" id="green" name="colors" value="green">
-          <label for="green">green</label><br>
-
+          <label for="colors">green</label><br>
 
           <input type="checkbox" id="blue" name="colors" value="blue">
-          <label for="blue">blue</label><br>
+          <label for="colors">blue</label><br>
+
+          <input type="checkbox" id="colorless" name="colors" value="colorless">
+          <label for="colors">colorless</label><br>
 
           <input type="radio" id="only" name="conditional" value="only" checked>
           <label for="only">only</label><br>
