@@ -15,6 +15,11 @@ use App\Models\Set;
 class MTGScrapperController extends Controller
 {
   public function index(){
-    return view('welcome');
+    $data['rarities'] = Rarity::get();
+    $data['supertypes'] = Supertype::get();
+    $data['subtypes'] = Subtype::get();
+    $data['types'] = Type::get();
+    $data['colors'] = Color::get();
+    return view('welcome')->with(['data' => $data]);
   }
 }

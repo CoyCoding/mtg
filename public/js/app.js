@@ -2114,7 +2114,7 @@ process.umask = function() { return 0; };
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _queryBuilder_queryStringBuilder__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./queryBuilder/queryStringBuilder */ "./resources/js/queryBuilder/queryStringBuilder.js");
+/* harmony import */ var _buildQueryString_buildQueryString__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./buildQueryString/buildQueryString */ "./resources/js/buildQueryString/buildQueryString.js");
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
 
 function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
@@ -2150,24 +2150,24 @@ var findChecked = function findChecked(tag) {
   return checked;
 };
 
+var findSelectedDropdown = function findSelectedDropdown(dropdown) {
+  return $(dropdown).find('.selected').data('value');
+};
+
 var submitForm = function submitForm(e) {
   e.preventDefault();
   var queries = {};
-  var searchCondition = findChecked('conditional')[0].value;
-  var colors = findChecked('colors').map(function (input) {
+  queries['searchCondition'] = findChecked('conditional')[0].value;
+  queries['colors'] = findChecked('colors').map(function (input) {
     return input.value;
   });
-
-  if (searchCondition) {
-    queries['searchCondition'] = searchCondition;
-  }
-
-  if (colors.length) {
-    queries['colors'] = colors;
-  }
-
-  var query = Object(_queryBuilder_queryStringBuilder__WEBPACK_IMPORTED_MODULE_0__["default"])(queries);
-  sendRequest(query);
+  queries['type'] = findSelectedDropdown('#types');
+  queries['supertype'] = findSelectedDropdown('#supertypes');
+  queries['subtype'] = findSelectedDropdown('#subtypes');
+  queries['rarity'] = findSelectedDropdown('#rarities');
+  console.log(findSelectedDropdown('#types'));
+  var query = Object(_buildQueryString_buildQueryString__WEBPACK_IMPORTED_MODULE_0__["default"])(queries);
+  console.log(query); //sendRequest(query);
 };
 
 var appendToDOM = function appendToDOM(cards) {
@@ -2186,18 +2186,15 @@ var createCardDiv = function createCardDiv(card) {
 document.onreadystatechange = function () {
   if (document.readyState == "complete") {
     var submitBtn = document.getElementById('submit');
-    var w = document.getElementById('white');
-    var b = document.getElementById('black');
-    var r = document.getElementById('red');
-    var g = document.getElementById('green');
-    var u = document.getElementById('blue');
+    colors.forEach(function (color) {
+      var colorCheckbox = document.getElementById(color.name);
+      colorCheckbox.addEventListener("click", checkBoxClicked);
+    });
     submitBtn.addEventListener("click", submitForm);
-    w.addEventListener("click", checkBoxClicked);
-    b.addEventListener("click", checkBoxClicked);
-    r.addEventListener("click", checkBoxClicked);
-    g.addEventListener("click", checkBoxClicked);
-    u.addEventListener("click", checkBoxClicked);
-    $('.ui.dropdown').dropdown();
+    $('.ui.dropdown').dropdown({
+      clearable: true,
+      forceSelection: false
+    });
     $('body').addClass('active');
   }
 };
@@ -2234,18 +2231,24 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 
 /***/ }),
 
-/***/ "./resources/js/queryBuilder/queryStringBuilder.js":
-/*!*********************************************************!*\
-  !*** ./resources/js/queryBuilder/queryStringBuilder.js ***!
-  \*********************************************************/
+/***/ "./resources/js/buildQueryString/buildQueryString.js":
+/*!***********************************************************!*\
+  !*** ./resources/js/buildQueryString/buildQueryString.js ***!
+  \***********************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-var queryStringBuilder = function queryStringBuilder(queryObj) {
+var buildQueryString = function buildQueryString(queryObj) {
   var esc = encodeURIComponent;
-  return Object.keys(queryObj).map(function (key) {
+  return Object.keys(queryObj).filter(function (key) {
+    if (Array.isArray(queryObj[key])) {
+      return queryObj[key].length;
+    }
+
+    return queryObj[key];
+  }).map(function (key) {
     if (Array.isArray(queryObj[key])) {
       console.log(queryObj[key]);
       var arrayQs = '';
@@ -2265,7 +2268,7 @@ var queryStringBuilder = function queryStringBuilder(queryObj) {
   }).join('&');
 };
 
-/* harmony default export */ __webpack_exports__["default"] = (queryStringBuilder);
+/* harmony default export */ __webpack_exports__["default"] = (buildQueryString);
 
 /***/ }),
 

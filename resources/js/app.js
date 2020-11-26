@@ -1,5 +1,5 @@
 require('./bootstrap');
-import queryStringBuilder from './queryBuilder/queryStringBuilder';
+import buildQueryString from './buildQueryString/buildQueryString';
 
 const sendRequest = (query) => {
   return axios.get(`http://localhost:8000/api/get?${query}`)
@@ -23,22 +23,25 @@ const findChecked = (tag) => {
   return checked;
 }
 
+const findSelectedDropdown = (dropdown) =>{
+  return $(dropdown).find('.selected').data('value');
+}
+
+
+
 const submitForm = (e) => {
   e.preventDefault();
   const queries = {};
-  const searchCondition = findChecked('conditional')[0].value;
-  const colors = findChecked('colors').map((input) => input.value);
-
-  if(searchCondition){
-    queries['searchCondition'] = searchCondition;
-  }
-
-  if(colors.length){
-    queries['colors'] = colors;
-  }
-
-  const query = queryStringBuilder(queries);
-  sendRequest(query);
+  queries['searchCondition'] = findChecked('conditional')[0].value;
+  queries['colors'] = findChecked('colors').map((input) => input.value);
+  queries['type'] = findSelectedDropdown('#types');
+  queries['supertype'] = findSelectedDropdown('#supertypes');
+  queries['subtype'] = findSelectedDropdown('#subtypes');
+  queries['rarity'] = findSelectedDropdown('#rarities');
+  console.log(findSelectedDropdown('#types'));
+  const query = buildQueryString(queries);
+  console.log(query);
+  //sendRequest(query);
 }
 
 const appendToDOM = (cards) => {
@@ -57,20 +60,19 @@ const createCardDiv = (card) =>{
 document.onreadystatechange = function () {
    if (document.readyState == "complete") {
      const submitBtn = document.getElementById('submit');
-     const w = document.getElementById('white');
-     const b = document.getElementById('black');
-     const r = document.getElementById('red');
-     const g = document.getElementById('green');
-     const u = document.getElementById('blue');
 
+     colors.forEach((color) => {
+       const colorCheckbox = document.getElementById(color.name);
+       colorCheckbox.addEventListener("click", checkBoxClicked);
+     });
 
      submitBtn.addEventListener("click", submitForm);
-     w.addEventListener("click", checkBoxClicked);
-     b.addEventListener("click", checkBoxClicked);
-     r.addEventListener("click", checkBoxClicked);
-     g.addEventListener("click", checkBoxClicked);
-     u.addEventListener("click", checkBoxClicked);
-     $('.ui.dropdown').dropdown();
+
+     $('.ui.dropdown').dropdown({
+       clearable: true,
+       forceSelection: false
+     });
+
      $('body').addClass('active');
   }
 

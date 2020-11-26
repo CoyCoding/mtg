@@ -1,7 +1,11 @@
-const queryStringBuilder = (queryObj) =>{
+const buildQueryString = (queryObj) =>{
   const esc = encodeURIComponent;
-  return Object.keys(queryObj)
-    .map((key) => {
+  return Object.keys(queryObj).filter((key) => {
+    if(Array.isArray(queryObj[key])){
+      return queryObj[key].length;
+    }
+    return queryObj[key];
+  }).map((key) => {
       if(Array.isArray(queryObj[key])){
         console.log(queryObj[key])
         let arrayQs = '';
@@ -19,4 +23,4 @@ const queryStringBuilder = (queryObj) =>{
     }).join('&');
 }
 
-export default queryStringBuilder;
+export default buildQueryString;
