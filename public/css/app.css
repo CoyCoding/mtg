@@ -1,0 +1,9 @@
+body.no-fouc {
+  opacity: 0;
+  transition: opacity 0s ease-in;
+}
+
+body.no-fouc.active {
+  opacity: 1;
+}
+

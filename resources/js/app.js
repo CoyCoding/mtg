@@ -70,7 +70,9 @@ document.onreadystatechange = function () {
      r.addEventListener("click", checkBoxClicked);
      g.addEventListener("click", checkBoxClicked);
      u.addEventListener("click", checkBoxClicked);
-
+     $('.ui.dropdown').dropdown();
+     $('body').addClass('active');
   }
+
 }
 
