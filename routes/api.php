@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Models\Card;
+use App\Helpers\QueryStringParser;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -14,11 +15,25 @@ use App\Models\Card;
 |
 */
 
+// Accepts QueryString with :
+//
+//  -colors array
+//  -rarity string
+//  -type string
+//  -subtype string
+//  -supertype string
+//  -searchCondition string
 Route::get('/get', function (Request $request) {
-  $colors = $request->query('colors') ?? [];
-  $searchCondition = $request->query('searchCondition') ?? '';
-  $cards = Card::filterColorsBy($colors, $searchCondition)->get()->map(function($card) {
-    return $card->format();
-  });
-  return $cards;
+  try{
+    QueryStringParser::Card($request->query());
+
+    return Card::filterColorsBy($colors, $searchCondition)
+      ->hasColumnId('rarity', $rarity)->hasColumnId('type', $type)
+      ->hasColumnId('subtype', $subtype)->hasColumnId('supertype', $supertype)
+      ->get()->map(function($card) {
+        return $card->format();
+    });
+  } catch(Exception $e) {
+    return $e;
+  }
 });

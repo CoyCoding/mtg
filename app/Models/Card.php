@@ -182,6 +182,20 @@ class Card extends Model
       }
     }
 
+    public function scopeFilterByRarity($q, $rarityId){
+      if(!$rarity) return $q;
+      return $q->whereHas('rarity', function ($query) use($rarity){
+        $query->where('id', $rarity);
+      });
+    }
+
+    public function scopeHasColumnId($q, $column, $typeId){
+      if(!$typeId) return $q;
+      return $q->whereHas($column, function ($query) use($typeId){
+        $query->where('id', $typeId);
+      });
+    }
+
     public function format(){
       $this->setRelation('colors', $this->colors->pluck('name'));
       $this->setRelation('subtypes', $this->subtypes->pluck('name'));

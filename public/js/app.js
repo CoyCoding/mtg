@@ -2164,10 +2164,10 @@ var submitForm = function submitForm(e) {
   queries['type'] = findSelectedDropdown('#types');
   queries['supertype'] = findSelectedDropdown('#supertypes');
   queries['subtype'] = findSelectedDropdown('#subtypes');
-  queries['rarity'] = findSelectedDropdown('#rarities');
-  console.log(findSelectedDropdown('#types'));
+  queries['rarity'] = findSelectedDropdown('#rarity');
   var query = Object(_buildQueryString_buildQueryString__WEBPACK_IMPORTED_MODULE_0__["default"])(queries);
-  console.log(query); //sendRequest(query);
+  console.log(query);
+  sendRequest(query);
 };
 
 var appendToDOM = function appendToDOM(cards) {

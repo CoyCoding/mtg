@@ -37,11 +37,10 @@ const submitForm = (e) => {
   queries['type'] = findSelectedDropdown('#types');
   queries['supertype'] = findSelectedDropdown('#supertypes');
   queries['subtype'] = findSelectedDropdown('#subtypes');
-  queries['rarity'] = findSelectedDropdown('#rarities');
-  console.log(findSelectedDropdown('#types'));
+  queries['rarity'] = findSelectedDropdown('#rarity');
   const query = buildQueryString(queries);
   console.log(query);
-  //sendRequest(query);
+  sendRequest(query);
 }
 
 const appendToDOM = (cards) => {
