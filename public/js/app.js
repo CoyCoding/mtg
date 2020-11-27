@@ -2105,23 +2105,16 @@ process.umask = function() { return 0; };
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _buildQueryString_buildQueryString__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./buildQueryString/buildQueryString */ "./resources/js/buildQueryString/buildQueryString.js");
 /* harmony import */ var _service_api__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./service/api */ "./resources/js/service/api.js");
-function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
-
-function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
-
-function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
-
-function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter); }
-
-function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
-
-function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
-
+/* harmony import */ var _form_form__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./form/form */ "./resources/js/form/form.js");
 __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 
 
 
+
 var cards;
+var currentQuery;
+var currPage = 0;
+var lastPage = Infinity;
 
 var clearDom = function clearDom(element) {
   element.html('');
@@ -2129,10 +2122,14 @@ var clearDom = function clearDom(element) {
 
 var submitForm = function submitForm(e) {
   e.preventDefault();
-  var filters = getSelectedfilters();
-  var query = Object(_buildQueryString_buildQueryString__WEBPACK_IMPORTED_MODULE_0__["default"])(filters);
-  Object(_service_api__WEBPACK_IMPORTED_MODULE_1__["default"])(query).then(function (data) {
-    appendToDOM(data.data);
+  $('#cards').empty();
+  var filters = Object(_form_form__WEBPACK_IMPORTED_MODULE_2__["default"])(currPage);
+  currentQuery = Object(_buildQueryString_buildQueryString__WEBPACK_IMPORTED_MODULE_0__["default"])(filters);
+  if (filters['page'] === lastPage) return;
+  Object(_service_api__WEBPACK_IMPORTED_MODULE_1__["default"])(currentQuery).then(function (res) {
+    currPage = res.data.current_page;
+    lastPage = res.data.last_page;
+    appendToDOM(res.data.data);
   })["catch"](function (e) {
     console.log(e);
   });
@@ -2140,12 +2137,11 @@ var submitForm = function submitForm(e) {
 
 var appendToDOM = function appendToDOM(cards) {
   var cardList = $('#cards');
-  cardList.empty();
 
   (function myLoop(i) {
     setTimeout(function () {
       cardList.append(createCardDiv(cards[i]));
-      if (++i !== cards.length - 1) myLoop(i);
+      if (++i < cards.length - 1) myLoop(i);
     }, 100);
   })(0);
 };
@@ -2156,11 +2152,7 @@ var createCardDiv = function createCardDiv(card) {
 
 document.onreadystatechange = function () {
   if (document.readyState == "complete") {
-    var submitBtn = document.getElementById('submit');
-    colors.forEach(function (color) {
-      var colorCheckbox = document.getElementById(color.name);
-    });
-    submitBtn.addEventListener("click", submitForm);
+    $('#submit').on('click', submitForm);
     $('.ui.dropdown').dropdown({
       clearable: true,
       forceSelection: false
@@ -2170,32 +2162,10 @@ document.onreadystatechange = function () {
       $('.sidebar').toggleClass('open');
     });
     $('body').addClass('active');
+    $('.card-wrap').on('scroll', function (e) {
+      console.log(e.target.scrollTop, e.target.offsetHeight, e.target.scrollHeight, e.target.scrollTop + e.target.offsetHeight);
+    });
   }
-};
-
-var findChecked = function findChecked(tag) {
-  var checked = _toConsumableArray(document.querySelectorAll("input[name=\"".concat(tag, "\"]"))).filter(function (input) {
-    return input.checked;
-  });
-
-  return checked;
-};
-
-var findSelectedDropdown = function findSelectedDropdown(dropdown) {
-  return $(dropdown).find('.selected.active').data('value');
-};
-
-var getSelectedfilters = function getSelectedfilters() {
-  var filters = {};
-  filters['searchCondition'] = findChecked('conditional')[0].value;
-  filters['colors'] = findChecked('colors').map(function (input) {
-    return input.value;
-  });
-  filters['type'] = findSelectedDropdown('#types');
-  filters['supertype'] = findSelectedDropdown('#supertypes');
-  filters['subtype'] = findSelectedDropdown('#subtypes');
-  filters['rarity'] = findSelectedDropdown('#rarity');
-  return filters;
 };
 
 /***/ }),
@@ -2268,6 +2238,57 @@ var buildQueryString = function buildQueryString(queryObj) {
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (buildQueryString);
+
+/***/ }),
+
+/***/ "./resources/js/form/form.js":
+/*!***********************************!*\
+  !*** ./resources/js/form/form.js ***!
+  \***********************************/
+/*! exports provided: getSelectedfilters, default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getSelectedfilters", function() { return getSelectedfilters; });
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+var findChecked = function findChecked(tag) {
+  var checked = _toConsumableArray(document.querySelectorAll("input[name=\"".concat(tag, "\"]"))).filter(function (input) {
+    return input.checked;
+  });
+
+  return checked;
+};
+
+var findSelectedDropdown = function findSelectedDropdown(dropdown) {
+  return $(dropdown).find('.selected.active').data('value');
+};
+
+var getSelectedfilters = function getSelectedfilters(currPage) {
+  var filters = {};
+  filters['page'] = currPage + 1;
+  filters['searchCondition'] = findChecked('conditional')[0].value;
+  filters['colors'] = findChecked('colors').map(function (input) {
+    return input.value;
+  });
+  filters['type'] = findSelectedDropdown('#types');
+  filters['supertype'] = findSelectedDropdown('#supertypes');
+  filters['subtype'] = findSelectedDropdown('#subtypes');
+  filters['rarity'] = findSelectedDropdown('#rarity');
+  return filters;
+};
+/* harmony default export */ __webpack_exports__["default"] = (getSelectedfilters);
 
 /***/ }),
 

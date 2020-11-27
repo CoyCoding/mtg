@@ -21,7 +21,7 @@
         <div class="fixed-card-display">
 
         </div>
-        <div class="card-display">
+        <div class="card-display" onscroll="(e)=>console.log(e)">
           <div class="card-wrap">
             <div id="cards">
 
