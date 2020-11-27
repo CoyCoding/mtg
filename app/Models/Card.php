@@ -185,7 +185,7 @@ class Card extends Model
     public function scopeHasColumnId($q, $column, $typeId){
       if(!$typeId) return $q;
       return $q->whereHas($column, function ($query) use($typeId){
-        $query->where('id', $typeId);
+        $query->where('name', $typeId);
       });
     }
 

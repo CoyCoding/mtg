@@ -1,0 +1,102 @@
+body{
+  min-height: 100vh;
+  line-height: 0;
+  &.no-fouc{
+    opacity: 0;
+    transition: opacity 0s ease-in;
+    &.active{
+      opacity: 1;
+    }
+  }
+}
+
+.sidebar{
+  position: fixed;
+  background: white;
+  height: 100%;
+  width: 300px;
+  transform: translateX(-355px);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 0 2px 0px black;
+  transition: transform 1s ease-in-out;
+  &.open{
+    transform: translateX(0px);
+  }
+}
+
+.body{
+  background: lightblue;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  .fixed-card-display{
+    max-width: 300px;
+    background: green;
+    width: 100%;
+  }
+
+  .card-display{
+    width: 100%;
+    .card-wrap{
+      overflow-y: scroll;
+      height: 100%;
+    }
+  }
+  #cards{
+    display: flex;
+    flex-wrap: wrap;
+    .magic-card{
+      color: white;
+      width: 20%;
+      line-height: 0;
+      min-width: 150px;
+      img{
+        border-style: none;
+        width: 100%;
+        height: auto;
+        padding: 10px;
+        border-radius: 17px;
+      }
+    }
+  }
+}
+
+.open-btn{
+  background: blue;
+  position: absolute;
+}
+
+.magic-card-inner {
+  position: relative;
+  width: 100%;
+  height: auto;
+  text-align: center;
+  animation: 1.5s slide-in-flip forwards;
+  transform-style: preserve-3d;
+}
+
+.magic-card-front, .magic-card-back {
+  width: 100%;
+  height: 100%;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
+
+.magic-card-back {
+  position: absolute;
+  transform: rotateY(180deg);
+}
+
+@keyframes slide-in-flip{
+  0%{
+    transform: translateX(100vw) rotateY(0deg);
+  }
+  70%{
+    transform: translateX(0vw) rotateY(0deg);
+  }
+  100%{
+    transform: translateX(0vw) rotateY(-180deg);
+  }
+}

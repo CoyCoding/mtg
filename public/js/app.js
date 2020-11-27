@@ -2094,17 +2094,6 @@ process.umask = function() { return 0; };
 
 /***/ }),
 
-/***/ "./resources/css/app.scss":
-/*!********************************!*\
-  !*** ./resources/css/app.scss ***!
-  \********************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-// removed by extract-text-webpack-plugin
-
-/***/ }),
-
 /***/ "./resources/js/app.js":
 /*!*****************************!*\
   !*** ./resources/js/app.js ***!
@@ -2115,6 +2104,7 @@ process.umask = function() { return 0; };
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _buildQueryString_buildQueryString__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./buildQueryString/buildQueryString */ "./resources/js/buildQueryString/buildQueryString.js");
+/* harmony import */ var _service_api__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./service/api */ "./resources/js/service/api.js");
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
 
 function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
@@ -2131,16 +2121,57 @@ __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 
 
 
-var sendRequest = function sendRequest(query) {
-  return axios.get("http://localhost:8000/api/get?".concat(query)).then(function (res) {
-    console.log(res);
-    appendToDOM(res.data);
+var cards;
+
+var clearDom = function clearDom(element) {
+  element.html('');
+};
+
+var submitForm = function submitForm(e) {
+  e.preventDefault();
+  var filters = getSelectedfilters();
+  var query = Object(_buildQueryString_buildQueryString__WEBPACK_IMPORTED_MODULE_0__["default"])(filters);
+  Object(_service_api__WEBPACK_IMPORTED_MODULE_1__["default"])(query).then(function (data) {
+    appendToDOM(data.data);
   })["catch"](function (e) {
     console.log(e);
   });
 };
 
-var checkBoxClicked = function checkBoxClicked(e) {};
+var appendToDOM = function appendToDOM(cards) {
+  var cardList = $('#cards');
+  cardList.empty();
+
+  (function myLoop(i) {
+    setTimeout(function () {
+      cardList.append(createCardDiv(cards[i]));
+      if (++i !== cards.length - 1) myLoop(i);
+    }, 100);
+  })(0);
+};
+
+var createCardDiv = function createCardDiv(card) {
+  return "<div class=\"magic-card\">\n            <div class=\"magic-card-inner\">\n              <div class=\"magic-card-back\">\n                <img src=\"".concat(card.image_url, "\" alt=\"").concat(card.name, " card\">\n              </div>\n              <div class=\"magic-card-front\">\n                <img src=\"/img/mtg-back-sm.jpg\" alt=\"card back\">\n              </div>\n            </div>\n          </div>");
+};
+
+document.onreadystatechange = function () {
+  if (document.readyState == "complete") {
+    var submitBtn = document.getElementById('submit');
+    colors.forEach(function (color) {
+      var colorCheckbox = document.getElementById(color.name);
+    });
+    submitBtn.addEventListener("click", submitForm);
+    $('.ui.dropdown').dropdown({
+      clearable: true,
+      forceSelection: false
+    });
+    $('.open-btn').on('click', function () {
+      $('.open-btn').toggleClass('open');
+      $('.sidebar').toggleClass('open');
+    });
+    $('body').addClass('active');
+  }
+};
 
 var findChecked = function findChecked(tag) {
   var checked = _toConsumableArray(document.querySelectorAll("input[name=\"".concat(tag, "\"]"))).filter(function (input) {
@@ -2151,52 +2182,20 @@ var findChecked = function findChecked(tag) {
 };
 
 var findSelectedDropdown = function findSelectedDropdown(dropdown) {
-  return $(dropdown).find('.selected').data('value');
+  return $(dropdown).find('.selected.active').data('value');
 };
 
-var submitForm = function submitForm(e) {
-  e.preventDefault();
-  var queries = {};
-  queries['searchCondition'] = findChecked('conditional')[0].value;
-  queries['colors'] = findChecked('colors').map(function (input) {
+var getSelectedfilters = function getSelectedfilters() {
+  var filters = {};
+  filters['searchCondition'] = findChecked('conditional')[0].value;
+  filters['colors'] = findChecked('colors').map(function (input) {
     return input.value;
   });
-  queries['type'] = findSelectedDropdown('#types');
-  queries['supertype'] = findSelectedDropdown('#supertypes');
-  queries['subtype'] = findSelectedDropdown('#subtypes');
-  queries['rarity'] = findSelectedDropdown('#rarity');
-  var query = Object(_buildQueryString_buildQueryString__WEBPACK_IMPORTED_MODULE_0__["default"])(queries);
-  console.log(query);
-  sendRequest(query);
-};
-
-var appendToDOM = function appendToDOM(cards) {
-  var cardList = document.getElementById('cards');
-  cards.map(function (card) {
-    cardList.appendChild(createCardDiv(card));
-  });
-};
-
-var createCardDiv = function createCardDiv(card) {
-  var div = document.createElement('div');
-  div.textContent = card.name;
-  return div;
-};
-
-document.onreadystatechange = function () {
-  if (document.readyState == "complete") {
-    var submitBtn = document.getElementById('submit');
-    colors.forEach(function (color) {
-      var colorCheckbox = document.getElementById(color.name);
-      colorCheckbox.addEventListener("click", checkBoxClicked);
-    });
-    submitBtn.addEventListener("click", submitForm);
-    $('.ui.dropdown').dropdown({
-      clearable: true,
-      forceSelection: false
-    });
-    $('body').addClass('active');
-  }
+  filters['type'] = findSelectedDropdown('#types');
+  filters['supertype'] = findSelectedDropdown('#supertypes');
+  filters['subtype'] = findSelectedDropdown('#subtypes');
+  filters['rarity'] = findSelectedDropdown('#rarity');
+  return filters;
 };
 
 /***/ }),
@@ -2272,15 +2271,43 @@ var buildQueryString = function buildQueryString(queryObj) {
 
 /***/ }),
 
+/***/ "./resources/js/service/api.js":
+/*!*************************************!*\
+  !*** ./resources/js/service/api.js ***!
+  \*************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+var sendRequest = function sendRequest(query) {
+  return axios.get("http://localhost:8000/api/get?".concat(query));
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (sendRequest);
+
+/***/ }),
+
+/***/ "./resources/scss/app.scss":
+/*!*********************************!*\
+  !*** ./resources/scss/app.scss ***!
+  \*********************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+
 /***/ 0:
-/*!************************************************************!*\
-  !*** multi ./resources/js/app.js ./resources/css/app.scss ***!
-  \************************************************************/
+/*!*************************************************************!*\
+  !*** multi ./resources/js/app.js ./resources/scss/app.scss ***!
+  \*************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(/*! D:\Atom\projects\mtg\resources\js\app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! D:\Atom\projects\mtg\resources\css\app.scss */"./resources/css/app.scss");
+module.exports = __webpack_require__(/*! D:\Atom\projects\mtg\resources\scss\app.scss */"./resources/scss/app.scss");
 
 
 /***/ })

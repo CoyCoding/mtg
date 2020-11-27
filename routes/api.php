@@ -27,10 +27,10 @@ use App\Helpers\QueryStringParser;
 Route::get('/get', function (Request $request) {
   try{
     $query = QueryStringParser::Card($request->query());
-    
+
     return Card::filterColorsBy($query['colors'], $query['searchCondition'])
-      ->hasColumnId('rarity', $query['rarity'])->hasColumnId('type', $query['type'])
-      ->hasColumnId('subtype', $query['subtype'])->hasColumnId('supertype', $query['supertype'])
+      ->hasColumnId('rarity', $query['rarity'])->hasColumnId('types', $query['type'])
+      ->hasColumnId('subtypes', $query['subtype'])->hasColumnId('supertypes', $query['supertype'])
       ->get()->map(function($card) {
         return $card->format();
     });
