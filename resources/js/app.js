@@ -11,7 +11,7 @@ const submitForm = (e) => {
   $('#cards').empty();
   const filters = getSelectedfilters();
   queryString = new PagedQueryString(filters, 1);
-  console.log(queryString);
+  $('.sidebar').toggleClass('open');
   getCards((page) => queryString.setLastPage(page));
 }
 
@@ -37,7 +37,7 @@ const appendToDOM = (cards) => {
 
 const createCardDiv = (card) =>{
   const renderCardFront = () => {
-    let frontCardImage = `<img class="${!card.image_url ? "missing" : ""}"src="${card.image_url || '/img/mtg-back-sm.jpg'}" alt="${card.name} card">`;
+    let frontCardImage = `<img data-card-info='${JSON.stringify(card)}' class="${!card.image_url ? "missing" : ""}"src="${card.image_url || '/img/mtg-back-sm.jpg'}" alt="${card.name} card">`;
     if(!card.image_url){
       frontCardImage += `<div class="missing-card"><p>${card.name}</p><p>Missing Image</p></div>`
     }
@@ -74,11 +74,15 @@ $(document).ready(()=> {
 
   $('.card-wrap').on('scroll', (e) => {
     const screenPos = e.target.scrollHeight - (e.target.scrollTop + e.target.offsetHeight);
-    if(screenPos < 300 && queryString.getCurrPage() < queryString.getLastPage() && ready){
+    if(screenPos < 500 && queryString.getCurrPage() < queryString.getLastPage() && ready){
       queryString.nextPage();
       ready = false;
       getCards();
       setTimeout(() => {ready = true}, 1000);
     }
   });
+
+  $('#cards').on('click', '.magic-card img', (e) => {
+    console.log($(e.target).data('cardInfo'));
+  })
 })

@@ -2210,7 +2210,7 @@ var submitForm = function submitForm(e) {
   $('#cards').empty();
   var filters = Object(_form_form__WEBPACK_IMPORTED_MODULE_2__["default"])();
   queryString = new _PagedQueryString_PagedQueryString__WEBPACK_IMPORTED_MODULE_0__["default"](filters, 1);
-  console.log(queryString);
+  $('.sidebar').toggleClass('open');
   getCards(function (page) {
     return queryString.setLastPage(page);
   });
@@ -2239,7 +2239,7 @@ var appendToDOM = function appendToDOM(cards) {
 
 var createCardDiv = function createCardDiv(card) {
   var renderCardFront = function renderCardFront() {
-    var frontCardImage = "<img class=\"".concat(!card.image_url ? "missing" : "", "\"src=\"").concat(card.image_url || '/img/mtg-back-sm.jpg', "\" alt=\"").concat(card.name, " card\">");
+    var frontCardImage = "<img data-card-info='".concat(JSON.stringify(card), "' class=\"").concat(!card.image_url ? "missing" : "", "\"src=\"").concat(card.image_url || '/img/mtg-back-sm.jpg', "\" alt=\"").concat(card.name, " card\">");
 
     if (!card.image_url) {
       frontCardImage += "<div class=\"missing-card\"><p>".concat(card.name, "</p><p>Missing Image</p></div>");
@@ -2266,7 +2266,7 @@ $(document).ready(function () {
   $('.card-wrap').on('scroll', function (e) {
     var screenPos = e.target.scrollHeight - (e.target.scrollTop + e.target.offsetHeight);
 
-    if (screenPos < 300 && queryString.getCurrPage() < queryString.getLastPage() && ready) {
+    if (screenPos < 500 && queryString.getCurrPage() < queryString.getLastPage() && ready) {
       queryString.nextPage();
       ready = false;
       getCards();
@@ -2274,6 +2274,9 @@ $(document).ready(function () {
         ready = true;
       }, 1000);
     }
+  });
+  $('#cards').on('click', '.magic-card img', function (e) {
+    console.log($(e.target).data('cardInfo'));
   });
 });
 

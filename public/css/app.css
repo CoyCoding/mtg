@@ -63,13 +63,15 @@ body.no-fouc.active {
   color: white;
   width: 20%;
   line-height: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .body #cards .magic-card img {
   border-style: none;
   width: 100%;
   height: auto;
-  padding: 10px;
   border-radius: 17px;
 }
 
@@ -95,6 +97,7 @@ body.no-fouc.active {
   -webkit-animation: 1.5s slide-in-flip forwards;
           animation: 1.5s slide-in-flip forwards;
   transform-style: preserve-3d;
+  margin: 10px;
 }
 
 .magic-card-front,
