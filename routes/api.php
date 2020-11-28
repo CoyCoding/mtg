@@ -28,11 +28,16 @@ Route::get('/get', function (Request $request) {
   try{
     $query = QueryStringParser::Card($request->query());
 
-    return Card::filterColorsBy($query['colors'], $query['searchCondition'])
+    $pagedCards = Card::filterColorsBy($query['colors'], $query['searchCondition'])
       ->hasColumnId('rarity', $query['rarity'])->hasColumnId('types', $query['type'])
-      ->hasColumnId('subtypes', $query['subtype'])->hasColumnId('supertypes', $query['supertype'])
-      ->paginate(30);
+      ->hasColumnId('subtypes', $query['subtype'])->hasColumnId('supertypes', $query['supertype'])->paginate(30);
+
+    return array(
+      'currentPage' => $pagedCards->currentPage(),
+      'lastPage' => $pagedCards->lastPage(),
+      'cards' => $pagedCards->getCollection()->map(function($card) {return $card->format();})
+    );
   } catch(Exception $e) {
-    return $e;
+    return $e->messageBag();
   }
 });

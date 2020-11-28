@@ -61,14 +61,13 @@ Artisan::command('flip', function () {
 // set tilt and attach two flip cards
 Artisan::command('tilt', function () {
   $query = QueryStringParser::Card(['colors' => ['red']]);
-  return $query;
 
-  return Card::filterColorsBy($query->colors, $query->searchCondition)
-    ->hasColumnId('rarity', $query->rarity)->hasColumnId('type', $query->type)
-    ->hasColumnId('subtype', $query->subtype)->hasColumnId('supertype', $query->supertype)
-    ->get()->map(function($card) {
-      return $card->format();
-  });
+  $pagedCards = Card::filterColorsBy($query['colors'], $query['searchCondition'])
+    ->hasColumnId('rarity', $query['rarity'])->hasColumnId('types', $query['type'])
+    ->hasColumnId('subtypes', $query['subtype'])->hasColumnId('supertypes', $query['supertype'])->paginate(30);
+    $lastPage =  $cardsPaginated->lastPage();
+    $currentPage = $cardsPaginated->currentPage();
+    return $currentPage;
 })->purpose('Display an inspiring quote');
 
 Artisan::command('combine', function () {

@@ -8,7 +8,6 @@ class QueryStringParser
   public static function card($request){
     $query = array();
     $query['colors'] = $request['colors'] ?? [];
-
     $query['rarity'] = $request['rarity'] ?? null;
     $query['type'] = $request['type'] ?? null;
     $query['subtype'] = $request['subtype'] ?? null;

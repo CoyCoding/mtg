@@ -170,7 +170,7 @@ class Card extends Model
         });
     }
 
-    public function scopeFilterColorsBy($q, $nameArr = [], $condition = 'or'){
+    public function scopeFilterColorsBy($q, $nameArr = [], $condition){
       if($condition == 'and'){
         return $q->containsColors($nameArr);
       } else if($condition == 'only'){
