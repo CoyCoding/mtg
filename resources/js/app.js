@@ -17,7 +17,7 @@ const submitForm = (e) => {
 
 const getCards = (setLastPage) => {
   sendRequest(queryString.currentQuery()).then((res)=> {
-    if(setLastPage) setLastPage(res.data.last_page);
+    if(setLastPage) setLastPage(res.data.lastPage);
     console.log(res);
     appendToDOM(res.data.cards);
   }).catch(e=>{

@@ -2218,7 +2218,7 @@ var submitForm = function submitForm(e) {
 
 var getCards = function getCards(setLastPage) {
   Object(_service_api__WEBPACK_IMPORTED_MODULE_1__["default"])(queryString.currentQuery()).then(function (res) {
-    if (setLastPage) setLastPage(res.data.last_page);
+    if (setLastPage) setLastPage(res.data.lastPage);
     console.log(res);
     appendToDOM(res.data.cards);
   })["catch"](function (e) {
