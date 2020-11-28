@@ -61,6 +61,9 @@ body{
         height: auto;
         padding: 10px;
         border-radius: 17px;
+        &.missing{
+          filter: grayscale(1);
+        }
       }
     }
   }
@@ -106,7 +109,6 @@ body{
     display: flex;
     justify-content: center;
     flex-direction: column;
-    background: #ff0000a8;
     padding: 14px;
     font-size: 20px;
   }

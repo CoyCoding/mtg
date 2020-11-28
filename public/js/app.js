@@ -2232,14 +2232,14 @@ var appendToDOM = function appendToDOM(cards) {
   (function myLoop(i) {
     setTimeout(function () {
       cardList.append(createCardDiv(cards[i]));
-      if (++i < cards.length - 1) myLoop(i);
+      if (++i < cards.length) myLoop(i);
     }, 100);
   })(0);
 };
 
 var createCardDiv = function createCardDiv(card) {
   var renderCardFront = function renderCardFront() {
-    var frontCardImage = "<img src=\"".concat(card.image_url || '/img/mtg-back-sm.jpg', "\" alt=\"").concat(card.name, " card\">");
+    var frontCardImage = "<img class=\"".concat(!card.image_url ? "missing" : "", "\"src=\"").concat(card.image_url || '/img/mtg-back-sm.jpg', "\" alt=\"").concat(card.name, " card\">");
 
     if (!card.image_url) {
       frontCardImage += "<div class=\"missing-card\"><p>".concat(card.name, "</p><p>Missing Image</p></div>");
@@ -2266,7 +2266,7 @@ $(document).ready(function () {
   $('.card-wrap').on('scroll', function (e) {
     var screenPos = e.target.scrollHeight - (e.target.scrollTop + e.target.offsetHeight);
 
-    if (screenPos < 300 && queryString.getCurrPage() < queryString.getLastPage() - 1 && ready) {
+    if (screenPos < 300 && queryString.getCurrPage() < queryString.getLastPage() && ready) {
       queryString.nextPage();
       ready = false;
       getCards();
