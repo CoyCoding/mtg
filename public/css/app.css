@@ -1,6 +1,7 @@
 body {
   min-height: 100vh;
-  line-height: 0;
+  flex-direction: column;
+  display: flex;
 }
 
 body.no-fouc {
@@ -16,7 +17,7 @@ body.no-fouc.active {
   position: fixed;
   background: white;
   height: 100%;
-  width: 300px;
+  width: 350px;
   transform: translateX(-355px);
   overflow: hidden;
   display: flex;
@@ -37,7 +38,7 @@ body.no-fouc.active {
 }
 
 .body .fixed-card-display {
-  max-width: 300px;
+  max-width: 350px;
   background: green;
   width: 100%;
 }
@@ -48,19 +49,20 @@ body.no-fouc.active {
 
 .body .card-display .card-wrap {
   overflow-y: scroll;
+  overflow-x: hidden;
   height: 100%;
 }
 
 .body #cards {
   display: flex;
   flex-wrap: wrap;
+  height: 0px;
 }
 
 .body #cards .magic-card {
   color: white;
   width: 20%;
   line-height: 0;
-  min-width: 150px;
 }
 
 .body #cards .magic-card img {
@@ -69,6 +71,11 @@ body.no-fouc.active {
   height: auto;
   padding: 10px;
   border-radius: 17px;
+}
+
+.main {
+  height: 100%;
+  overflow: hidden;
 }
 
 .open-btn {
@@ -97,6 +104,22 @@ body.no-fouc.active {
 .magic-card-back {
   position: absolute;
   transform: rotateY(180deg);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.magic-card-back .missing-card {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  background: #ff0000a8;
+  padding: 14px;
+  font-size: 20px;
 }
 
 @-webkit-keyframes slide-in-flip {

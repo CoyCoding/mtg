@@ -31,7 +31,7 @@ Route::get('/get', function (Request $request) {
     return Card::filterColorsBy($query['colors'], $query['searchCondition'])
       ->hasColumnId('rarity', $query['rarity'])->hasColumnId('types', $query['type'])
       ->hasColumnId('subtypes', $query['subtype'])->hasColumnId('supertypes', $query['supertype'])
-      ->paginate(20);
+      ->paginate(30);
   } catch(Exception $e) {
     return $e;
   }

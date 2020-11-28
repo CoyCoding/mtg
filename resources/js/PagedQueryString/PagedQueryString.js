@@ -1,3 +1,36 @@
+class PagedQueryString{
+  constructor(filters, page){
+    this.filters = buildQueryString(filters);
+    this.currPage = page;
+    this.lastPage = Infinity;
+  }
+
+  currentQuery(){
+    return this.filters + '&page=' + this.currPage;
+  }
+
+  getLastPage(){
+    return this.lastPage
+  }
+
+  getCurrPage(){
+    return this.currPage;
+  }
+
+  setPage(page){
+    this.currPage=page;
+  }
+
+  setLastPage(page){
+    this.lastPage = page;
+  }
+
+  nextPage(){
+    this.currPage++;
+  }
+}
+
+
 const buildQueryString = (queryObj) =>{
   const esc = encodeURIComponent;
   return Object.keys(queryObj).filter((key) => {
@@ -23,4 +56,4 @@ const buildQueryString = (queryObj) =>{
     }).join('&');
 }
 
-export default buildQueryString;
+export default PagedQueryString;

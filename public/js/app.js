@@ -2094,6 +2094,97 @@ process.umask = function() { return 0; };
 
 /***/ }),
 
+/***/ "./resources/js/PagedQueryString/PagedQueryString.js":
+/*!***********************************************************!*\
+  !*** ./resources/js/PagedQueryString/PagedQueryString.js ***!
+  \***********************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+var PagedQueryString = /*#__PURE__*/function () {
+  function PagedQueryString(filters, page) {
+    _classCallCheck(this, PagedQueryString);
+
+    this.filters = buildQueryString(filters);
+    this.currPage = page;
+    this.lastPage = Infinity;
+  }
+
+  _createClass(PagedQueryString, [{
+    key: "currentQuery",
+    value: function currentQuery() {
+      return this.filters + '&page=' + this.currPage;
+    }
+  }, {
+    key: "getLastPage",
+    value: function getLastPage() {
+      return this.lastPage;
+    }
+  }, {
+    key: "getCurrPage",
+    value: function getCurrPage() {
+      return this.currPage;
+    }
+  }, {
+    key: "setPage",
+    value: function setPage(page) {
+      this.currPage = page;
+    }
+  }, {
+    key: "setLastPage",
+    value: function setLastPage(page) {
+      this.lastPage = page;
+    }
+  }, {
+    key: "nextPage",
+    value: function nextPage() {
+      this.currPage++;
+    }
+  }]);
+
+  return PagedQueryString;
+}();
+
+var buildQueryString = function buildQueryString(queryObj) {
+  var esc = encodeURIComponent;
+  return Object.keys(queryObj).filter(function (key) {
+    if (Array.isArray(queryObj[key])) {
+      return queryObj[key].length;
+    }
+
+    return queryObj[key];
+  }).map(function (key) {
+    if (Array.isArray(queryObj[key])) {
+      console.log(queryObj[key]);
+      var arrayQs = '';
+
+      for (var i = 0; i < queryObj[key].length; i++) {
+        if (i + 1 === queryObj[key].length) {
+          arrayQs += "".concat(key, "[]=").concat(queryObj[key][i]);
+        } else {
+          arrayQs += "".concat(key, "[]=").concat(queryObj[key][i], "&");
+        }
+      }
+
+      return arrayQs;
+    } else {
+      return esc(key) + '=' + esc(queryObj[key]);
+    }
+  }).join('&');
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (PagedQueryString);
+
+/***/ }),
+
 /***/ "./resources/js/app.js":
 /*!*****************************!*\
   !*** ./resources/js/app.js ***!
@@ -2103,7 +2194,7 @@ process.umask = function() { return 0; };
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _buildQueryString_buildQueryString__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./buildQueryString/buildQueryString */ "./resources/js/buildQueryString/buildQueryString.js");
+/* harmony import */ var _PagedQueryString_PagedQueryString__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./PagedQueryString/PagedQueryString */ "./resources/js/PagedQueryString/PagedQueryString.js");
 /* harmony import */ var _service_api__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./service/api */ "./resources/js/service/api.js");
 /* harmony import */ var _form_form__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./form/form */ "./resources/js/form/form.js");
 __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
@@ -2111,24 +2202,24 @@ __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 
 
 
+var queryString;
 var cards;
-var currentQuery;
-var currPage = 0;
-var lastPage = Infinity;
-
-var clearDom = function clearDom(element) {
-  element.html('');
-};
 
 var submitForm = function submitForm(e) {
   e.preventDefault();
   $('#cards').empty();
-  var filters = Object(_form_form__WEBPACK_IMPORTED_MODULE_2__["default"])(currPage);
-  currentQuery = Object(_buildQueryString_buildQueryString__WEBPACK_IMPORTED_MODULE_0__["default"])(filters);
-  if (filters['page'] === lastPage) return;
-  Object(_service_api__WEBPACK_IMPORTED_MODULE_1__["default"])(currentQuery).then(function (res) {
-    currPage = res.data.current_page;
-    lastPage = res.data.last_page;
+  var filters = Object(_form_form__WEBPACK_IMPORTED_MODULE_2__["default"])();
+  queryString = new _PagedQueryString_PagedQueryString__WEBPACK_IMPORTED_MODULE_0__["default"](filters, 1);
+  console.log(queryString);
+  getCards(function (page) {
+    return queryString.setLastPage(page);
+  });
+};
+
+var getCards = function getCards(setLastPage) {
+  Object(_service_api__WEBPACK_IMPORTED_MODULE_1__["default"])(queryString.currentQuery()).then(function (res) {
+    if (setLastPage) setLastPage(res.data.last_page);
+    console.log(res);
     appendToDOM(res.data.data);
   })["catch"](function (e) {
     console.log(e);
@@ -2147,26 +2238,44 @@ var appendToDOM = function appendToDOM(cards) {
 };
 
 var createCardDiv = function createCardDiv(card) {
-  return "<div class=\"magic-card\">\n            <div class=\"magic-card-inner\">\n              <div class=\"magic-card-back\">\n                <img src=\"".concat(card.image_url, "\" alt=\"").concat(card.name, " card\">\n              </div>\n              <div class=\"magic-card-front\">\n                <img src=\"/img/mtg-back-sm.jpg\" alt=\"card back\">\n              </div>\n            </div>\n          </div>");
+  var renderCardFront = function renderCardFront() {
+    var frontCardImage = "<img src=\"".concat(card.image_url || '/img/mtg-back-sm.jpg', "\" alt=\"").concat(card.name, " card\">");
+
+    if (!card.image_url) {
+      frontCardImage += "<div class=\"missing-card\"><p>".concat(card.name, "</p><p>Missing Image</p></div>");
+    }
+
+    return frontCardImage;
+  };
+
+  return "<div class=\"magic-card\">\n    <div class=\"magic-card-inner\">\n      <div class=\"magic-card-back\">\n        ".concat(renderCardFront(), "\n      </div>\n      <div class=\"magic-card-front\">\n        <img src=\"/img/mtg-back-sm.jpg\" alt=\"card back\">\n      </div>\n    </div>\n  </div>");
 };
 
-document.onreadystatechange = function () {
-  if (document.readyState == "complete") {
-    $('#submit').on('click', submitForm);
-    $('.ui.dropdown').dropdown({
-      clearable: true,
-      forceSelection: false
-    });
-    $('.open-btn').on('click', function () {
-      $('.open-btn').toggleClass('open');
-      $('.sidebar').toggleClass('open');
-    });
-    $('body').addClass('active');
-    $('.card-wrap').on('scroll', function (e) {
-      console.log(e.target.scrollTop, e.target.offsetHeight, e.target.scrollHeight, e.target.scrollTop + e.target.offsetHeight);
-    });
-  }
-};
+$(document).ready(function () {
+  $('#submit').on('click', submitForm);
+  $('.ui.dropdown').dropdown({
+    clearable: true,
+    forceSelection: false
+  });
+  $('.open-btn').on('click', function () {
+    $('.open-btn').toggleClass('open');
+    $('.sidebar').toggleClass('open');
+  });
+  $('body').addClass('active');
+  var ready = true;
+  $('.card-wrap').on('scroll', function (e) {
+    var screenPos = e.target.scrollHeight - (e.target.scrollTop + e.target.offsetHeight);
+
+    if (screenPos < 300 && queryString.getCurrPage() < queryString.getLastPage() - 1 && ready) {
+      queryString.nextPage();
+      ready = false;
+      getCards();
+      setTimeout(function () {
+        ready = true;
+      }, 1000);
+    }
+  });
+});
 
 /***/ }),
 
@@ -2197,47 +2306,6 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 //     cluster: process.env.MIX_PUSHER_APP_CLUSTER,
 //     forceTLS: true
 // });
-
-/***/ }),
-
-/***/ "./resources/js/buildQueryString/buildQueryString.js":
-/*!***********************************************************!*\
-  !*** ./resources/js/buildQueryString/buildQueryString.js ***!
-  \***********************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-var buildQueryString = function buildQueryString(queryObj) {
-  var esc = encodeURIComponent;
-  return Object.keys(queryObj).filter(function (key) {
-    if (Array.isArray(queryObj[key])) {
-      return queryObj[key].length;
-    }
-
-    return queryObj[key];
-  }).map(function (key) {
-    if (Array.isArray(queryObj[key])) {
-      console.log(queryObj[key]);
-      var arrayQs = '';
-
-      for (var i = 0; i < queryObj[key].length; i++) {
-        if (i + 1 === queryObj[key].length) {
-          arrayQs += "".concat(key, "[]=").concat(queryObj[key][i]);
-        } else {
-          arrayQs += "".concat(key, "[]=").concat(queryObj[key][i], "&");
-        }
-      }
-
-      return arrayQs;
-    } else {
-      return esc(key) + '=' + esc(queryObj[key]);
-    }
-  }).join('&');
-};
-
-/* harmony default export */ __webpack_exports__["default"] = (buildQueryString);
 
 /***/ }),
 
@@ -2277,7 +2345,6 @@ var findSelectedDropdown = function findSelectedDropdown(dropdown) {
 
 var getSelectedfilters = function getSelectedfilters(currPage) {
   var filters = {};
-  filters['page'] = currPage + 1;
   filters['searchCondition'] = findChecked('conditional')[0].value;
   filters['colors'] = findChecked('colors').map(function (input) {
     return input.value;
@@ -2302,6 +2369,7 @@ var getSelectedfilters = function getSelectedfilters(currPage) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 var sendRequest = function sendRequest(query) {
+  console.log(query);
   return axios.get("http://localhost:8000/api/get?".concat(query));
 };
 

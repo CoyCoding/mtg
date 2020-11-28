@@ -13,18 +13,21 @@
     </script>
     </head>
     <body class="antialiased no-fouc">
-      @include('home/comps/formsidebar')
-      <div class="open-btn">
-        open
-      </div>
-      <div class="body">
-        <div class="fixed-card-display">
-
+      <div>nav bar</div>
+      <div class="main">
+        @include('home/comps/formsidebar')
+        <div class="open-btn">
+          open
         </div>
-        <div class="card-display" onscroll="(e)=>console.log(e)">
-          <div class="card-wrap">
-            <div id="cards">
+        <div class="body">
+          <div class="fixed-card-display">
 
+          </div>
+          <div class="card-display" onscroll="(e)=>console.log(e)">
+            <div class="card-wrap">
+              <div id="cards">
+
+              </div>
             </div>
           </div>
         </div>

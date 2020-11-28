@@ -1,6 +1,7 @@
 body{
   min-height: 100vh;
-  line-height: 0;
+  flex-direction: column;
+  display: flex;
   &.no-fouc{
     opacity: 0;
     transition: opacity 0s ease-in;
@@ -14,7 +15,7 @@ body{
   position: fixed;
   background: white;
   height: 100%;
-  width: 300px;
+  width: 350px;
   transform: translateX(-355px);
   overflow: hidden;
   display: flex;
@@ -32,7 +33,7 @@ body{
   width: 100%;
   display: flex;
   .fixed-card-display{
-    max-width: 300px;
+    max-width: 350px;
     background: green;
     width: 100%;
   }
@@ -41,17 +42,19 @@ body{
     width: 100%;
     .card-wrap{
       overflow-y: scroll;
+      overflow-x: hidden;
       height: 100%;
     }
   }
   #cards{
     display: flex;
     flex-wrap: wrap;
+    height: 0px;
     .magic-card{
       color: white;
       width: 20%;
       line-height: 0;
-      min-width: 150px;
+      // min-width: 150px;
       img{
         border-style: none;
         width: 100%;
@@ -61,6 +64,11 @@ body{
       }
     }
   }
+}
+
+.main{
+  height: 100%;
+  overflow: hidden;
 }
 
 .open-btn{
@@ -87,6 +95,21 @@ body{
 .magic-card-back {
   position: absolute;
   transform: rotateY(180deg);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  .missing-card{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    background: #ff0000a8;
+    padding: 14px;
+    font-size: 20px;
+  }
 }
 
 @keyframes slide-in-flip{

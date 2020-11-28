@@ -1,27 +1,24 @@
 require('./bootstrap');
-import buildQueryString from './buildQueryString/buildQueryString';
+import PagedQueryString from './PagedQueryString/PagedQueryString';
 import sendRequest from './service/api';
 import getSelectedfilters from './form/form';
 
+let queryString;
 let cards;
-let currentQuery;
-let currPage = 0;
-let lastPage = Infinity;
-
-const clearDom = (element) => {
-  element.html('');
-}
 
 const submitForm = (e) => {
   e.preventDefault();
   $('#cards').empty();
-  const filters = getSelectedfilters(currPage);
-  currentQuery = buildQueryString(filters);
-  if(filters['page'] === lastPage) return;
+  const filters = getSelectedfilters();
+  queryString = new PagedQueryString(filters, 1);
+  console.log(queryString);
+  getCards((page) => queryString.setLastPage(page));
+}
 
-  sendRequest(currentQuery).then((res)=> {
-    currPage = res.data.current_page;
-    lastPage = res.data.last_page;
+const getCards = (setLastPage) => {
+  sendRequest(queryString.currentQuery()).then((res)=> {
+    if(setLastPage) setLastPage(res.data.last_page);
+    console.log(res);
     appendToDOM(res.data.data);
   }).catch(e=>{
     console.log(e);
@@ -38,36 +35,50 @@ const appendToDOM = (cards) => {
   })(0);
 }
 
-const createCardDiv = (card) =>(
-  `<div class="magic-card">
-            <div class="magic-card-inner">
-              <div class="magic-card-back">
-                <img src="${card.image_url}" alt="${card.name} card">
-              </div>
-              <div class="magic-card-front">
-                <img src="/img/mtg-back-sm.jpg" alt="card back">
-              </div>
-            </div>
-          </div>`)
-
-document.onreadystatechange = function () {
-   if (document.readyState == "complete") {
-     $('#submit').on('click', submitForm);
-
-     $('.ui.dropdown').dropdown({
-       clearable: true,
-       forceSelection: false
-     });
-
-     $('.open-btn').on('click',()=>{
-       $('.open-btn').toggleClass('open');
-       $('.sidebar').toggleClass('open');
-     })
-
-     $('body').addClass('active');
-
-     $('.card-wrap').on('scroll', (e) => {
-       console.log(e.target.scrollTop, e.target.offsetHeight, e.target.scrollHeight, e.target.scrollTop + e.target.offsetHeight)
-     });
+const createCardDiv = (card) =>{
+  const renderCardFront = () => {
+    let frontCardImage = `<img src="${card.image_url || '/img/mtg-back-sm.jpg'}" alt="${card.name} card">`;
+    if(!card.image_url){
+      frontCardImage += `<div class="missing-card"><p>${card.name}</p><p>Missing Image</p></div>`
+    }
+    return frontCardImage;
   }
+  return `<div class="magic-card">
+    <div class="magic-card-inner">
+      <div class="magic-card-back">
+        ${renderCardFront()}
+      </div>
+      <div class="magic-card-front">
+        <img src="/img/mtg-back-sm.jpg" alt="card back">
+      </div>
+    </div>
+  </div>`
 }
+
+$(document).ready(()=> {
+  $('#submit').on('click', submitForm);
+
+  $('.ui.dropdown').dropdown({
+    clearable: true,
+    forceSelection: false
+  });
+
+  $('.open-btn').on('click',()=>{
+    $('.open-btn').toggleClass('open');
+    $('.sidebar').toggleClass('open');
+  })
+
+  $('body').addClass('active');
+
+  let ready = true;
+
+  $('.card-wrap').on('scroll', (e) => {
+    const screenPos = e.target.scrollHeight - (e.target.scrollTop + e.target.offsetHeight);
+    if(screenPos < 300 && queryString.getCurrPage() < queryString.getLastPage()-1 && ready){
+      queryString.nextPage();
+      ready = false;
+      getCards();
+      setTimeout(() => {ready = true}, 1000);
+    }
+  });
+})
