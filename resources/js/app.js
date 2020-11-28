@@ -19,7 +19,7 @@ const getCards = (setLastPage) => {
   sendRequest(queryString.currentQuery()).then((res)=> {
     if(setLastPage) setLastPage(res.data.last_page);
     console.log(res);
-    appendToDOM(res.data.data);
+    appendToDOM(res.data.cards);
   }).catch(e=>{
     console.log(e);
   });

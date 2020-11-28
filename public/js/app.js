@@ -2220,7 +2220,7 @@ var getCards = function getCards(setLastPage) {
   Object(_service_api__WEBPACK_IMPORTED_MODULE_1__["default"])(queryString.currentQuery()).then(function (res) {
     if (setLastPage) setLastPage(res.data.last_page);
     console.log(res);
-    appendToDOM(res.data.data);
+    appendToDOM(res.data.cards);
   })["catch"](function (e) {
     console.log(e);
   });
