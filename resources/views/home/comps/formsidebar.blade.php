@@ -1,10 +1,24 @@
 <div class="sidebar">
   <form>
     <div id="colors">
-      @foreach($data['colors'] as $color)
-        <input type="checkbox" id="{{$color->name}}" name="colors" value="{{$color->name}}">
-        <label for="{{$color->name}}">{{$color->name}}</label><br>
-      @endforeach
+      <div class="color-wrap" value="White">
+        <img src="/img/W.png">
+      </div>
+      <div class="color-wrap" value="Blue">
+        <img src="/img/U.png">
+      </div>
+      <div class="color-wrap" value="Black">
+        <img src="/img/B.png">
+      </div>
+      <div class="color-wrap" value="Red">
+        <img src="/img/R.png">
+      </div>
+      <div class="color-wrap" value="Green">
+        <img src="/img/G.png">
+      </div>
+      <div class="color-wrap" value="Colorless">
+        <img src="/img/C.png">
+      </div>
     </div>
     <div id="conditionals">
       <label for="conditionals">Conditional</label><br>

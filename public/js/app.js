@@ -2264,6 +2264,10 @@ $(document).ready(function () {
     $('.sidebar').toggleClass('open');
   });
   $('body').addClass('active');
+  $('.color-wrap').click(function () {
+    $(event.currentTarget).prop('selected', true);
+    $(event.currentTarget).toggleClass('active');
+  });
   $('.card-wrap').on('scroll', function (e) {
     var screenPos = e.target.scrollHeight - (e.target.scrollTop + e.target.offsetHeight);
 
@@ -2277,7 +2281,7 @@ $(document).ready(function () {
     }
   });
   $('#cards').on('click', '.magic-card img', function (e) {
-    console.log(JSON.parse(decodeURIComponent($(e.target).data('cardInfo'))));
+    setDisplayCard($(e.target).data('cardInfo'));
   });
 });
 
@@ -2297,6 +2301,8 @@ var submitForm = function submitForm(e) {
     return queryBuilder.setLastPage(page);
   });
 };
+
+var setDisplayCard = function setDisplayCard(e) {};
 
 /***/ }),
 
@@ -2360,6 +2366,14 @@ var findChecked = function findChecked(tag) {
   return checked;
 };
 
+var findColors = function findColors() {
+  var colors = [];
+  $('.color-wrap.active').each(function (i, ele) {
+    colors.push($(ele).attr('value'));
+  });
+  return colors;
+};
+
 var findSelectedDropdown = function findSelectedDropdown(dropdown) {
   return $(dropdown).find('.selected.active').data('value');
 };
@@ -2367,9 +2381,7 @@ var findSelectedDropdown = function findSelectedDropdown(dropdown) {
 var getSelectedfilters = function getSelectedfilters(currPage) {
   var filters = {};
   filters['searchCondition'] = findChecked('conditional')[0].value;
-  filters['colors'] = findChecked('colors').map(function (input) {
-    return input.value;
-  });
+  filters['colors'] = findColors('colors');
   filters['type'] = findSelectedDropdown('#types');
   filters['supertype'] = findSelectedDropdown('#supertypes');
   filters['subtype'] = findSelectedDropdown('#subtypes');

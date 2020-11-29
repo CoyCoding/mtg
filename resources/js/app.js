@@ -62,7 +62,10 @@ $(document).ready(()=> {
 
   $('body').addClass('active');
 
-
+  $('.color-wrap').click(() =>{
+    $(event.currentTarget).prop('selected',true)
+    $(event.currentTarget).toggleClass('active');
+  });
 
   $('.card-wrap').on('scroll', (e) => {
     const screenPos = e.target.scrollHeight - (e.target.scrollTop + e.target.offsetHeight);
@@ -75,7 +78,7 @@ $(document).ready(()=> {
   });
 
   $('#cards').on('click', '.magic-card img', (e) => {
-    console.log(JSON.parse(decodeURIComponent($(e.target).data('cardInfo'))));
+    setDisplayCard($(e.target).data('cardInfo'));
   });
 });
 
@@ -95,4 +98,8 @@ const submitForm = (e) => {
 
   //api call for new list
   getCards(queryBuilder, (page) => queryBuilder.setLastPage(page));
+}
+
+const setDisplayCard = (e) => {
+
 }

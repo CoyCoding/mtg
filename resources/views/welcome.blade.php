@@ -18,7 +18,8 @@
         @include('home/comps/formsidebar')
         <div class="body">
           <div class="fixed-card-display">
-
+            <div class="">
+            </div>
           </div>
           <div class="card-display" onscroll="(e)=>console.log(e)">
             <div class="card-wrap">
@@ -28,6 +29,9 @@
             </div>
           </div>
         </div>
+      </div>
+      <div>
+        footer
       </div>
     </body>
     <script src="/js/app.js"></script>

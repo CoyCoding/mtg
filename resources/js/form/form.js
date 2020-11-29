@@ -5,7 +5,13 @@ const findChecked = (tag) => {
   });
   return checked;
 }
-
+const findColors = () => {
+  const colors = [];
+  $('.color-wrap.active').each((i, ele) => {
+    colors.push($(ele).attr('value'));
+  });
+  return colors;
+}
 const findSelectedDropdown = (dropdown) =>{
   return $(dropdown).find('.selected.active').data('value');
 }
@@ -13,7 +19,7 @@ const findSelectedDropdown = (dropdown) =>{
 export const getSelectedfilters = (currPage) => {
   const filters = {};
   filters['searchCondition'] = findChecked('conditional')[0].value;
-  filters['colors'] = findChecked('colors').map((input) => input.value);
+  filters['colors'] = findColors('colors');
   filters['type'] = findSelectedDropdown('#types');
   filters['supertype'] = findSelectedDropdown('#supertypes');
   filters['subtype'] = findSelectedDropdown('#subtypes');

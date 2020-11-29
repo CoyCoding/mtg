@@ -1,34 +1,16 @@
+@import 'form';
+
 body{
   min-height: 100vh;
   flex-direction: column;
   display: flex;
+  line-height: 1 !important;
   &.no-fouc{
     opacity: 0;
     transition: opacity 0s ease-in;
     &.active{
       opacity: 1;
     }
-  }
-}
-
-.sidebar{
-  position: fixed;
-  background: white;
-  height: 100%;
-  width: 350px;
-  transform: translateX(-355px);
-  display: flex;
-  flex-direction: column;
-  box-shadow: 0 0 2px 0px black;
-  transition: transform 1s ease-in-out;
-  z-index: 5;
-  &.open{
-    transform: translateX(0px);
-  }
-  form{
-    z-index: 5;
-    background: red;
-    height: 100%;
   }
 }
 
@@ -80,41 +62,11 @@ body{
 
 .main{
   height: 100%;
+  position: relative;
   overflow: hidden;
 }
 
-.bot-tri{
-  background: #ff0000;
-  position: absolute;
-  width: 120px;
-  height: 120px;
-  right: -60px;
-  transform: rotate(45deg);
-  bottom: -12px;
-  box-shadow: 0 0 2px 0px black;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
 
-.top-tri{
-  background: #ff0000;
-  position: absolute;
-  width: 120px;
-  height: 120px;
-  right: -60px;
-  transform: rotate(45deg);
-  top: -60px;
-  box-shadow: 0 0 2px 0px black;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  .open-btn{
-    position: absolute;
-    transform: rotate(-45deg);
-    right: 7px;
-  }
-}
 
 .magic-card-inner {
   position: relative;
