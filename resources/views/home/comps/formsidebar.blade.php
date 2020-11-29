@@ -21,17 +21,18 @@
       </div>
     </div>
     <div id="conditionals">
-      <label for="conditionals">Conditional</label><br>
-      <input type="radio" id="only" name="conditional" value="only" checked>
-      <label for="only">only</label><br>
-
-      <input type="radio" id="and" name="conditional" value="and">
-      <label for="and">and</label><br>
-
-      <input type="radio" id="or" name="conditional" value="or">
-      <label for="or">or</label><br>
+      <p for="conditionals">Conditional</p>
+      <div class="radio-wrap active" value="or">
+        <span>or</span><div class="radio"></div>
+      </div>
+      <div class="radio-wrap" value="and">
+        <span>and</span><div class="radio"></div>
+      </div>
+      <div class="radio-wrap" value="only">
+        <span>only</span><div class="radio"></div>
+      </div>
     </div>
-    <div id="types">
+    <div class="dropdown-wraps" id="types">
       <label for="type">Types</label><br>
       <select class="ui selection search dropdown">
         <option name="type" value=""></option>
@@ -40,7 +41,7 @@
         @endforeach
       </select>
     </div>
-    <div id="subtypes">
+    <div class="dropdown-wraps" id="subtypes">
       <label for="Subtypes">Subtypes</label><br>
       <select class="ui selection dropdown">
         <option value=""></option>
@@ -49,7 +50,7 @@
         @endforeach
       </select>
     </div>
-    <div id="supertypes">
+    <div class="dropdown-wraps" id="supertypes">
       <label for="supertypes">Supertypes</label><br>
       <select class="ui selection dropdown">
         <option value=""></option>
@@ -58,7 +59,7 @@
         @endforeach
       </select>
     </div>
-    <div id="rarity">
+    <div class="dropdown-wraps" id="rarity">
       <label for="rarity">Rarity</label><br>
       <select class="ui selection dropdown">
         <option value=""></option>
@@ -67,7 +68,9 @@
         @endforeach
       </select>
     </div>
-    <input id="submit" type="Submit">submit</input>
+    <div class="submit-wrap">
+      <input id="submit" type="Submit">submit</input>
+    </div>
   </form>
   <div class="top-tri">
     <div class="open-btn">open</div>

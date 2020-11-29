@@ -20,7 +20,7 @@ body{
   width: 100%;
   display: flex;
   .fixed-card-display{
-    max-width: 350px;
+    max-width: 400px;
     background: green;
     width: 100%;
   }
@@ -50,7 +50,6 @@ body{
         border-style: none;
         width: 100%;
         height: auto;
-
         border-radius: 17px;
         &.missing{
           filter: grayscale(1);

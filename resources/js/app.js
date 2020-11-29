@@ -67,6 +67,11 @@ $(document).ready(()=> {
     $(event.currentTarget).toggleClass('active');
   });
 
+  $('.radio-wrap').click(() =>{
+    $('.radio-wrap.active').toggleClass('active');
+    $(event.currentTarget).toggleClass('active');
+  });
+
   $('.card-wrap').on('scroll', (e) => {
     const screenPos = e.target.scrollHeight - (e.target.scrollTop + e.target.offsetHeight);
     if(screenPos < 600 && queryBuilder.getCurrPage() < queryBuilder.getLastPage() && infiniteLoadReady){

@@ -2268,6 +2268,10 @@ $(document).ready(function () {
     $(event.currentTarget).prop('selected', true);
     $(event.currentTarget).toggleClass('active');
   });
+  $('.radio-wrap').click(function () {
+    $('.radio-wrap.active').toggleClass('active');
+    $(event.currentTarget).toggleClass('active');
+  });
   $('.card-wrap').on('scroll', function (e) {
     var screenPos = e.target.scrollHeight - (e.target.scrollTop + e.target.offsetHeight);
 
@@ -2346,24 +2350,8 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getSelectedfilters", function() { return getSelectedfilters; });
-function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
-
-function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
-
-function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
-
-function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter); }
-
-function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
-
-function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
-
 var findChecked = function findChecked(tag) {
-  var checked = _toConsumableArray(document.querySelectorAll("input[name=\"".concat(tag, "\"]"))).filter(function (input) {
-    return input.checked;
-  });
-
-  return checked;
+  return $('.radio-wrap.active').attr('value');
 };
 
 var findColors = function findColors() {
@@ -2380,7 +2368,7 @@ var findSelectedDropdown = function findSelectedDropdown(dropdown) {
 
 var getSelectedfilters = function getSelectedfilters(currPage) {
   var filters = {};
-  filters['searchCondition'] = findChecked('conditional')[0].value;
+  filters['searchCondition'] = findChecked('conditional');
   filters['colors'] = findColors('colors');
   filters['type'] = findSelectedDropdown('#types');
   filters['supertype'] = findSelectedDropdown('#supertypes');

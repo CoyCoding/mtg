@@ -1,9 +1,5 @@
 const findChecked = (tag) => {
-  const checked = [...document.querySelectorAll(`input[name="${tag}"]`)]
-  .filter((input) => {
-    return input.checked;
-  });
-  return checked;
+  return $('.radio-wrap.active').attr('value')
 }
 const findColors = () => {
   const colors = [];
@@ -18,7 +14,7 @@ const findSelectedDropdown = (dropdown) =>{
 
 export const getSelectedfilters = (currPage) => {
   const filters = {};
-  filters['searchCondition'] = findChecked('conditional')[0].value;
+  filters['searchCondition'] = findChecked('conditional');
   filters['colors'] = findColors('colors');
   filters['type'] = findSelectedDropdown('#types');
   filters['supertype'] = findSelectedDropdown('#supertypes');
