@@ -1,5 +1,5 @@
 class PagedQueryString{
-  constructor(filters, page){
+  constructor(filters, page = 1){
     this.filters = buildQueryString(filters);
     this.currPage = page;
     this.lastPage = Infinity;
@@ -28,10 +28,16 @@ class PagedQueryString{
   nextPage(){
     this.currPage++;
   }
+
+  buildQuery(filters, page=1){
+    this.page = page;
+    this.filters = buildQueryString(filters);
+  }
 }
 
 
 const buildQueryString = (queryObj) =>{
+  if(!queryObj) return '';
   const esc = encodeURIComponent;
   return Object.keys(queryObj).filter((key) => {
     if(Array.isArray(queryObj[key])){

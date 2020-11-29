@@ -13,12 +13,9 @@
     </script>
     </head>
     <body class="antialiased no-fouc">
-      <div>nav bar</div>
+      <div class="nav">nav bar</div>
       <div class="main">
         @include('home/comps/formsidebar')
-        <div class="open-btn">
-          open
-        </div>
         <div class="body">
           <div class="fixed-card-display">
 

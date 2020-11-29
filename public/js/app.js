@@ -2110,7 +2110,9 @@ function _defineProperties(target, props) { for (var i = 0; i < props.length; i+
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
 var PagedQueryString = /*#__PURE__*/function () {
-  function PagedQueryString(filters, page) {
+  function PagedQueryString(filters) {
+    var page = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 1;
+
     _classCallCheck(this, PagedQueryString);
 
     this.filters = buildQueryString(filters);
@@ -2148,12 +2150,20 @@ var PagedQueryString = /*#__PURE__*/function () {
     value: function nextPage() {
       this.currPage++;
     }
+  }, {
+    key: "buildQuery",
+    value: function buildQuery(filters) {
+      var page = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 1;
+      this.page = page;
+      this.filters = buildQueryString(filters);
+    }
   }]);
 
   return PagedQueryString;
 }();
 
 var buildQueryString = function buildQueryString(queryObj) {
+  if (!queryObj) return '';
   var esc = encodeURIComponent;
   return Object.keys(queryObj).filter(function (key) {
     if (Array.isArray(queryObj[key])) {
@@ -2202,22 +2212,9 @@ __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 
 
 
-var queryString;
-var cards;
 
-var submitForm = function submitForm(e) {
-  e.preventDefault();
-  $('#cards').empty();
-  var filters = Object(_form_form__WEBPACK_IMPORTED_MODULE_2__["default"])();
-  queryString = new _PagedQueryString_PagedQueryString__WEBPACK_IMPORTED_MODULE_0__["default"](filters, 1);
-  $('.sidebar').toggleClass('open');
-  getCards(function (page) {
-    return queryString.setLastPage(page);
-  });
-};
-
-var getCards = function getCards(setLastPage) {
-  Object(_service_api__WEBPACK_IMPORTED_MODULE_1__["default"])(queryString.currentQuery()).then(function (res) {
+var getCards = function getCards(queryBuilder, setLastPage) {
+  Object(_service_api__WEBPACK_IMPORTED_MODULE_1__["default"])(queryBuilder.currentQuery()).then(function (res) {
     if (setLastPage) setLastPage(res.data.lastPage);
     console.log(res);
     appendToDOM(res.data.cards);
@@ -2239,7 +2236,7 @@ var appendToDOM = function appendToDOM(cards) {
 
 var createCardDiv = function createCardDiv(card) {
   var renderCardFront = function renderCardFront() {
-    var frontCardImage = "<img data-card-info='".concat(JSON.stringify(card), "' class=\"").concat(!card.image_url ? "missing" : "", "\"src=\"").concat(card.image_url || '/img/mtg-back-sm.jpg', "\" alt=\"").concat(card.name, " card\">");
+    var frontCardImage = "<img data-card-info=".concat(encodeURIComponent(JSON.stringify(card)), " class=\"").concat(!card.image_url ? "missing" : "", "\"src=\"").concat(card.image_url || '/img/mtg-back-sm.jpg', "\" alt=\"").concat(card.name, " card\">");
 
     if (!card.image_url) {
       frontCardImage += "<div class=\"missing-card\"><p>".concat(card.name, "</p><p>Missing Image</p></div>");
@@ -2248,11 +2245,16 @@ var createCardDiv = function createCardDiv(card) {
     return frontCardImage;
   };
 
-  return "<div class=\"magic-card\">\n    <div class=\"magic-card-inner\">\n      <div class=\"magic-card-back\">\n        ".concat(renderCardFront(), "\n      </div>\n      <div class=\"magic-card-front\">\n        <img src=\"/img/mtg-back-sm.jpg\" alt=\"card back\">\n      </div>\n    </div>\n  </div>");
+  return "<div class=\"magic-card\" key=\"".concat(card.id, "\">\n    <div class=\"magic-card-inner\">\n      <div class=\"magic-card-back\">\n        ").concat(renderCardFront(), "\n      </div>\n      <div class=\"magic-card-front\">\n        <img src=\"/img/mtg-back-sm.jpg\" alt=\"card back\">\n      </div>\n    </div>\n  </div>");
 };
 
 $(document).ready(function () {
-  $('#submit').on('click', submitForm);
+  var queryBuilder = new _PagedQueryString_PagedQueryString__WEBPACK_IMPORTED_MODULE_0__["default"]();
+  var infiniteLoadReady = true;
+  var selectedCard = null;
+  $('#submit').on('click', {
+    queryBuilder: queryBuilder
+  }, submitForm);
   $('.ui.dropdown').dropdown({
     clearable: true,
     forceSelection: false
@@ -2262,23 +2264,39 @@ $(document).ready(function () {
     $('.sidebar').toggleClass('open');
   });
   $('body').addClass('active');
-  var ready = true;
   $('.card-wrap').on('scroll', function (e) {
     var screenPos = e.target.scrollHeight - (e.target.scrollTop + e.target.offsetHeight);
 
-    if (screenPos < 500 && queryString.getCurrPage() < queryString.getLastPage() && ready) {
-      queryString.nextPage();
-      ready = false;
-      getCards();
+    if (screenPos < 600 && queryBuilder.getCurrPage() < queryBuilder.getLastPage() && infiniteLoadReady) {
+      queryBuilder.nextPage();
+      infiniteLoadReady = false;
+      getCards(queryBuilder);
       setTimeout(function () {
-        ready = true;
-      }, 1000);
+        infiniteLoadReady = true;
+      }, 2000);
     }
   });
   $('#cards').on('click', '.magic-card img', function (e) {
-    console.log($(e.target).data('cardInfo'));
+    console.log(JSON.parse(decodeURIComponent($(e.target).data('cardInfo'))));
   });
 });
+
+var submitForm = function submitForm(e) {
+  e.preventDefault(); // empty previous displayed cards
+
+  $('#cards').empty(); // get query string
+
+  var filters = Object(_form_form__WEBPACK_IMPORTED_MODULE_2__["default"])();
+  console.log(e.data);
+  var queryBuilder = e.data.queryBuilder;
+  queryBuilder.buildQuery(filters); //close sidebar
+
+  $('.sidebar').toggleClass('open'); //api call for new list
+
+  getCards(queryBuilder, function (page) {
+    return queryBuilder.setLastPage(page);
+  });
+};
 
 /***/ }),
 
@@ -2372,7 +2390,6 @@ var getSelectedfilters = function getSelectedfilters(currPage) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 var sendRequest = function sendRequest(query) {
-  console.log(query);
   return axios.get("http://localhost:8000/api/get?".concat(query));
 };
 

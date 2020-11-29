@@ -55,4 +55,10 @@
     </div>
     <input id="submit" type="Submit">submit</input>
   </form>
+  <div class="top-tri">
+    <div class="open-btn">open</div>
+  </div>
+  <div class="bot-tri">
+    open
+  </div>
 </div>

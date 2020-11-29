@@ -17,13 +17,18 @@ body{
   height: 100%;
   width: 350px;
   transform: translateX(-355px);
-  overflow: hidden;
   display: flex;
   flex-direction: column;
   box-shadow: 0 0 2px 0px black;
   transition: transform 1s ease-in-out;
+  z-index: 5;
   &.open{
     transform: translateX(0px);
+  }
+  form{
+    z-index: 5;
+    background: red;
+    height: 100%;
   }
 }
 
@@ -44,6 +49,7 @@ body{
       overflow-y: scroll;
       overflow-x: hidden;
       height: 100%;
+      padding: 20px;
     }
   }
   #cards{
@@ -77,9 +83,37 @@ body{
   overflow: hidden;
 }
 
-.open-btn{
-  background: blue;
+.bot-tri{
+  background: #ff0000;
   position: absolute;
+  width: 120px;
+  height: 120px;
+  right: -60px;
+  transform: rotate(45deg);
+  bottom: -12px;
+  box-shadow: 0 0 2px 0px black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.top-tri{
+  background: #ff0000;
+  position: absolute;
+  width: 120px;
+  height: 120px;
+  right: -60px;
+  transform: rotate(45deg);
+  top: -60px;
+  box-shadow: 0 0 2px 0px black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  .open-btn{
+    position: absolute;
+    transform: rotate(-45deg);
+    right: 7px;
+  }
 }
 
 .magic-card-inner {
@@ -117,7 +151,11 @@ body{
     font-size: 20px;
   }
 }
-
+.nav{
+  background: red;
+  z-index: 6;
+  height: 50px;
+}
 @keyframes slide-in-flip{
   0%{
     transform: translateX(100vw) rotateY(0deg);
