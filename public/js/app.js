@@ -2215,9 +2215,14 @@ __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 
 var getCards = function getCards(queryBuilder, setLastPage) {
   Object(_service_api__WEBPACK_IMPORTED_MODULE_1__["default"])(queryBuilder.currentQuery()).then(function (res) {
-    if (setLastPage) setLastPage(res.data.lastPage);
-    console.log(res);
-    appendToDOM(res.data.cards);
+    if (res.data.cards.length) {
+      if (setLastPage) setLastPage(res.data.lastPage);
+      $('.sidebar').removeClass('open');
+      $('#no-cards').remove();
+      appendToDOM(res.data.cards);
+    } else {
+      $('.card-display').append('<div id="no-cards">NO CARDS WERE FOUND</div>');
+    }
   })["catch"](function (e) {
     console.log(e);
   });
@@ -2311,7 +2316,7 @@ var submitForm = function submitForm(e) {
   e.preventDefault(); // get query string
 
   var filters = Object(_form_form__WEBPACK_IMPORTED_MODULE_2__["default"])();
-  $('p').remove('.error');
+  $('p').remove('.error'); //check that a color is selected
 
   if (!filters.colors.length) {
     return $('#name-search').after('<p class="error">* You sould select at least one color *</p>');
@@ -2320,9 +2325,7 @@ var submitForm = function submitForm(e) {
   var queryBuilder = e.data.queryBuilder;
   queryBuilder.buildQuery(filters); // empty previous displayed cards
 
-  $('#cards').empty(); //close sidebar
-
-  $('.sidebar').toggleClass('open'); //api call for new list
+  $('#cards').empty(); //api call for new list
 
   getCards(queryBuilder, function (page) {
     return queryBuilder.setLastPage(page);

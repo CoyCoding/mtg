@@ -5,9 +5,15 @@ import getSelectedfilters from './form/form';
 
 const getCards = (queryBuilder, setLastPage) => {
   sendRequest(queryBuilder.currentQuery()).then((res)=> {
-    if(setLastPage) setLastPage(res.data.lastPage);
-    console.log(res);
-    appendToDOM(res.data.cards);
+    if(res.data.cards.length){
+      if(setLastPage) setLastPage(res.data.lastPage);
+      $('.sidebar').removeClass('open');
+      $('#no-cards').remove();
+      appendToDOM(res.data.cards);
+    } else {
+      $('.card-display').append('<div id="no-cards">NO CARDS WERE FOUND</div>')
+    }
+
   }).catch(e=>{
     console.log(e);
   });
@@ -103,6 +109,7 @@ $(document).ready(()=> {
       },
       minCharacters: 3
   });
+
 });
 
 const submitForm = (e) => {
@@ -110,6 +117,8 @@ const submitForm = (e) => {
   // get query string
   const filters = getSelectedfilters();
   $('p').remove('.error');
+
+  //check that a color is selected
   if(!filters.colors.length){
     return $('#name-search').after('<p class="error">* You sould select at least one color *</p>');
   }
@@ -119,11 +128,6 @@ const submitForm = (e) => {
 
   // empty previous displayed cards
   $('#cards').empty();
-
-
-
-  //close sidebar
-  $('.sidebar').toggleClass('open');
 
   //api call for new list
   getCards(queryBuilder, (page) => queryBuilder.setLastPage(page));

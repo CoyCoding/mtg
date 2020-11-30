@@ -31,6 +31,7 @@ body{
     background-position: center;
     background-repeat: no-repeat;
     background-size: 50% auto;
+    position: relative;
     width: 100%;
     .card-wrap{
       overflow-y: scroll;
@@ -43,6 +44,7 @@ body{
   #cards{
     display: flex;
     flex-wrap: wrap;
+    justify-content: center;
     height: 0px;
     .magic-card{
       color: white;
@@ -115,6 +117,18 @@ body{
   height: 50px;
   box-shadow: 0 0 3px black;
 }
+
+#no-cards{
+  position: absolute;
+    color: white;
+    font-size: 40px;
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+    top: 0;
+    width: 100%;
+}
+
 @keyframes slide-in-flip{
   0%{
     transform: translateX(100vw) rotateY(0deg);
@@ -124,5 +138,29 @@ body{
   }
   100%{
     transform: translateX(0vw) rotateY(180deg);
+  }
+}
+
+@media only screen and (max-width: 1200px){
+  .body{
+    .card-wrap{
+        #cards{
+          .magic-card{
+            width: 25%;
+          }
+        }
+    }
+  }
+}
+
+@media only screen and (max-width: 1024px){
+  .body{
+    .card-wrap{
+        #cards{
+          .magic-card{
+            width: 33%;
+          }
+        }
+    }
   }
 }
