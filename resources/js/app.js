@@ -4,6 +4,7 @@ import sendRequest from './service/api';
 import getSelectedfilters from './form/form';
 
 const getCards = (queryBuilder, setLastPage) => {
+  console.log(queryBuilder.currentQuery());
   sendRequest(queryBuilder.currentQuery()).then((res)=> {
     if(res.data.cards.length){
       if(setLastPage) setLastPage(res.data.lastPage);
@@ -11,9 +12,8 @@ const getCards = (queryBuilder, setLastPage) => {
       $('#no-cards').remove();
       appendToDOM(res.data.cards);
     } else {
-      $('.card-display').append('<div id="no-cards">NO CARDS WERE FOUND</div>')
+      $('.card-display').append('<div id="no-cards">NO CARDS WERE FOUND</div>');
     }
-
   }).catch(e=>{
     console.log(e);
   });
@@ -114,23 +114,25 @@ $(document).ready(()=> {
 
 const submitForm = (e) => {
   e.preventDefault();
+
   // get query string
   const filters = getSelectedfilters();
   $('p').remove('.error');
 
+  //build query
+  const queryBuilder = e.data.queryBuilder;
+  queryBuilder.buildQuery(filters, 1);
+  console.log(queryBuilder);
   //check that a color is selected
   if(!filters.colors.length){
     return $('#name-search').after('<p class="error">* You sould select at least one color *</p>');
   }
 
-  const queryBuilder = e.data.queryBuilder;
-  queryBuilder.buildQuery(filters);
-
   // empty previous displayed cards
   $('#cards').empty();
 
   //api call for new list
-  getCards(queryBuilder, (page) => queryBuilder.setLastPage(page));
+  getCards(queryBuilder, (lastPage) => queryBuilder.setLastPage(lastPage));
 }
 
 const setDisplayCard = (e) => {

@@ -287,7 +287,6 @@ body.no-fouc.active {
 .body #cards {
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
   height: 0px;
 }
 
@@ -411,7 +410,7 @@ body.no-fouc.active {
 
 @media only screen and (max-width: 1024px) {
   .body .card-wrap #cards .magic-card {
-    width: 33%;
+    width: 33.33%;
   }
 }
 

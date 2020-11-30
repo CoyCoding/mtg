@@ -16,7 +16,10 @@ class PagedQueryString{
   getCurrPage(){
     return this.currPage;
   }
-
+  setPages(curr, last){
+    this.currPage = curr;
+    this.lastPage = last;
+  }
   setPage(page){
     this.currPage=page;
   }
@@ -29,8 +32,8 @@ class PagedQueryString{
     this.currPage++;
   }
 
-  buildQuery(filters, page=1){
-    this.page = page;
+  buildQuery(filters, page = 1){
+    this.currPage = page;
     this.filters = buildQueryString(filters);
   }
 }
@@ -46,7 +49,6 @@ const buildQueryString = (queryObj) =>{
     return queryObj[key];
   }).map((key) => {
       if(Array.isArray(queryObj[key])){
-        console.log(queryObj[key])
         let arrayQs = '';
         for(var i = 0; i < queryObj[key].length; i++){
           if(i+1 === queryObj[key].length) {

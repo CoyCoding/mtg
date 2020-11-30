@@ -8,6 +8,7 @@ const findColors = () => {
   });
   return colors;
 }
+
 const findSelectedDropdown = (dropdown) =>{
   return $(dropdown).find('.selected.active').data('value');
 }

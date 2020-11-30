@@ -2136,6 +2136,12 @@ var PagedQueryString = /*#__PURE__*/function () {
       return this.currPage;
     }
   }, {
+    key: "setPages",
+    value: function setPages(curr, last) {
+      this.currPage = curr;
+      this.lastPage = last;
+    }
+  }, {
     key: "setPage",
     value: function setPage(page) {
       this.currPage = page;
@@ -2154,7 +2160,7 @@ var PagedQueryString = /*#__PURE__*/function () {
     key: "buildQuery",
     value: function buildQuery(filters) {
       var page = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 1;
-      this.page = page;
+      this.currPage = page;
       this.filters = buildQueryString(filters);
     }
   }]);
@@ -2173,7 +2179,6 @@ var buildQueryString = function buildQueryString(queryObj) {
     return queryObj[key];
   }).map(function (key) {
     if (Array.isArray(queryObj[key])) {
-      console.log(queryObj[key]);
       var arrayQs = '';
 
       for (var i = 0; i < queryObj[key].length; i++) {
@@ -2214,6 +2219,7 @@ __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 
 
 var getCards = function getCards(queryBuilder, setLastPage) {
+  console.log(queryBuilder.currentQuery());
   Object(_service_api__WEBPACK_IMPORTED_MODULE_1__["default"])(queryBuilder.currentQuery()).then(function (res) {
     if (res.data.cards.length) {
       if (setLastPage) setLastPage(res.data.lastPage);
@@ -2316,19 +2322,21 @@ var submitForm = function submitForm(e) {
   e.preventDefault(); // get query string
 
   var filters = Object(_form_form__WEBPACK_IMPORTED_MODULE_2__["default"])();
-  $('p').remove('.error'); //check that a color is selected
+  $('p').remove('.error'); //build query
+
+  var queryBuilder = e.data.queryBuilder;
+  queryBuilder.buildQuery(filters, 1);
+  console.log(queryBuilder); //check that a color is selected
 
   if (!filters.colors.length) {
     return $('#name-search').after('<p class="error">* You sould select at least one color *</p>');
-  }
+  } // empty previous displayed cards
 
-  var queryBuilder = e.data.queryBuilder;
-  queryBuilder.buildQuery(filters); // empty previous displayed cards
 
   $('#cards').empty(); //api call for new list
 
-  getCards(queryBuilder, function (page) {
-    return queryBuilder.setLastPage(page);
+  getCards(queryBuilder, function (lastPage) {
+    return queryBuilder.setLastPage(lastPage);
   });
 };
 
