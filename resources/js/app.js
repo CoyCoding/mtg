@@ -85,6 +85,24 @@ $(document).ready(()=> {
   $('#cards').on('click', '.magic-card img', (e) => {
     setDisplayCard($(e.target).data('cardInfo'));
   });
+
+  $('.ui.search.name')
+    .search({
+      apiSettings: {
+        url: 'api/byname?name={query}',
+        type: 'customType'
+      },
+      onResultsAdd: function(res){
+        return $(res).each((i,ele) => $(ele).append('test'));
+      },
+      fields: {
+        results: 'items',
+        title: 'name',
+        image: 'img',
+        url: 'html_url'
+      },
+      minCharacters: 3
+  });
 });
 
 const submitForm = (e) => {

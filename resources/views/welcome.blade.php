@@ -13,7 +13,7 @@
     </script>
     </head>
     <body class="antialiased no-fouc">
-      <div class="nav">nav bar</div>
+      <div class="nav noise">nav bar</div>
       <div class="main">
         @include('home/comps/formsidebar')
         <div class="body">
@@ -29,9 +29,6 @@
             </div>
           </div>
         </div>
-      </div>
-      <div>
-        footer
       </div>
     </body>
     <script src="/js/app.js"></script>

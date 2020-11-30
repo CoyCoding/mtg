@@ -2287,6 +2287,24 @@ $(document).ready(function () {
   $('#cards').on('click', '.magic-card img', function (e) {
     setDisplayCard($(e.target).data('cardInfo'));
   });
+  $('.ui.search.name').search({
+    apiSettings: {
+      url: 'api/byname?name={query}',
+      type: 'customType'
+    },
+    onResultsAdd: function onResultsAdd(res) {
+      return $(res).each(function (i, ele) {
+        return $(ele).append('test');
+      });
+    },
+    fields: {
+      results: 'items',
+      title: 'name',
+      image: 'img',
+      url: 'html_url'
+    },
+    minCharacters: 3
+  });
 });
 
 var submitForm = function submitForm(e) {

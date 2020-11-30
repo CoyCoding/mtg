@@ -41,3 +41,12 @@ Route::get('/get', function (Request $request) {
     return $e->messageBag();
   }
 });
+
+Route::get('/byname', function(Request $request){
+  $query = QueryStringParser::Card($request->query());
+  try{
+    return Card::where('name', 'like', '%'.$query['name'].'%')->take(4)->get();
+  }catch(Exception $e){
+    return $e;
+  }
+});
