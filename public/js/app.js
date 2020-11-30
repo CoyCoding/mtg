@@ -2308,14 +2308,19 @@ $(document).ready(function () {
 });
 
 var submitForm = function submitForm(e) {
-  e.preventDefault(); // empty previous displayed cards
-
-  $('#cards').empty(); // get query string
+  e.preventDefault(); // get query string
 
   var filters = Object(_form_form__WEBPACK_IMPORTED_MODULE_2__["default"])();
-  console.log(e.data);
+  $('p').remove('.error');
+
+  if (!filters.colors.length) {
+    return $('#name-search').after('<p class="error">* You sould select at least one color *</p>');
+  }
+
   var queryBuilder = e.data.queryBuilder;
-  queryBuilder.buildQuery(filters); //close sidebar
+  queryBuilder.buildQuery(filters); // empty previous displayed cards
+
+  $('#cards').empty(); //close sidebar
 
   $('.sidebar').toggleClass('open'); //api call for new list
 
@@ -2386,6 +2391,7 @@ var findSelectedDropdown = function findSelectedDropdown(dropdown) {
 
 var getSelectedfilters = function getSelectedfilters(currPage) {
   var filters = {};
+  filters['name'] = $('#name-input').val().trim();
   filters['searchCondition'] = findChecked('conditional');
   filters['colors'] = findColors('colors');
   filters['type'] = findSelectedDropdown('#types');

@@ -14,6 +14,8 @@ const findSelectedDropdown = (dropdown) =>{
 
 export const getSelectedfilters = (currPage) => {
   const filters = {};
+
+  filters['name'] = $('#name-input').val().trim();
   filters['searchCondition'] = findChecked('conditional');
   filters['colors'] = findColors('colors');
   filters['type'] = findSelectedDropdown('#types');

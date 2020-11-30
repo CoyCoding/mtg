@@ -4,7 +4,7 @@
     <div id="name-search">
       <div class="ui fluid search name">
         <div class="ui icon input">
-          <input class="prompt" type="text" placeholder="">
+          <input id='name-input' class="prompt" type="text" placeholder="">
           <i class="search icon"></i>
         </div>
         <div class="results"></div>
@@ -80,10 +80,10 @@
       </div>
     </div>
     <div class="submit-wrap">
-      <input id="submit" type="Submit">submit</input>
+      <input id="submit" type="Submit">
     </div>
   </form>
   <div class="top-tri">
-    <div class="open-btn">open</div>
+    <div class="open-btn"><div class="wrap"><i class="angle double right icon"></div></i></div>
   </div>
 </div>

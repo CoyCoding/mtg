@@ -9,16 +9,21 @@
 
   h1{
     font-size: 3rem;
-    background: #000913;
+    background: #333333;
     font-weight: 100;
     color: white;
     margin: 0;
-    border-bottom: solid #919191;
+    border-bottom: solid #000913;
     padding: 21px;
     line-height: 1;
   }
   &.open{
     transform: translateX(0px);
+    .open-btn{
+      .wrap{
+          transform: rotateY(180deg);
+      }
+    }
   }
   form{
     display: flex;
@@ -32,13 +37,14 @@
       input{
         width: 100%;
         border-radius: 0px;
-        border-bottom: 1px solid #919191;
+        border-bottom: solid #333333;
         background: #a8a8a875;
         color: white;
         &:focus{
           border-color: unset;
         }
       }
+
       i{
         color: white;
       }
@@ -121,10 +127,32 @@
         }
       }
     }
+    .submit-wrap{
+      width: 100%;
+      display: flex;
+      justify-content: flex-end;
+      padding: 20px;
+      input{
+        padding: 6px 16px;
+        cursor: pointer;
+        background: white;
+        border: none;
+        border-radius: 3px;
+      }
+    }
+    .error{
+      text-align: center;
+      font-size: 19px;
+      color: #f84f4f;
+      width: 100%;
+      margin: 10px;
+      font-weight: 900;
+    }
   }
 
   .top-tri{
-    background: #000913;
+    background: #333333;
+    z-index: -1;
     position: absolute;
     width: 120px;
     height: 120px;
@@ -138,7 +166,14 @@
     .open-btn{
       position: absolute;
       transform: rotate(-45deg);
-      right: 7px;
+      right: 0px;
+      .wrap{
+        transition: .5s ease-in-out;
+        i{
+          color: white;
+          font-size: 2rem;
+        }
+      }
     }
   }
 

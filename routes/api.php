@@ -30,7 +30,7 @@ Route::get('/get', function (Request $request) {
 
     $pagedCards = Card::filterColorsBy($query['colors'], $query['searchCondition'])
       ->hasColumnId('rarity', $query['rarity'])->hasColumnId('types', $query['type'])
-      ->hasColumnId('subtypes', $query['subtype'])->hasColumnId('supertypes', $query['supertype'])->paginate(30);
+      ->hasColumnId('subtypes', $query['subtype'])->hasColumnId('supertypes', $query['supertype'])->hasName($query['name'])->paginate(30);
 
     return array(
       'currentPage' => $pagedCards->currentPage(),

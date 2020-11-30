@@ -85,25 +85,9 @@ class Card extends Model
       return $this->hasOne('App\Models\Card', 'flipcard_id');
     }
 
-    // returns query with selected subtype names
-    public function scopeHasSubtypes($q, $nameArr = []){
-        return $q->whereHas('subtypes', function ($query) use($nameArr){
-          $query->whereIn('name', $nameArr, $boolean, $not);
-        });
-    }
-
-    // returns query with selected type names
-    public function scopeHasTypes($q, $nameArr = []){
-        return $q->whereHas('types', function ($query) use($nameArr){
-          $query->whereIn('name', $nameArr);
-        });
-    }
-
-    // returns query with selected supertype names
-    public function scopeHasSupertypes($q, $nameArr = []){
-        return $q->whereHas('supertypes', function ($query) use($nameArr){
-          $query->whereIn('name', $nameArr);
-        });
+    public function scopeHasName($q, $name){
+      if(!$name) return $q;
+      return $q->where('name', 'like', '%'.$name.'%');
     }
 
     // returns query for all cards that have any of the selected colors

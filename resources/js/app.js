@@ -48,6 +48,7 @@ $(document).ready(()=> {
   let queryBuilder = new PagedQueryString();
   let infiniteLoadReady = true;
   let selectedCard = null;
+
   $('#submit').on('click', {queryBuilder}, submitForm);
 
   $('.ui.dropdown').dropdown({
@@ -86,8 +87,7 @@ $(document).ready(()=> {
     setDisplayCard($(e.target).data('cardInfo'));
   });
 
-  $('.ui.search.name')
-    .search({
+  $('.ui.search.name').search({
       apiSettings: {
         url: 'api/byname?name={query}',
         type: 'customType'
@@ -107,14 +107,20 @@ $(document).ready(()=> {
 
 const submitForm = (e) => {
   e.preventDefault();
+  // get query string
+  const filters = getSelectedfilters();
+  $('p').remove('.error');
+  if(!filters.colors.length){
+    return $('#name-search').after('<p class="error">* You sould select at least one color *</p>');
+  }
+
+  const queryBuilder = e.data.queryBuilder;
+  queryBuilder.buildQuery(filters);
+
   // empty previous displayed cards
   $('#cards').empty();
 
-  // get query string
-  const filters = getSelectedfilters();
-  console.log(e.data)
-  const queryBuilder = e.data.queryBuilder;
-  queryBuilder.buildQuery(filters);
+
 
   //close sidebar
   $('.sidebar').toggleClass('open');
