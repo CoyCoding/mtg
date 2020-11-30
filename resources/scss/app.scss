@@ -27,12 +27,17 @@ body{
   }
 
   .card-display{
+    background: url(/img/mtg-cardfinder.png), #1a1820;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 50% auto;
     width: 100%;
     .card-wrap{
       overflow-y: scroll;
       overflow-x: hidden;
       height: 100%;
       padding: 20px;
+      background: #1a182000;
     }
   }
   #cards{

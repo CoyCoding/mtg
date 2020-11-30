@@ -5,11 +5,10 @@
   width: 400px;
   z-index: 3;
   transform: translateX(-405px);
-  box-shadow: 0 0 2px 0px black;
-
+  transition: all .5s ease-in-out;
   h1{
     font-size: 3rem;
-    background: #333333;
+    background: #1a1820;
     font-weight: 100;
     color: white;
     margin: 0;
@@ -19,9 +18,13 @@
   }
   &.open{
     transform: translateX(0px);
-    .open-btn{
-      .wrap{
-          transform: rotateY(180deg);
+    box-shadow: 0 0 20px 5px black;
+    .top-tri{
+      box-shadow: 0 0 0 black;
+      .open-btn{
+        .wrap{
+            transform: rotateY(180deg);
+        }
       }
     }
   }
@@ -40,6 +43,7 @@
         border-bottom: solid #333333;
         background: #a8a8a875;
         color: white;
+        font-size: 18px;
         &:focus{
           border-color: unset;
         }
@@ -151,7 +155,7 @@
   }
 
   .top-tri{
-    background: #333333;
+    background: #1a1820;
     z-index: -1;
     position: absolute;
     width: 120px;
@@ -159,10 +163,11 @@
     right: -60px;
     transform: rotate(45deg);
     top: -60px;
-    box-shadow: 0 0 2px 0px black;
     display: flex;
     justify-content: center;
     align-items: center;
+    transition: all 0.5s ease-in-out;
+    box-shadow: 0 0 5px 0px black;
     .open-btn{
       position: absolute;
       transform: rotate(-45deg);
@@ -172,6 +177,7 @@
         i{
           color: white;
           font-size: 2rem;
+          cursor: pointer;
         }
       }
     }

@@ -13,7 +13,6 @@
     </script>
     </head>
     <body class="antialiased no-fouc">
-      <div class="nav noise">nav bar</div>
       <div class="main">
         @include('home/comps/formsidebar')
         <div class="body">
