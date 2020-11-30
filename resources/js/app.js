@@ -21,12 +21,15 @@ const getCards = (queryBuilder, setLastPage) => {
 
 const appendToDOM = (cards) => {
   const cardList = $('#cards');
-  (function myLoop(i) {
-    setTimeout(function() {
-      cardList.append(createCardDiv(cards[i]));
-      if (++i < cards.length) myLoop(i);
-    }, 100)
-  })(0);
+  cards.forEach((card)=>{
+    cardList.append(createCardDiv(card));
+  });
+  // (function myLoop(i) {
+  //   setTimeout(function() {
+  //     cardList.append(createCardDiv(cards[i]));
+  //     if (++i < cards.length) myLoop(i);
+  //   }, 100)
+  // })(0);
 }
 
 const createCardDiv = (card) =>{
@@ -122,7 +125,7 @@ const submitForm = (e) => {
   //build query
   const queryBuilder = e.data.queryBuilder;
   queryBuilder.buildQuery(filters, 1);
-  console.log(queryBuilder);
+
   //check that a color is selected
   if(!filters.colors.length){
     return $('#name-search').after('<p class="error">* You sould select at least one color *</p>');

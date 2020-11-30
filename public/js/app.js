@@ -2236,13 +2236,14 @@ var getCards = function getCards(queryBuilder, setLastPage) {
 
 var appendToDOM = function appendToDOM(cards) {
   var cardList = $('#cards');
-
-  (function myLoop(i) {
-    setTimeout(function () {
-      cardList.append(createCardDiv(cards[i]));
-      if (++i < cards.length) myLoop(i);
-    }, 100);
-  })(0);
+  cards.forEach(function (card) {
+    cardList.append(createCardDiv(card));
+  }); // (function myLoop(i) {
+  //   setTimeout(function() {
+  //     cardList.append(createCardDiv(cards[i]));
+  //     if (++i < cards.length) myLoop(i);
+  //   }, 100)
+  // })(0);
 };
 
 var createCardDiv = function createCardDiv(card) {
@@ -2325,8 +2326,7 @@ var submitForm = function submitForm(e) {
   $('p').remove('.error'); //build query
 
   var queryBuilder = e.data.queryBuilder;
-  queryBuilder.buildQuery(filters, 1);
-  console.log(queryBuilder); //check that a color is selected
+  queryBuilder.buildQuery(filters, 1); //check that a color is selected
 
   if (!filters.colors.length) {
     return $('#name-search').after('<p class="error">* You sould select at least one color *</p>');
