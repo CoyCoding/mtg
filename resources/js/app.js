@@ -67,9 +67,9 @@ $(document).ready(()=> {
     $(event.currentTarget).toggleClass('active');
   });
 
-  $('.radio-wrap').click(() =>{
+  $('.radio').click(() =>{
     $('.radio-wrap.active').toggleClass('active');
-    $(event.currentTarget).toggleClass('active');
+    $(event.currentTarget).closest('.radio-wrap').toggleClass('active');
   });
 
   $('.card-wrap').on('scroll', (e) => {

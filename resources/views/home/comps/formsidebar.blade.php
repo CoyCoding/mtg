@@ -1,4 +1,5 @@
 <div class="sidebar">
+  <h1>Search</h1>
   <form>
     <div id="colors">
       <div class="color-wrap" value="White">
@@ -21,15 +22,14 @@
       </div>
     </div>
     <div id="conditionals">
-      <p for="conditionals">Conditional</p>
       <div class="radio-wrap active" value="or">
-        <span>or</span><div class="radio"></div>
+        <span>or</span><div class="radio"><div></div></div>
       </div>
       <div class="radio-wrap" value="and">
-        <span>and</span><div class="radio"></div>
+        <span>and</span><div class="radio"><div></div></div>
       </div>
       <div class="radio-wrap" value="only">
-        <span>only</span><div class="radio"></div>
+        <span>only</span><div class="radio"><div></div></div>
       </div>
     </div>
     <div class="dropdown-wraps" id="types">

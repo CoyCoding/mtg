@@ -2268,9 +2268,9 @@ $(document).ready(function () {
     $(event.currentTarget).prop('selected', true);
     $(event.currentTarget).toggleClass('active');
   });
-  $('.radio-wrap').click(function () {
+  $('.radio').click(function () {
     $('.radio-wrap.active').toggleClass('active');
-    $(event.currentTarget).toggleClass('active');
+    $(event.currentTarget).closest('.radio-wrap').toggleClass('active');
   });
   $('.card-wrap').on('scroll', function (e) {
     var screenPos = e.target.scrollHeight - (e.target.scrollTop + e.target.offsetHeight);
