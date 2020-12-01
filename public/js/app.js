@@ -2094,6 +2094,146 @@ process.umask = function() { return 0; };
 
 /***/ }),
 
+/***/ "./resources/js/CardForm/CardForm.js":
+/*!*******************************************!*\
+  !*** ./resources/js/CardForm/CardForm.js ***!
+  \*******************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _service_api__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../service/api */ "./resources/js/service/api.js");
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+
+
+var CardForm = /*#__PURE__*/function () {
+  function CardForm(queryBuilder) {
+    _classCallCheck(this, CardForm);
+
+    this.queryBuilder = queryBuilder;
+    this.colors = $('.color-wrap');
+    this.colors.click(function () {
+      $(event.currentTarget).prop('selected', true);
+      $(event.currentTarget).toggleClass('active');
+    });
+    this.radio = $('.radio');
+    this.radio.click(function () {
+      $('.radio-wrap.active').toggleClass('active');
+      $(event.currentTarget).closest('.radio-wrap').toggleClass('active');
+    });
+    this.dropdowns = $('.ui.dropdown').dropdown({
+      clearable: true,
+      forceSelection: false
+    });
+    this.nameSearch = $('.ui.search.name').search({
+      apiSettings: {
+        url: 'api/byname?name={query}',
+        type: 'customType'
+      },
+      onResultsAdd: function onResultsAdd(res) {
+        return $(res).each(function (i, ele) {
+          return $(ele).append('test');
+        });
+      },
+      fields: {
+        results: 'items',
+        title: 'name',
+        image: 'img',
+        url: 'html_url'
+      },
+      minCharacters: 3
+    });
+  }
+
+  _createClass(CardForm, [{
+    key: "getQueryBuilder",
+    value: function getQueryBuilder() {
+      return this.queryBuilder;
+    }
+  }, {
+    key: "getCardName",
+    value: function getCardName() {
+      return $('#name-input').val().trim();
+    }
+  }, {
+    key: "getConditional",
+    value: function getConditional() {
+      return $('.radio-wrap.active').attr('value');
+    }
+  }, {
+    key: "getColors",
+    value: function getColors() {
+      var colors = [];
+      this.colors.each(function (i, ele) {
+        if ($(ele).hasClass('active')) colors.push($(ele).attr('value'));
+      });
+      return colors;
+    }
+  }, {
+    key: "getDropdownValueOf",
+    value: function getDropdownValueOf(dropdown) {
+      return $(dropdown).find('.selected.active').data('value');
+    }
+  }, {
+    key: "getSelectedfilters",
+    value: function getSelectedfilters(currPage) {
+      var filters = {};
+      filters['name'] = this.getCardName();
+      filters['searchCondition'] = this.getConditional();
+      filters['colors'] = this.getColors();
+      filters['type'] = this.getDropdownValueOf('#types');
+      filters['supertype'] = this.getDropdownValueOf('#supertypes');
+      filters['subtype'] = this.getDropdownValueOf('#subtypes');
+      filters['rarity'] = this.getDropdownValueOf('#rarity');
+      return filters;
+    }
+  }, {
+    key: "submit",
+    value: function submit() {
+      var _this = this;
+
+      //clear current errors close results and check for errors
+      $('p').remove('.error');
+      $('.ui.search.name').search('hide results');
+
+      if (!this.getColors().length) {
+        return $('#name-search').after('<p class="error">* You sould select at least one color *</p>');
+      } // get create query string
+
+
+      this.queryBuilder.buildQuery(this.getSelectedfilters(), 1); // empty previous displayed cards
+
+      $('#cards').empty(); //api call for new list
+
+      Object(_service_api__WEBPACK_IMPORTED_MODULE_0__["default"])(this.queryBuilder.currentQuery()).then(function (res) {
+        if (res.data.cards.length) {
+          _this.queryBuilder.setLastPage(res.data.lastPage);
+
+          $('.sidebar').removeClass('open');
+          $('#no-cards').remove();
+          console.log(res.data.cards); //appendToDOM(res.data.cards);
+        } else {
+          $('.card-display').append('<div id="no-cards">NO CARDS WERE FOUND</div>');
+        }
+      })["catch"](function (e) {
+        console.log(e);
+      });
+    }
+  }]);
+
+  return CardForm;
+}();
+
+/* harmony default export */ __webpack_exports__["default"] = (CardForm);
+
+/***/ }),
+
 /***/ "./resources/js/PagedQueryString/PagedQueryString.js":
 /*!***********************************************************!*\
   !*** ./resources/js/PagedQueryString/PagedQueryString.js ***!
@@ -2211,7 +2351,7 @@ var buildQueryString = function buildQueryString(queryObj) {
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _PagedQueryString_PagedQueryString__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./PagedQueryString/PagedQueryString */ "./resources/js/PagedQueryString/PagedQueryString.js");
 /* harmony import */ var _service_api__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./service/api */ "./resources/js/service/api.js");
-/* harmony import */ var _form_form__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./form/form */ "./resources/js/form/form.js");
+/* harmony import */ var _CardForm_CardForm__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./CardForm/CardForm */ "./resources/js/CardForm/CardForm.js");
 __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 
 
@@ -2222,12 +2362,6 @@ var getCards = function getCards(queryBuilder, setLastPage) {
   console.log(queryBuilder.currentQuery());
   Object(_service_api__WEBPACK_IMPORTED_MODULE_1__["default"])(queryBuilder.currentQuery()).then(function (res) {
     if (res.data.cards.length) {
-      if (setLastPage) {
-        setLastPage(res.data.lastPage);
-        $('.sidebar').removeClass('open');
-        $('#no-cards').remove();
-      }
-
       appendToDOM(res.data.cards);
     } else {
       $('.card-display').append('<div id="no-cards">NO CARDS WERE FOUND</div>');
@@ -2265,27 +2399,16 @@ var createCardDiv = function createCardDiv(card) {
 
 $(document).ready(function () {
   var queryBuilder = new _PagedQueryString_PagedQueryString__WEBPACK_IMPORTED_MODULE_0__["default"]();
+  var cardForm = new _CardForm_CardForm__WEBPACK_IMPORTED_MODULE_2__["default"](queryBuilder);
   var infiniteLoadReady = true;
   var selectedCard = null;
-  $('#submit').on('click', {
-    queryBuilder: queryBuilder
-  }, submitForm);
-  $('.ui.dropdown').dropdown({
-    clearable: true,
-    forceSelection: false
+  $('#submit').on('click', function (e) {
+    e.preventDefault();
+    cardForm.submit();
   });
   $('.open-btn').on('click', function () {
     $('.open-btn').toggleClass('open');
     $('.sidebar').toggleClass('open');
-  });
-  $('body').addClass('active');
-  $('.color-wrap').click(function () {
-    $(event.currentTarget).prop('selected', true);
-    $(event.currentTarget).toggleClass('active');
-  });
-  $('.radio').click(function () {
-    $('.radio-wrap.active').toggleClass('active');
-    $(event.currentTarget).closest('.radio-wrap').toggleClass('active');
   });
   $('.card-wrap').on('scroll', function (e) {
     var screenPos = e.target.scrollHeight - (e.target.scrollTop + e.target.offsetHeight);
@@ -2300,48 +2423,10 @@ $(document).ready(function () {
     }
   });
   $('#cards').on('click', '.magic-card img', function (e) {
-    setDisplayCard($(e.target).data('cardInfo'));
+    console.log(JSON.parse(decodeURIComponent($(e.target).data('cardInfo'))));
   });
-  $('.ui.search.name').search({
-    apiSettings: {
-      url: 'api/byname?name={query}',
-      type: 'customType'
-    },
-    onResultsAdd: function onResultsAdd(res) {
-      return $(res).each(function (i, ele) {
-        return $(ele).append('test');
-      });
-    },
-    fields: {
-      results: 'items',
-      title: 'name',
-      image: 'img',
-      url: 'html_url'
-    },
-    minCharacters: 3
-  });
+  $('body').addClass('active');
 });
-
-var submitForm = function submitForm(e) {
-  e.preventDefault(); // get query string
-
-  var filters = Object(_form_form__WEBPACK_IMPORTED_MODULE_2__["default"])();
-  $('p').remove('.error'); //build query
-
-  var queryBuilder = e.data.queryBuilder;
-  queryBuilder.buildQuery(filters, 1); //check that a color is selected
-
-  if (!filters.colors.length) {
-    return $('#name-search').after('<p class="error">* You sould select at least one color *</p>');
-  } // empty previous displayed cards
-
-
-  $('#cards').empty(); //api call for new list
-
-  getCards(queryBuilder, function (lastPage) {
-    return queryBuilder.setLastPage(lastPage);
-  });
-};
 
 var setDisplayCard = function setDisplayCard(e) {};
 
@@ -2374,47 +2459,6 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 //     cluster: process.env.MIX_PUSHER_APP_CLUSTER,
 //     forceTLS: true
 // });
-
-/***/ }),
-
-/***/ "./resources/js/form/form.js":
-/*!***********************************!*\
-  !*** ./resources/js/form/form.js ***!
-  \***********************************/
-/*! exports provided: getSelectedfilters, default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getSelectedfilters", function() { return getSelectedfilters; });
-var findChecked = function findChecked(tag) {
-  return $('.radio-wrap.active').attr('value');
-};
-
-var findColors = function findColors() {
-  var colors = [];
-  $('.color-wrap.active').each(function (i, ele) {
-    colors.push($(ele).attr('value'));
-  });
-  return colors;
-};
-
-var findSelectedDropdown = function findSelectedDropdown(dropdown) {
-  return $(dropdown).find('.selected.active').data('value');
-};
-
-var getSelectedfilters = function getSelectedfilters(currPage) {
-  var filters = {};
-  filters['name'] = $('#name-input').val().trim();
-  filters['searchCondition'] = findChecked('conditional');
-  filters['colors'] = findColors('colors');
-  filters['type'] = findSelectedDropdown('#types');
-  filters['supertype'] = findSelectedDropdown('#supertypes');
-  filters['subtype'] = findSelectedDropdown('#subtypes');
-  filters['rarity'] = findSelectedDropdown('#rarity');
-  return filters;
-};
-/* harmony default export */ __webpack_exports__["default"] = (getSelectedfilters);
 
 /***/ }),
 

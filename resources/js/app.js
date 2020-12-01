@@ -1,17 +1,13 @@
 require('./bootstrap');
 import PagedQueryString from './PagedQueryString/PagedQueryString';
 import sendRequest from './service/api';
-import getSelectedfilters from './form/form';
+import CardForm from './CardForm/CardForm';
+
 
 const getCards = (queryBuilder, setLastPage) => {
   console.log(queryBuilder.currentQuery());
   sendRequest(queryBuilder.currentQuery()).then((res)=> {
     if(res.data.cards.length){
-      if(setLastPage) {
-        setLastPage(res.data.lastPage);
-        $('.sidebar').removeClass('open');
-        $('#no-cards').remove();
-      }
       appendToDOM(res.data.cards);
     } else {
       $('.card-display').append('<div id="no-cards">NO CARDS WERE FOUND</div>');
@@ -57,32 +53,16 @@ const createCardDiv = (card) =>{
 
 $(document).ready(()=> {
   let queryBuilder = new PagedQueryString();
+  const cardForm = new CardForm(queryBuilder);
   let infiniteLoadReady = true;
   let selectedCard = null;
 
-  $('#submit').on('click', {queryBuilder}, submitForm);
-
-  $('.ui.dropdown').dropdown({
-    clearable: true,
-    forceSelection: false
-  });
+  $('#submit').on('click', (e) => {e.preventDefault(); cardForm.submit()});
 
   $('.open-btn').on('click',()=>{
     $('.open-btn').toggleClass('open');
     $('.sidebar').toggleClass('open');
   })
-
-  $('body').addClass('active');
-
-  $('.color-wrap').click(() =>{
-    $(event.currentTarget).prop('selected',true)
-    $(event.currentTarget).toggleClass('active');
-  });
-
-  $('.radio').click(() =>{
-    $('.radio-wrap.active').toggleClass('active');
-    $(event.currentTarget).closest('.radio-wrap').toggleClass('active');
-  });
 
   $('.card-wrap').on('scroll', (e) => {
     const screenPos = e.target.scrollHeight - (e.target.scrollTop + e.target.offsetHeight);
@@ -95,50 +75,11 @@ $(document).ready(()=> {
   });
 
   $('#cards').on('click', '.magic-card img', (e) => {
-    setDisplayCard($(e.target).data('cardInfo'));
+    console.log(JSON.parse(decodeURIComponent($(e.target).data('cardInfo'))));
   });
 
-  $('.ui.search.name').search({
-      apiSettings: {
-        url: 'api/byname?name={query}',
-        type: 'customType'
-      },
-      onResultsAdd: function(res){
-        return $(res).each((i,ele) => $(ele).append('test'));
-      },
-      fields: {
-        results: 'items',
-        title: 'name',
-        image: 'img',
-        url: 'html_url'
-      },
-      minCharacters: 3
-  });
-
+  $('body').addClass('active');
 });
-
-const submitForm = (e) => {
-  e.preventDefault();
-
-  // get query string
-  const filters = getSelectedfilters();
-  $('p').remove('.error');
-
-  //build query
-  const queryBuilder = e.data.queryBuilder;
-  queryBuilder.buildQuery(filters, 1);
-
-  //check that a color is selected
-  if(!filters.colors.length){
-    return $('#name-search').after('<p class="error">* You sould select at least one color *</p>');
-  }
-
-  // empty previous displayed cards
-  $('#cards').empty();
-
-  //api call for new list
-  getCards(queryBuilder, (lastPage) => queryBuilder.setLastPage(lastPage));
-}
 
 const setDisplayCard = (e) => {
 
