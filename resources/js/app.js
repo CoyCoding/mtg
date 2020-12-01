@@ -7,9 +7,11 @@ const getCards = (queryBuilder, setLastPage) => {
   console.log(queryBuilder.currentQuery());
   sendRequest(queryBuilder.currentQuery()).then((res)=> {
     if(res.data.cards.length){
-      if(setLastPage) setLastPage(res.data.lastPage);
-      $('.sidebar').removeClass('open');
-      $('#no-cards').remove();
+      if(setLastPage) {
+        setLastPage(res.data.lastPage);
+        $('.sidebar').removeClass('open');
+        $('#no-cards').remove();
+      }
       appendToDOM(res.data.cards);
     } else {
       $('.card-display').append('<div id="no-cards">NO CARDS WERE FOUND</div>');

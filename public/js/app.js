@@ -2222,9 +2222,12 @@ var getCards = function getCards(queryBuilder, setLastPage) {
   console.log(queryBuilder.currentQuery());
   Object(_service_api__WEBPACK_IMPORTED_MODULE_1__["default"])(queryBuilder.currentQuery()).then(function (res) {
     if (res.data.cards.length) {
-      if (setLastPage) setLastPage(res.data.lastPage);
-      $('.sidebar').removeClass('open');
-      $('#no-cards').remove();
+      if (setLastPage) {
+        setLastPage(res.data.lastPage);
+        $('.sidebar').removeClass('open');
+        $('#no-cards').remove();
+      }
+
       appendToDOM(res.data.cards);
     } else {
       $('.card-display').append('<div id="no-cards">NO CARDS WERE FOUND</div>');
