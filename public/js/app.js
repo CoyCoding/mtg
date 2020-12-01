@@ -2114,6 +2114,8 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 
 var CardForm = /*#__PURE__*/function () {
   function CardForm(queryBuilder) {
+    var _this = this;
+
     _classCallCheck(this, CardForm);
 
     this.queryBuilder = queryBuilder;
@@ -2148,6 +2150,10 @@ var CardForm = /*#__PURE__*/function () {
         url: 'html_url'
       },
       minCharacters: 3
+    });
+    this.submitBtn = $('#submit');
+    this.submitBtn.on('click', function (e) {
+      _this.submit(e);
     });
   }
 
@@ -2195,10 +2201,11 @@ var CardForm = /*#__PURE__*/function () {
     }
   }, {
     key: "submit",
-    value: function submit() {
-      var _this = this;
+    value: function submit(e) {
+      var _this2 = this;
 
-      //clear current errors close results and check for errors
+      e.preventDefault(); //clear current errors close results and check for errors
+
       $('p').remove('.error');
       $('.ui.search.name').search('hide results');
 
@@ -2213,7 +2220,7 @@ var CardForm = /*#__PURE__*/function () {
 
       Object(_service_api__WEBPACK_IMPORTED_MODULE_0__["default"])(this.queryBuilder.currentQuery()).then(function (res) {
         if (res.data.cards.length) {
-          _this.queryBuilder.setLastPage(res.data.lastPage);
+          _this2.queryBuilder.setLastPage(res.data.lastPage);
 
           $('.sidebar').removeClass('open');
           $('#no-cards').remove();
@@ -2402,10 +2409,6 @@ $(document).ready(function () {
   var cardForm = new _CardForm_CardForm__WEBPACK_IMPORTED_MODULE_2__["default"](queryBuilder);
   var infiniteLoadReady = true;
   var selectedCard = null;
-  $('#submit').on('click', function (e) {
-    e.preventDefault();
-    cardForm.submit();
-  });
   $('.open-btn').on('click', function () {
     $('.open-btn').toggleClass('open');
     $('.sidebar').toggleClass('open');

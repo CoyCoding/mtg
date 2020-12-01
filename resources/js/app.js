@@ -57,8 +57,6 @@ $(document).ready(()=> {
   let infiniteLoadReady = true;
   let selectedCard = null;
 
-  $('#submit').on('click', (e) => {e.preventDefault(); cardForm.submit()});
-
   $('.open-btn').on('click',()=>{
     $('.open-btn').toggleClass('open');
     $('.sidebar').toggleClass('open');

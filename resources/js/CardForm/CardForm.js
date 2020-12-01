@@ -33,6 +33,8 @@ class CardForm {
           },
           minCharacters: 3
     });
+    this.submitBtn = $('#submit')
+    this.submitBtn.on('click', (e) => {this.submit(e)});
   }
 
   getQueryBuilder(){
@@ -72,7 +74,8 @@ class CardForm {
     return filters;
   }
 
-  submit(){
+  submit(e){
+    e.preventDefault();
     //clear current errors close results and check for errors
     $('p').remove('.error');
     $('.ui.search.name').search('hide results');
