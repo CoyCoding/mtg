@@ -2113,7 +2113,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 
 
 var CardForm = /*#__PURE__*/function () {
-  function CardForm(queryBuilder) {
+  function CardForm(queryBuilder, cardGrid) {
     var _this = this;
 
     _classCallCheck(this, CardForm);
@@ -2155,6 +2155,7 @@ var CardForm = /*#__PURE__*/function () {
     this.submitBtn.on('click', function (e) {
       _this.submit(e);
     });
+    this.cardGrid = cardGrid;
   }
 
   _createClass(CardForm, [{
@@ -2224,7 +2225,9 @@ var CardForm = /*#__PURE__*/function () {
 
           $('.sidebar').removeClass('open');
           $('#no-cards').remove();
-          console.log(res.data.cards); //appendToDOM(res.data.cards);
+          console.log(res.data.cards);
+
+          _this2.cardGrid.append(res.data.cards);
         } else {
           $('.card-display').append('<div id="no-cards">NO CARDS WERE FOUND</div>');
         }
@@ -2238,6 +2241,132 @@ var CardForm = /*#__PURE__*/function () {
 }();
 
 /* harmony default export */ __webpack_exports__["default"] = (CardForm);
+
+/***/ }),
+
+/***/ "./resources/js/CardGrid/CardGrid.js":
+/*!*******************************************!*\
+  !*** ./resources/js/CardGrid/CardGrid.js ***!
+  \*******************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return CardGrid; });
+/* harmony import */ var _service_api__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../service/api */ "./resources/js/service/api.js");
+function _createForOfIteratorHelper(o, allowArrayLike) { var it; if (typeof Symbol === "undefined" || o[Symbol.iterator] == null) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = o[Symbol.iterator](); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+
+
+var CardGrid = /*#__PURE__*/function () {
+  function CardGrid(queryBuilder) {
+    var _this = this;
+
+    _classCallCheck(this, CardGrid);
+
+    this.cards = [];
+    this.ready = true;
+    this.grid = $('#cards');
+    this.grid.on('click', '.magic-card img', function (e) {
+      console.log(JSON.parse(decodeURIComponent($(e.target).data('cardInfo'))));
+    });
+    this.wrap = $('.card-wrap');
+    this.queryBuilder = queryBuilder;
+    this.wrap.on('scroll', function (e) {
+      var screenPos = e.target.scrollHeight - (e.target.scrollTop + e.target.offsetHeight);
+
+      if (screenPos < 600 && queryBuilder.getCurrPage() < queryBuilder.getLastPage() && _this.ready) {
+        queryBuilder.nextPage();
+        _this.ready = false;
+
+        _this.getCards();
+
+        setTimeout(function () {
+          _this.ready = true;
+        }, 2000);
+      }
+    });
+  }
+
+  _createClass(CardGrid, [{
+    key: "append",
+    value: function append(cards) {
+      //
+      var _iterator = _createForOfIteratorHelper(cards),
+          _step;
+
+      try {
+        for (_iterator.s(); !(_step = _iterator.n()).done;) {
+          var card = _step.value;
+          this.grid.append(createDOMCard(card));
+        }
+      } catch (err) {
+        _iterator.e(err);
+      } finally {
+        _iterator.f();
+      }
+
+      this.animate(cards.length);
+    }
+  }, {
+    key: "animate",
+    value: function animate(num) {
+      var self = this;
+
+      (function myLoop(i) {
+        setTimeout(function () {
+          console.log();
+          self.wrap.find('.magic-card').not('.here').first().addClass('here');
+          if (++i < num) myLoop(i);
+        }, 100);
+      })(0);
+    }
+  }, {
+    key: "getCards",
+    value: function getCards() {
+      var _this2 = this;
+
+      Object(_service_api__WEBPACK_IMPORTED_MODULE_0__["default"])(this.queryBuilder.currentQuery()).then(function (res) {
+        _this2.queryBuilder.setLastPage(res.data.lastPage);
+
+        console.log(res.data.cards);
+
+        _this2.append(res.data.cards);
+      })["catch"](function (e) {
+        console.log(e);
+      });
+    }
+  }]);
+
+  return CardGrid;
+}();
+
+
+
+var createDOMCard = function createDOMCard(card) {
+  var renderCardFront = function renderCardFront() {
+    var frontCardImage = "<img data-card-info=".concat(encodeURIComponent(JSON.stringify(card)), " class=\"").concat(!card.image_url ? "missing" : "", "\"src=\"").concat(card.image_url || '/img/mtg-back-sm.jpg', "\" alt=\"").concat(card.name, " card\">");
+
+    if (!card.image_url) {
+      frontCardImage += "<div class=\"missing-card\"><p>".concat(card.name, "</p><p>Missing Image</p></div>");
+    }
+
+    return frontCardImage;
+  };
+
+  return "<div class=\"magic-card\" key=\"".concat(card.id, "\">\n    <div class=\"magic-card-inner\">\n      <div class=\"magic-card-back\">\n        ").concat(renderCardFront(), "\n      </div>\n      <div class=\"magic-card-front\">\n        <img src=\"/img/mtg-back-sm.jpg\" alt=\"card back\">\n      </div>\n    </div>\n  </div>");
+};
 
 /***/ }),
 
@@ -2359,24 +2488,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _PagedQueryString_PagedQueryString__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./PagedQueryString/PagedQueryString */ "./resources/js/PagedQueryString/PagedQueryString.js");
 /* harmony import */ var _service_api__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./service/api */ "./resources/js/service/api.js");
 /* harmony import */ var _CardForm_CardForm__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./CardForm/CardForm */ "./resources/js/CardForm/CardForm.js");
+/* harmony import */ var _CardGrid_CardGrid__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./CardGrid/CardGrid */ "./resources/js/CardGrid/CardGrid.js");
 __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 
 
 
 
 
-var getCards = function getCards(queryBuilder, setLastPage) {
-  console.log(queryBuilder.currentQuery());
-  Object(_service_api__WEBPACK_IMPORTED_MODULE_1__["default"])(queryBuilder.currentQuery()).then(function (res) {
-    if (res.data.cards.length) {
-      appendToDOM(res.data.cards);
-    } else {
-      $('.card-display').append('<div id="no-cards">NO CARDS WERE FOUND</div>');
-    }
-  })["catch"](function (e) {
-    console.log(e);
-  });
-};
 
 var appendToDOM = function appendToDOM(cards) {
   var cardList = $('#cards');
@@ -2390,43 +2508,15 @@ var appendToDOM = function appendToDOM(cards) {
   // })(0);
 };
 
-var createCardDiv = function createCardDiv(card) {
-  var renderCardFront = function renderCardFront() {
-    var frontCardImage = "<img data-card-info=".concat(encodeURIComponent(JSON.stringify(card)), " class=\"").concat(!card.image_url ? "missing" : "", "\"src=\"").concat(card.image_url || '/img/mtg-back-sm.jpg', "\" alt=\"").concat(card.name, " card\">");
-
-    if (!card.image_url) {
-      frontCardImage += "<div class=\"missing-card\"><p>".concat(card.name, "</p><p>Missing Image</p></div>");
-    }
-
-    return frontCardImage;
-  };
-
-  return "<div class=\"magic-card\" key=\"".concat(card.id, "\">\n    <div class=\"magic-card-inner\">\n      <div class=\"magic-card-back\">\n        ").concat(renderCardFront(), "\n      </div>\n      <div class=\"magic-card-front\">\n        <img src=\"/img/mtg-back-sm.jpg\" alt=\"card back\">\n      </div>\n    </div>\n  </div>");
-};
-
 $(document).ready(function () {
   var queryBuilder = new _PagedQueryString_PagedQueryString__WEBPACK_IMPORTED_MODULE_0__["default"]();
-  var cardForm = new _CardForm_CardForm__WEBPACK_IMPORTED_MODULE_2__["default"](queryBuilder);
+  var cardGrid = new _CardGrid_CardGrid__WEBPACK_IMPORTED_MODULE_3__["default"](queryBuilder);
+  var cardForm = new _CardForm_CardForm__WEBPACK_IMPORTED_MODULE_2__["default"](queryBuilder, cardGrid);
   var infiniteLoadReady = true;
   var selectedCard = null;
   $('.open-btn').on('click', function () {
     $('.open-btn').toggleClass('open');
     $('.sidebar').toggleClass('open');
-  });
-  $('.card-wrap').on('scroll', function (e) {
-    var screenPos = e.target.scrollHeight - (e.target.scrollTop + e.target.offsetHeight);
-
-    if (screenPos < 600 && queryBuilder.getCurrPage() < queryBuilder.getLastPage() && infiniteLoadReady) {
-      queryBuilder.nextPage();
-      infiniteLoadReady = false;
-      getCards(queryBuilder);
-      setTimeout(function () {
-        infiniteLoadReady = true;
-      }, 2000);
-    }
-  });
-  $('#cards').on('click', '.magic-card img', function (e) {
-    console.log(JSON.parse(decodeURIComponent($(e.target).data('cardInfo'))));
   });
   $('body').addClass('active');
 });

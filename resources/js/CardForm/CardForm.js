@@ -1,7 +1,7 @@
 import sendRequest from '../service/api';
 
 class CardForm {
-  constructor(queryBuilder){
+  constructor(queryBuilder, cardGrid){
     this.queryBuilder = queryBuilder;
     this.colors = $('.color-wrap');
     this.colors.click(() =>{
@@ -35,6 +35,7 @@ class CardForm {
     });
     this.submitBtn = $('#submit')
     this.submitBtn.on('click', (e) => {this.submit(e)});
+    this.cardGrid = cardGrid;
   }
 
   getQueryBuilder(){
@@ -96,7 +97,7 @@ class CardForm {
         $('.sidebar').removeClass('open');
         $('#no-cards').remove();
         console.log(res.data.cards);
-        //appendToDOM(res.data.cards);
+        this.cardGrid.append(res.data.cards);
       } else {
         $('.card-display').append('<div id="no-cards">NO CARDS WERE FOUND</div>');
       }

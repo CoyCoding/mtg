@@ -311,6 +311,11 @@ body.no-fouc.active {
   filter: grayscale(1);
 }
 
+.body #cards .magic-card.here .magic-card-inner {
+  -webkit-animation: 0.5s slide-in-flip forwards;
+          animation: 0.5s slide-in-flip forwards;
+}
+
 .main {
   height: 100%;
   position: relative;
@@ -322,10 +327,9 @@ body.no-fouc.active {
   width: 100%;
   height: auto;
   text-align: center;
-  -webkit-animation: 1.5s slide-in-flip forwards;
-          animation: 1.5s slide-in-flip forwards;
   transform-style: preserve-3d;
   margin: 10px;
+  transform: translateX(100vw) rotateY(0deg);
 }
 
 .magic-card-front,
