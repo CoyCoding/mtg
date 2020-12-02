@@ -3,7 +3,7 @@ import PagedQueryString from './PagedQueryString/PagedQueryString';
 import sendRequest from './service/api';
 import CardForm from './CardForm/CardForm';
 import CardGrid from './CardGrid/CardGrid';
-
+import CardDisplaySection from './CardDisplaySection/CardDisplaySection';
 
 
 
@@ -22,10 +22,9 @@ const appendToDOM = (cards) => {
 
 $(document).ready(()=> {
   let queryBuilder = new PagedQueryString();
-  const cardGrid = new CardGrid(queryBuilder);
+  const cardDisplaySection = new CardDisplaySection();
+  const cardGrid = new CardGrid(queryBuilder, cardDisplaySection);
   const cardForm = new CardForm(queryBuilder, cardGrid);
-  let infiniteLoadReady = true;
-  let selectedCard = null;
 
   $('.open-btn').on('click',()=>{
     $('.open-btn').toggleClass('open');

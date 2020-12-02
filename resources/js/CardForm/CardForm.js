@@ -96,7 +96,6 @@ class CardForm {
         this.queryBuilder.setLastPage(res.data.lastPage);
         $('.sidebar').removeClass('open');
         $('#no-cards').remove();
-        console.log(res.data.cards);
         this.cardGrid.append(res.data.cards);
       } else {
         $('.card-display').append('<div id="no-cards">NO CARDS WERE FOUND</div>');

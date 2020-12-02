@@ -16,11 +16,21 @@
       <div class="main">
         @include('home/comps/formsidebar')
         <div class="body">
-          <div class="fixed-card-display">
-            <div class="">
+          <div class="fixed-card-display noise">
+            <div class="magic-card" key="17033">
+              <div class="magic-card-inner">
+                <div class="magic-card-back">
+                  <img src="/img/mtg-back-sm.jpg" alt="card back">
+                </div>
+                <div class="magic-card-front">
+                  <img src="/img/mtg-back-sm.jpg" alt="card back">
+                </div>
+              </div>
+            </div>
+            <div id="card-info">
             </div>
           </div>
-          <div class="card-display" onscroll="(e)=>console.log(e)">
+          <div class="card-display">
             <div class="card-wrap">
               <div id="cards">
 

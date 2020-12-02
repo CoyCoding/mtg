@@ -24,8 +24,65 @@ body{
     max-width: 400px;
     background: green;
     width: 100%;
+    overflow-y: scroll;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    .magic-card{
+      padding: 20px;
+      width: 100%;
+      .magic-card-inner{
+        transition: all .5s ease-in-out;
+        transform: rotateY(0deg);
+        margin: 0px;
+      }
+      img{
+        border-radius: 4%;
+        width: 100%;
+      }
+      &.flip{
+        .magic-card-inner{
+            transform: rotateY(180deg);
+            margin: 0px;
+        }
+      }
+    }
+    #card-info{
+      padding: 20px;
+      color: #1a1820;
+      width: 100%;
+      overflow: hidden;
+      transition: all .5s;
+      opacity: 1;
+      height: 0%;
+      .card-info-wrap{
+        background: #ffffff8c;
+        height: 100%;
+        width: 100%;
+        border-radius: 10px;
+        padding: 20px;
+      }
+      h2{
+        margin: 0;
+      }
+      h3{
+        margin: 0;
+      }
+      p{
+        margin-top: 10px;
+        font-size: 16px;
+      }
+      .power{
+        text-align: end;
+        font-weight: 700;
+      }
+      &.close{
+        max-height: 0px;
+        opacity: 0;
+      }
+    }
   }
-
   .card-display{
     background: url(/img/mtg-cardfinder.png), #1a1820;
     background-position: center;
@@ -71,6 +128,10 @@ body{
   }
 }
 
+
+
+
+
 .main{
   height: 100%;
   position: relative;
@@ -85,6 +146,7 @@ body{
   transform-style: preserve-3d;
   margin: 10px;
   transform: translateX(100vw) rotateY(0deg);
+  line-height: 0;
 }
 
 .magic-card-front, .magic-card-back {
@@ -92,6 +154,7 @@ body{
   height: 100%;
   -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
+  line-height: 0;
 }
 
 .magic-card-back {
@@ -141,6 +204,18 @@ body{
     transform: translateX(0vw) rotateY(180deg);
   }
 }
+
+@keyframes fade-in{
+  0%{
+    opacity: 0;
+    height: 0px;
+  }
+  100%{
+    opacity: 1;
+    height: 100%;
+  }
+}
+
 
 @media only screen and (max-width: 1200px){
   .body{

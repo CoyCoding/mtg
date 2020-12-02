@@ -2094,6 +2094,110 @@ process.umask = function() { return 0; };
 
 /***/ }),
 
+/***/ "./resources/js/CardDisplaySection/CardDisplaySection.js":
+/*!***************************************************************!*\
+  !*** ./resources/js/CardDisplaySection/CardDisplaySection.js ***!
+  \***************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _service_api__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../service/api */ "./resources/js/service/api.js");
+/* harmony import */ var _helper_buildDOMCard__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../helper/buildDOMCard */ "./resources/js/helper/buildDOMCard.js");
+/* harmony import */ var _helper_buildDOMCardInfo__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../helper/buildDOMCardInfo */ "./resources/js/helper/buildDOMCardInfo.js");
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+
+
+
+
+var CardDisplaySection = /*#__PURE__*/function () {
+  function CardDisplaySection(card) {
+    _classCallCheck(this, CardDisplaySection);
+
+    this.flipcard = card ? card.flipcard : null;
+    this.card = this.card;
+    this.display = $('.fixed-card-display');
+    this.cardBack = this.display.find('.magic-card-front > img');
+    this.cardFace = this.display.find('.magic-card-back > img');
+    this.background = null;
+  }
+
+  _createClass(CardDisplaySection, [{
+    key: "addCard",
+    value: function addCard(card) {
+      var _this = this;
+
+      // remove old Back to replace possible Flip cards
+      this.removeImg(this.cardBack);
+      this.shrinkCardText(); // reflip card over
+
+      this.display.find('.magic-card').removeClass('flip'); // set front card image or no image
+      //if there is already a card timeout for animations
+
+      if (this.card) {
+        setTimeout(function () {
+          _this.appendNewImages(card);
+
+          _this.display.find('.magic-card').addClass('flip');
+
+          _this.replaceCardText(card);
+        }, 500);
+      } else {
+        this.appendNewImages(card);
+        this.display.find('.magic-card').addClass('flip');
+        this.replaceCardText(card);
+      }
+
+      this.card = card;
+    }
+  }, {
+    key: "removeImg",
+    value: function removeImg(ele) {
+      return ele.attr("src", "/img/mtg-back-sm.jpg");
+    }
+  }, {
+    key: "appendNewImages",
+    value: function appendNewImages(card) {
+      if (!card.image_url) {
+        this.removeImg(this.cardFace).addClass('no-image');
+      } else {
+        this.cardFace.attr("src", "".concat(card.image_url)).removeClass('no-image');
+      }
+    }
+  }, {
+    key: "replaceCardText",
+    value: function replaceCardText(card) {
+      this.display.find('#card-info').empty();
+      this.display.find('#card-info').first().append(Object(_helper_buildDOMCardInfo__WEBPACK_IMPORTED_MODULE_2__["default"])(card));
+      this.display.find('#card-info').first().css({
+        "height": "100%",
+        "opacity": "1"
+      });
+      ;
+    }
+  }, {
+    key: "shrinkCardText",
+    value: function shrinkCardText() {
+      this.display.find('#card-info').first().css({
+        "height": "0px",
+        "opacity": "0"
+      });
+    }
+  }]);
+
+  return CardDisplaySection;
+}();
+
+/* harmony default export */ __webpack_exports__["default"] = (CardDisplaySection);
+
+/***/ }),
+
 /***/ "./resources/js/CardForm/CardForm.js":
 /*!*******************************************!*\
   !*** ./resources/js/CardForm/CardForm.js ***!
@@ -2225,7 +2329,6 @@ var CardForm = /*#__PURE__*/function () {
 
           $('.sidebar').removeClass('open');
           $('#no-cards').remove();
-          console.log(res.data.cards);
 
           _this2.cardGrid.append(res.data.cards);
         } else {
@@ -2255,6 +2358,7 @@ var CardForm = /*#__PURE__*/function () {
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return CardGrid; });
 /* harmony import */ var _service_api__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../service/api */ "./resources/js/service/api.js");
+/* harmony import */ var _helper_buildDOMCard__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../helper/buildDOMCard */ "./resources/js/helper/buildDOMCard.js");
 function _createForOfIteratorHelper(o, allowArrayLike) { var it; if (typeof Symbol === "undefined" || o[Symbol.iterator] == null) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = o[Symbol.iterator](); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
 
 function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
@@ -2269,20 +2373,24 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 
 
 
+
 var CardGrid = /*#__PURE__*/function () {
-  function CardGrid(queryBuilder) {
+  function CardGrid(queryBuilder, cardDisplaySection) {
     var _this = this;
 
     _classCallCheck(this, CardGrid);
 
     this.cards = [];
     this.ready = true;
+    this.cardDisplaySection = cardDisplaySection;
+    this.queryBuilder = queryBuilder;
     this.grid = $('#cards');
     this.grid.on('click', '.magic-card img', function (e) {
+      _this.cardDisplaySection.addCard(JSON.parse(decodeURIComponent($(e.target).data('cardInfo'))));
+
       console.log(JSON.parse(decodeURIComponent($(e.target).data('cardInfo'))));
     });
     this.wrap = $('.card-wrap');
-    this.queryBuilder = queryBuilder;
     this.wrap.on('scroll', function (e) {
       var screenPos = e.target.scrollHeight - (e.target.scrollTop + e.target.offsetHeight);
 
@@ -2309,7 +2417,7 @@ var CardGrid = /*#__PURE__*/function () {
       try {
         for (_iterator.s(); !(_step = _iterator.n()).done;) {
           var card = _step.value;
-          this.grid.append(createDOMCard(card));
+          this.grid.append(Object(_helper_buildDOMCard__WEBPACK_IMPORTED_MODULE_1__["default"])(card));
         }
       } catch (err) {
         _iterator.e(err);
@@ -2326,7 +2434,6 @@ var CardGrid = /*#__PURE__*/function () {
 
       (function myLoop(i) {
         setTimeout(function () {
-          console.log();
           self.wrap.find('.magic-card').not('.here').first().addClass('here');
           if (++i < num) myLoop(i);
         }, 100);
@@ -2340,8 +2447,6 @@ var CardGrid = /*#__PURE__*/function () {
       Object(_service_api__WEBPACK_IMPORTED_MODULE_0__["default"])(this.queryBuilder.currentQuery()).then(function (res) {
         _this2.queryBuilder.setLastPage(res.data.lastPage);
 
-        console.log(res.data.cards);
-
         _this2.append(res.data.cards);
       })["catch"](function (e) {
         console.log(e);
@@ -2353,20 +2458,6 @@ var CardGrid = /*#__PURE__*/function () {
 }();
 
 
-
-var createDOMCard = function createDOMCard(card) {
-  var renderCardFront = function renderCardFront() {
-    var frontCardImage = "<img data-card-info=".concat(encodeURIComponent(JSON.stringify(card)), " class=\"").concat(!card.image_url ? "missing" : "", "\"src=\"").concat(card.image_url || '/img/mtg-back-sm.jpg', "\" alt=\"").concat(card.name, " card\">");
-
-    if (!card.image_url) {
-      frontCardImage += "<div class=\"missing-card\"><p>".concat(card.name, "</p><p>Missing Image</p></div>");
-    }
-
-    return frontCardImage;
-  };
-
-  return "<div class=\"magic-card\" key=\"".concat(card.id, "\">\n    <div class=\"magic-card-inner\">\n      <div class=\"magic-card-back\">\n        ").concat(renderCardFront(), "\n      </div>\n      <div class=\"magic-card-front\">\n        <img src=\"/img/mtg-back-sm.jpg\" alt=\"card back\">\n      </div>\n    </div>\n  </div>");
-};
 
 /***/ }),
 
@@ -2489,7 +2580,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _service_api__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./service/api */ "./resources/js/service/api.js");
 /* harmony import */ var _CardForm_CardForm__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./CardForm/CardForm */ "./resources/js/CardForm/CardForm.js");
 /* harmony import */ var _CardGrid_CardGrid__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./CardGrid/CardGrid */ "./resources/js/CardGrid/CardGrid.js");
+/* harmony import */ var _CardDisplaySection_CardDisplaySection__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./CardDisplaySection/CardDisplaySection */ "./resources/js/CardDisplaySection/CardDisplaySection.js");
 __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
+
 
 
 
@@ -2510,10 +2603,9 @@ var appendToDOM = function appendToDOM(cards) {
 
 $(document).ready(function () {
   var queryBuilder = new _PagedQueryString_PagedQueryString__WEBPACK_IMPORTED_MODULE_0__["default"]();
-  var cardGrid = new _CardGrid_CardGrid__WEBPACK_IMPORTED_MODULE_3__["default"](queryBuilder);
+  var cardDisplaySection = new _CardDisplaySection_CardDisplaySection__WEBPACK_IMPORTED_MODULE_4__["default"]();
+  var cardGrid = new _CardGrid_CardGrid__WEBPACK_IMPORTED_MODULE_3__["default"](queryBuilder, cardDisplaySection);
   var cardForm = new _CardForm_CardForm__WEBPACK_IMPORTED_MODULE_2__["default"](queryBuilder, cardGrid);
-  var infiniteLoadReady = true;
-  var selectedCard = null;
   $('.open-btn').on('click', function () {
     $('.open-btn').toggleClass('open');
     $('.sidebar').toggleClass('open');
@@ -2552,6 +2644,58 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 //     cluster: process.env.MIX_PUSHER_APP_CLUSTER,
 //     forceTLS: true
 // });
+
+/***/ }),
+
+/***/ "./resources/js/helper/buildDOMCard.js":
+/*!*********************************************!*\
+  !*** ./resources/js/helper/buildDOMCard.js ***!
+  \*********************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+var createDOMCard = function createDOMCard(card) {
+  var renderCardFront = function renderCardFront() {
+    var frontCardImage = "<img data-card-info=".concat(encodeURIComponent(JSON.stringify(card)), " class=\"").concat(!card.image_url ? "missing" : "", "\"src=\"").concat(card.image_url || '/img/mtg-back-sm.jpg', "\" alt=\"").concat(card.name, " card\">");
+
+    if (!card.image_url) {
+      frontCardImage += "<div class=\"missing-card\"><p>".concat(card.name, "</p><p>Missing Image</p></div>");
+    }
+
+    return frontCardImage;
+  };
+
+  return "<div class=\"magic-card\" key=\"".concat(card.id, "\">\n    <div class=\"magic-card-inner\">\n      <div class=\"magic-card-back\">\n        ").concat(renderCardFront(), "\n      </div>\n      <div class=\"magic-card-front\">\n        <img src=\"/img/mtg-back-sm.jpg\" alt=\"card back\">\n      </div>\n    </div>\n  </div>");
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (createDOMCard);
+
+/***/ }),
+
+/***/ "./resources/js/helper/buildDOMCardInfo.js":
+/*!*************************************************!*\
+  !*** ./resources/js/helper/buildDOMCardInfo.js ***!
+  \*************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+var createDOMCardInfo = function createDOMCardInfo(card) {
+  var renderPowerTough = function renderPowerTough() {
+    if (card.power && card.toughness) {
+      return "<div class=\"power\"><p>".concat(card.power, "/").concat(card.toughness, "</p></div>");
+    }
+
+    return '';
+  };
+
+  return "<div class=\"card-info-wrap\">\n      <h2>".concat(card.name, "</h2>\n      <h3>").concat(card.type_text, "</h3>\n      ").concat(card.text ? "<p>".concat(card.text, "</p>") : '', "\n      ").concat(renderPowerTough(), "\n    </div>");
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (createDOMCardInfo);
 
 /***/ }),
 
