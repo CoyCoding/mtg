@@ -1,21 +1,23 @@
 import sendRequest from '../service/api';
 import buildDOMCard from '../helper/buildDOMCard';
 import buildDOMCardInfo from '../helper/buildDOMCardInfo';
+import DisplayColors from './DisplayColors';
 
 class CardDisplaySection {
-  constructor(card){
+  constructor(card = null){
     this.flipcard = card ? card.flipcard : null;
-    this.card = this.card;
+    this.card = card;
     this.display = $('.fixed-card-display');
     this.cardBack = this.display.find('.magic-card-front > img');
     this.cardFace = this.display.find('.magic-card-back > img');
-    this.background = null;
   }
 
   addCard(card){
+    if(this.card && card.id == this.card.id) return;
     // remove old Back to replace possible Flip cards
     this.removeImg(this.cardBack);
     this.shrinkCardText();
+    this.display.css({background: DisplayColors.getDisplayColors(card.colors)})
     // reflip card over
     this.display.find('.magic-card').removeClass('flip');
 
@@ -52,11 +54,19 @@ class CardDisplaySection {
   replaceCardText(card){
     this.display.find('#card-info').empty();
     this.display.find('#card-info').first().append(buildDOMCardInfo(card));
-    this.display.find('#card-info').first().css({"height": "100%", "opacity": "1"});;
+    this.display.find('#card-info').first().addClass('open');
   }
 
   shrinkCardText(){
-    this.display.find('#card-info').first().css({"height": "0px", "opacity": "0"});
+    this.display.find('#card-info').first().removeClass('open');
+  }
+
+  reset(){
+    this.shrinkCardText();
+    this.removeImg(this.cardBack);
+    this.removeImg(this.cardFace);
+    this.display.find('.magic-card').removeClass('flip');
+    this.display.css({background: DisplayColors.getDisplayColors(['reset'])})
   }
 }
 

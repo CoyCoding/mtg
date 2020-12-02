@@ -1,7 +1,7 @@
 import sendRequest from '../service/api';
 
 class CardForm {
-  constructor(queryBuilder, cardGrid){
+  constructor(queryBuilder, cardGrid, cardDisplaySection){
     this.queryBuilder = queryBuilder;
     this.colors = $('.color-wrap');
     this.colors.click(() =>{
@@ -36,6 +36,7 @@ class CardForm {
     this.submitBtn = $('#submit')
     this.submitBtn.on('click', (e) => {this.submit(e)});
     this.cardGrid = cardGrid;
+    this.cardDisplaySection = cardDisplaySection;
   }
 
   getQueryBuilder(){
@@ -89,6 +90,8 @@ class CardForm {
 
     // empty previous displayed cards
     $('#cards').empty();
+    console.log(this.cardDisplaySection.cardFace)
+    this.cardDisplaySection.reset();
 
     //api call for new list
     sendRequest(this.queryBuilder.currentQuery()).then((res)=> {

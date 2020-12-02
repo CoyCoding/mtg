@@ -263,7 +263,7 @@ body.no-fouc.active {
 
 .body .fixed-card-display {
   max-width: 400px;
-  background: green;
+  background: #1a1820;
   width: 100%;
   overflow-y: scroll;
   display: flex;
@@ -294,17 +294,16 @@ body.no-fouc.active {
 }
 
 .body .fixed-card-display #card-info {
-  padding: 20px;
+  padding: 0px 20px 20px;
   color: #1a1820;
   width: 100%;
-  overflow: hidden;
   transition: all 0.5s;
-  opacity: 1;
+  opacity: 0;
   height: 0%;
 }
 
 .body .fixed-card-display #card-info .card-info-wrap {
-  background: #ffffff8c;
+  background: #ffffffd1;
   height: 100%;
   width: 100%;
   border-radius: 10px;
@@ -329,9 +328,9 @@ body.no-fouc.active {
   font-weight: 700;
 }
 
-.body .fixed-card-display #card-info.close {
-  max-height: 0px;
-  opacity: 0;
+.body .fixed-card-display #card-info.open {
+  height: 100%;
+  opacity: 1;
 }
 
 .body .card-display {
@@ -362,7 +361,6 @@ body.no-fouc.active {
   width: 20%;
   line-height: 0;
   display: flex;
-  justify-content: center;
   align-items: center;
 }
 
@@ -472,30 +470,6 @@ body.no-fouc.active {
 
   100% {
     transform: translateX(0vw) rotateY(180deg);
-  }
-}
-
-@-webkit-keyframes fade-in {
-  0% {
-    opacity: 0;
-    height: 0px;
-  }
-
-  100% {
-    opacity: 1;
-    height: 100%;
-  }
-}
-
-@keyframes fade-in {
-  0% {
-    opacity: 0;
-    height: 0px;
-  }
-
-  100% {
-    opacity: 1;
-    height: 100%;
   }
 }
 

@@ -2106,6 +2106,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _service_api__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../service/api */ "./resources/js/service/api.js");
 /* harmony import */ var _helper_buildDOMCard__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../helper/buildDOMCard */ "./resources/js/helper/buildDOMCard.js");
 /* harmony import */ var _helper_buildDOMCardInfo__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../helper/buildDOMCardInfo */ "./resources/js/helper/buildDOMCardInfo.js");
+/* harmony import */ var _DisplayColors__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./DisplayColors */ "./resources/js/CardDisplaySection/DisplayColors.js");
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
@@ -2116,16 +2117,18 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 
 
 
+
 var CardDisplaySection = /*#__PURE__*/function () {
-  function CardDisplaySection(card) {
+  function CardDisplaySection() {
+    var card = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
+
     _classCallCheck(this, CardDisplaySection);
 
     this.flipcard = card ? card.flipcard : null;
-    this.card = this.card;
+    this.card = card;
     this.display = $('.fixed-card-display');
     this.cardBack = this.display.find('.magic-card-front > img');
     this.cardFace = this.display.find('.magic-card-back > img');
-    this.background = null;
   }
 
   _createClass(CardDisplaySection, [{
@@ -2133,9 +2136,13 @@ var CardDisplaySection = /*#__PURE__*/function () {
     value: function addCard(card) {
       var _this = this;
 
-      // remove old Back to replace possible Flip cards
+      if (this.card && card.id == this.card.id) return; // remove old Back to replace possible Flip cards
+
       this.removeImg(this.cardBack);
-      this.shrinkCardText(); // reflip card over
+      this.shrinkCardText();
+      this.display.css({
+        background: _DisplayColors__WEBPACK_IMPORTED_MODULE_3__["default"].getDisplayColors(card.colors)
+      }); // reflip card over
 
       this.display.find('.magic-card').removeClass('flip'); // set front card image or no image
       //if there is already a card timeout for animations
@@ -2175,18 +2182,22 @@ var CardDisplaySection = /*#__PURE__*/function () {
     value: function replaceCardText(card) {
       this.display.find('#card-info').empty();
       this.display.find('#card-info').first().append(Object(_helper_buildDOMCardInfo__WEBPACK_IMPORTED_MODULE_2__["default"])(card));
-      this.display.find('#card-info').first().css({
-        "height": "100%",
-        "opacity": "1"
-      });
-      ;
+      this.display.find('#card-info').first().addClass('open');
     }
   }, {
     key: "shrinkCardText",
     value: function shrinkCardText() {
-      this.display.find('#card-info').first().css({
-        "height": "0px",
-        "opacity": "0"
+      this.display.find('#card-info').first().removeClass('open');
+    }
+  }, {
+    key: "reset",
+    value: function reset() {
+      this.shrinkCardText();
+      this.removeImg(this.cardBack);
+      this.removeImg(this.cardFace);
+      this.display.find('.magic-card').removeClass('flip');
+      this.display.css({
+        background: _DisplayColors__WEBPACK_IMPORTED_MODULE_3__["default"].getDisplayColors(['reset'])
       });
     }
   }]);
@@ -2195,6 +2206,41 @@ var CardDisplaySection = /*#__PURE__*/function () {
 }();
 
 /* harmony default export */ __webpack_exports__["default"] = (CardDisplaySection);
+
+/***/ }),
+
+/***/ "./resources/js/CardDisplaySection/DisplayColors.js":
+/*!**********************************************************!*\
+  !*** ./resources/js/CardDisplaySection/DisplayColors.js ***!
+  \**********************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+var colors = {
+  green: '#355c3b',
+  red: '#923b23',
+  white: '#c7c0ad',
+  blue: '#05a5c8',
+  black: '#10130d',
+  colorless: '#86a0ac',
+  multi: '#d5c07f',
+  reset: '#1a1820',
+  backgroundNoise: 'url(data:image/png;base64,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)'
+};
+var DisplayColors = {
+  getDisplayColors: function getDisplayColors(colorArray) {
+    if (colorArray.length > 2) {
+      return "".concat(colors.backgroundNoise, ", ").concat(colors.multi);
+    } else if (colorArray.length === 2) {
+      return "".concat(colors.backgroundNoise, ", linear-gradient(90deg,").concat(colors[colorArray[0].toLowerCase()], ", ").concat(colors[colorArray[1].toLowerCase()]);
+    } else {
+      return "".concat(colors.backgroundNoise, ", ").concat(colors[colorArray[0].toLowerCase()]);
+    }
+  }
+};
+/* harmony default export */ __webpack_exports__["default"] = (DisplayColors);
 
 /***/ }),
 
@@ -2217,7 +2263,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 
 
 var CardForm = /*#__PURE__*/function () {
-  function CardForm(queryBuilder, cardGrid) {
+  function CardForm(queryBuilder, cardGrid, cardDisplaySection) {
     var _this = this;
 
     _classCallCheck(this, CardForm);
@@ -2260,6 +2306,7 @@ var CardForm = /*#__PURE__*/function () {
       _this.submit(e);
     });
     this.cardGrid = cardGrid;
+    this.cardDisplaySection = cardDisplaySection;
   }
 
   _createClass(CardForm, [{
@@ -2321,7 +2368,9 @@ var CardForm = /*#__PURE__*/function () {
 
       this.queryBuilder.buildQuery(this.getSelectedfilters(), 1); // empty previous displayed cards
 
-      $('#cards').empty(); //api call for new list
+      $('#cards').empty();
+      console.log(this.cardDisplaySection.cardFace);
+      this.cardDisplaySection.reset(); //api call for new list
 
       Object(_service_api__WEBPACK_IMPORTED_MODULE_0__["default"])(this.queryBuilder.currentQuery()).then(function (res) {
         if (res.data.cards.length) {
@@ -2588,32 +2637,17 @@ __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 
 
 
-
-var appendToDOM = function appendToDOM(cards) {
-  var cardList = $('#cards');
-  cards.forEach(function (card) {
-    cardList.append(createCardDiv(card));
-  }); // (function myLoop(i) {
-  //   setTimeout(function() {
-  //     cardList.append(createCardDiv(cards[i]));
-  //     if (++i < cards.length) myLoop(i);
-  //   }, 100)
-  // })(0);
-};
-
 $(document).ready(function () {
   var queryBuilder = new _PagedQueryString_PagedQueryString__WEBPACK_IMPORTED_MODULE_0__["default"]();
   var cardDisplaySection = new _CardDisplaySection_CardDisplaySection__WEBPACK_IMPORTED_MODULE_4__["default"]();
   var cardGrid = new _CardGrid_CardGrid__WEBPACK_IMPORTED_MODULE_3__["default"](queryBuilder, cardDisplaySection);
-  var cardForm = new _CardForm_CardForm__WEBPACK_IMPORTED_MODULE_2__["default"](queryBuilder, cardGrid);
+  var cardForm = new _CardForm_CardForm__WEBPACK_IMPORTED_MODULE_2__["default"](queryBuilder, cardGrid, cardDisplaySection);
   $('.open-btn').on('click', function () {
     $('.open-btn').toggleClass('open');
     $('.sidebar').toggleClass('open');
   });
   $('body').addClass('active');
 });
-
-var setDisplayCard = function setDisplayCard(e) {};
 
 /***/ }),
 
