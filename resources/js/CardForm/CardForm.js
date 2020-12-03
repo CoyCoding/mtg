@@ -90,7 +90,6 @@ class CardForm {
 
     // empty previous displayed cards
     $('#cards').empty();
-    console.log(this.cardDisplaySection.cardFace)
     this.cardDisplaySection.reset();
 
     //api call for new list

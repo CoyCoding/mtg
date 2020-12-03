@@ -2139,6 +2139,7 @@ var CardDisplaySection = /*#__PURE__*/function () {
       if (this.card && card.id == this.card.id) return; // remove old Back to replace possible Flip cards
 
       this.removeImg(this.cardBack);
+      this.removeImg(this.cardFace);
       this.shrinkCardText();
       this.display.css({
         background: _DisplayColors__WEBPACK_IMPORTED_MODULE_3__["default"].getDisplayColors(card.colors)
@@ -2369,7 +2370,6 @@ var CardForm = /*#__PURE__*/function () {
       this.queryBuilder.buildQuery(this.getSelectedfilters(), 1); // empty previous displayed cards
 
       $('#cards').empty();
-      console.log(this.cardDisplaySection.cardFace);
       this.cardDisplaySection.reset(); //api call for new list
 
       Object(_service_api__WEBPACK_IMPORTED_MODULE_0__["default"])(this.queryBuilder.currentQuery()).then(function (res) {

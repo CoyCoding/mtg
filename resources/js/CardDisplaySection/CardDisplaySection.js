@@ -16,6 +16,7 @@ class CardDisplaySection {
     if(this.card && card.id == this.card.id) return;
     // remove old Back to replace possible Flip cards
     this.removeImg(this.cardBack);
+    this.removeImg(this.cardFace);
     this.shrinkCardText();
     this.display.css({background: DisplayColors.getDisplayColors(card.colors)})
     // reflip card over
