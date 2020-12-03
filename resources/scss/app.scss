@@ -303,3 +303,15 @@ body{
 
   }
 }
+
+@media only screen and (max-width: 767px){
+  .body{
+    .card-wrap{
+        #cards{
+          .magic-card{
+            width: 50%;
+          }
+        }
+    }
+  }
+}
