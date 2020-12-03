@@ -2201,6 +2201,11 @@ var CardDisplaySection = /*#__PURE__*/function () {
         background: _DisplayColors__WEBPACK_IMPORTED_MODULE_3__["default"].getDisplayColors(['reset'])
       });
     }
+  }, {
+    key: "open",
+    value: function open() {
+      this.display.toggleClass('open');
+    }
   }]);
 
   return CardDisplaySection;
@@ -2382,6 +2387,7 @@ var CardForm = /*#__PURE__*/function () {
           _this2.cardGrid.append(res.data.cards);
         } else {
           $('.card-display').append('<div id="no-cards">NO CARDS WERE FOUND</div>');
+          $('#name-search').after('<p class="error">* NO CARDS WERE FOUND *</p>');
         }
       })["catch"](function (e) {
         console.log(e);
@@ -2437,7 +2443,7 @@ var CardGrid = /*#__PURE__*/function () {
     this.grid.on('click', '.magic-card img', function (e) {
       _this.cardDisplaySection.addCard(JSON.parse(decodeURIComponent($(e.target).data('cardInfo'))));
 
-      console.log(JSON.parse(decodeURIComponent($(e.target).data('cardInfo'))));
+      _this.cardDisplaySection.open();
     });
     this.wrap = $('.card-wrap');
     this.wrap.on('scroll', function (e) {

@@ -69,6 +69,10 @@ class CardDisplaySection {
     this.display.find('.magic-card').removeClass('flip');
     this.display.css({background: DisplayColors.getDisplayColors(['reset'])})
   }
+
+  open(){
+    this.display.toggleClass('open');
+  }
 }
 
 export default CardDisplaySection;

@@ -101,6 +101,7 @@ class CardForm {
         this.cardGrid.append(res.data.cards);
       } else {
         $('.card-display').append('<div id="no-cards">NO CARDS WERE FOUND</div>');
+        $('#name-search').after('<p class="error">* NO CARDS WERE FOUND *</p>')
       }
     }).catch(e=>{
       console.log(e);

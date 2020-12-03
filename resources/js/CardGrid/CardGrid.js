@@ -10,7 +10,7 @@ export default class CardGrid{
     this.grid = $('#cards');
     this.grid.on('click', '.magic-card img', (e) => {
       this.cardDisplaySection.addCard(JSON.parse(decodeURIComponent($(e.target).data('cardInfo'))));
-      console.log(JSON.parse(decodeURIComponent($(e.target).data('cardInfo'))));
+      this.cardDisplaySection.open();
     });
     this.wrap = $('.card-wrap');
     this.wrap.on('scroll', (e) => {
