@@ -2753,7 +2753,7 @@ var createDOMCardInfo = function createDOMCardInfo(card) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 var sendRequest = function sendRequest(query) {
-  return axios.get("http://localhost:8000/api/get?".concat(query));
+  return axios.get("/api/get?".concat(query));
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (sendRequest);

@@ -1,5 +1,5 @@
 const sendRequest = (query) => {
-  return axios.get(`http://localhost:8000/api/get?${query}`);
+  return axios.get(`/api/get?${query}`);
 }
 
 export default sendRequest;
