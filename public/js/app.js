@@ -2646,6 +2646,10 @@ $(document).ready(function () {
     $('.open-btn').toggleClass('open');
     $('.sidebar').toggleClass('open');
   });
+  $('.card-open-btn').on('click', function () {
+    $('.card-open-btn').toggleClass('open');
+    $('.fixed-card-display').toggleClass('open');
+  });
   $('body').addClass('active');
 });
 

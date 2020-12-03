@@ -84,6 +84,13 @@
     </div>
   </form>
   <div class="top-tri">
-    <div class="open-btn"><div class="wrap"><i class="angle double right icon"></div></i></div>
+    <div class="open-btn">
+      <div class="wrap">
+        <i class="angle double right icon"></i>
+      </div>
+      <div class="wrap">
+        <i class="angle double right icon"></i>
+      </div>
+    </div>
   </div>
 </div>

@@ -14,6 +14,9 @@ $(document).ready(()=> {
     $('.open-btn').toggleClass('open');
     $('.sidebar').toggleClass('open');
   })
-
+  $('.card-open-btn').on('click',()=>{
+    $('.card-open-btn').toggleClass('open');
+    $('.fixed-card-display').toggleClass('open');
+  })
   $('body').addClass('active');
 });
