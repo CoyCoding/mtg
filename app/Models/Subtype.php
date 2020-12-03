@@ -13,8 +13,6 @@ class Subtype extends NameOnlyModel
     protected $guarded = ['id'];
     protected $hidden = ['pivot', 'created_at', 'updated_at'];
 
-    use HasFactory;
-
     public function cards()
     {
       return $this->belongsToMany('App\Models\Card', 'card_subtypes');
