@@ -4,7 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Models\Card;
 use App\Helpers\QueryStringParser;
-
+use App\Http\Controllers\Api\CardController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -24,6 +24,12 @@ use App\Helpers\QueryStringParser;
 //  -subtype string
 //  -supertype string
 //  -searchCondition string
+Route::apiResource('cards', CardController::class, [
+       'only' => [
+           'index'
+       ]
+]);
+
 Route::get('/get', function (Request $request) {
   try{
     $query = QueryStringParser::Card($request->query());
