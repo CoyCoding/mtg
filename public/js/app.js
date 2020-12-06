@@ -2340,9 +2340,13 @@ var CardForm = /*#__PURE__*/function () {
       return colors;
     }
   }, {
+    key: "getDropdownValuesOf",
+    value: function getDropdownValuesOf(dropdown) {}
+  }, {
     key: "getDropdownValueOf",
     value: function getDropdownValueOf(dropdown) {
-      return $(dropdown).find('.selected.active').data('value');
+      console.log($(dropdown).dropdown("get value"));
+      return $(dropdown).dropdown("get value");
     }
   }, {
     key: "getSelectedfilters",

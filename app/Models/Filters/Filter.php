@@ -23,8 +23,7 @@ abstract class Filter
      *
      * @param \Illuminate\Http\Request $request
      */
-    public function __construct(Request $request)
-    {
+    public function __construct(Request $request){
         $this->request = $request;
     }
 
@@ -33,8 +32,7 @@ abstract class Filter
      *
      * @return array
      */
-    protected function getFilterMethods()
-    {
+    protected function getFilterMethods(){
         $class  = new ReflectionClass(static::class);
 
         $methods = array_map(function($method) use ($class) {
@@ -53,8 +51,7 @@ abstract class Filter
      *
      * @return array
      */
-    protected function getFilters()
-    {
+    protected function getFilters(){
         return array_filter($this->request->only($this->getFilterMethods()));
     }
 
@@ -64,8 +61,8 @@ abstract class Filter
      * @param \Illuminate\Database\Eloquent\Builder $builder
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function apply(Builder $builder)
-    {
+    public function apply(Builder $builder){
+      error_log(print_r($this->getFilters()));
         $this->builder = $builder;
         foreach ($this->getFilters() as $name => $value) {
             if (method_exists($this, $name)) {
@@ -80,4 +77,5 @@ abstract class Filter
 
         return $this->builder;
     }
+
 }

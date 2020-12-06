@@ -59,8 +59,13 @@ class CardForm {
     return colors;
   }
 
+  getDropdownValuesOf(dropdown){
+
+  }
+
   getDropdownValueOf(dropdown){
-    return $(dropdown).find('.selected.active').data('value');
+    console.log($(dropdown).dropdown("get value"));
+    return $(dropdown).dropdown("get value");
   }
 
   getSelectedfilters(currPage){

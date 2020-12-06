@@ -42,36 +42,36 @@
       </div>
     </div>
     <div id="dropdowns">
-      <div class="dropdown-wraps" id="types">
+      <div class="dropdown-wraps" >
         <label for="type">Types</label><br>
-        <select class="ui selection search dropdown">
+        <select id="types" class="ui selection search dropdown" multiple="">
           <option name="type" value=""></option>
           @foreach($data['types'] as $type)
             <option name="type" value="{{$type->name}}">{{$type->name}}</option>
           @endforeach
         </select>
       </div>
-      <div class="dropdown-wraps" id="subtypes">
+      <div class="dropdown-wraps" >
         <label for="Subtypes">Subtypes</label><br>
-        <select class="ui selection dropdown">
+        <select id="subtypes" class="ui selection dropdown">
           <option value=""></option>
           @foreach($data['subtypes'] as $subtype)
             <option name="subtype" value="{{$subtype->name}}">{{$subtype->name}}</option>
           @endforeach
         </select>
       </div>
-      <div class="dropdown-wraps" id="supertypes">
+      <div class="dropdown-wraps" >
         <label for="supertypes">Supertypes</label><br>
-        <select class="ui selection dropdown">
+        <select id="supertypes" class="ui selection dropdown">
           <option value=""></option>
           @foreach($data['supertypes'] as $supertype)
             <option name="supertype" value="{{$supertype->name}}">{{$supertype->name}}</option>
           @endforeach
         </select>
       </div>
-      <div class="dropdown-wraps" id="rarity">
+      <div class="dropdown-wraps" >
         <label for="rarity">Rarity</label><br>
-        <select class="ui selection dropdown">
+        <select id="rarity" class="ui selection dropdown">
           <option value=""></option>
           @foreach($data['rarities'] as $rarity)
             <option name="supertype" value="{{$rarity->name}}">{{$rarity->name}}</option>
