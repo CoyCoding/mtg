@@ -38,6 +38,7 @@ abstract class Filter
         $class  = new ReflectionClass(static::class);
 
         $methods = array_map(function($method) use ($class) {
+
             if ($method->class === $class->getName()) {
                 return $method->name;
             }
@@ -66,11 +67,11 @@ abstract class Filter
     public function apply(Builder $builder)
     {
         $this->builder = $builder;
-
         foreach ($this->getFilters() as $name => $value) {
             if (method_exists($this, $name)) {
                 if ($value) {
-                    $this->$name($value);
+                    // some filters are dependent on the other filters
+                    $this->$name($value, $this->request);
                 } else {
                     $this->$name();
                 }

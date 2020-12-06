@@ -5,10 +5,11 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Filters\CardFilter;
+use App\Models\Card;
 
 class CardController extends Controller
 {
-    // 
+    //
     // /**
     //  * ArticleController constructor.
     //  *
@@ -18,6 +19,7 @@ class CardController extends Controller
     // {
     //
     // }
+
     /**
      * Display a listing of the resource.
      *
@@ -25,7 +27,7 @@ class CardController extends Controller
      */
     public function index(CardFilter $filter)
     {
-        return 'test';
+        return Card::filter($filter)->with('flipcard')->paginate(30);
     }
 
     /**

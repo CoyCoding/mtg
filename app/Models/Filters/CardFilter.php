@@ -2,56 +2,89 @@
 
 namespace App\Models\Filters;
 
-use App\Models\Tag;
+use App\Models\Color;
 use App\Models\User;
 
 class CardFilter extends Filter
 {
     /**
-     * Filter by author username.
-     * Get all the articles by the user with given username.
+     * Filter by card Color.
+     * Get all the Cards based on conditional and colors.
      *
      * @param $username
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    protected function author($username)
+    protected function colors($colors, $query)
     {
-        $user = User::whereUsername($username)->first();
-
-        $userId = $user ? $user->id : null;
-
-        return $this->builder->whereUserId($userId);
+        if($query->searchCondition == 'and'){
+          return $this->builder->containsColors($colors);
+        } else if($query->searchCondition == 'only'){
+          return $this->builder->onlyColors($colors);
+        }else if($query->searchCondition == 'or'){
+          return $this->builder->bothColors($colors);
+        } else {
+          return $this->builder;
+        }
     }
 
     /**
-     * Filter by favorited username.
-     * Get all the articles favorited by the user with given username.
-     *
-     * @param $username
-     * @return \Illuminate\Database\Eloquent\Builder
-     */
-    protected function favorited($username)
-    {
-        $user = User::whereUsername($username)->first();
+    * returns query for all cards that have any of the selected colors
+    *
+    * ex. inupt [blue,black]
+    * return blue-black, blue, and black.
+    *  @param $username
+    *  @return \Illuminate\Database\Eloquent\Builder
+    */
+    protected function bothColors($q, $colorsToFind =[]){
+      $colors = Color::get()->pluck('name')->toArray();
+      $colorsToRemove = array_udiff($colors, $colorsToFind,'strcasecmp');
 
-        $articleIds = $user ? $user->favorites()->pluck('id')->toArray() : [];
+      $this->builder->whereHas('colors', function($query) use($colorsToFind){
+        $query->whereIn('name',  $colorsToFind);
+      });
 
-        return $this->builder->whereIn('id', $articleIds);
+      $this->builder->whereDoesntHave('colors', function($query) use($colorsToRemove){
+        $query->whereIn('name', $colorsToRemove);
+      });
+
+      return $this->builder;
     }
 
-    /**
-     * Filter by tag name.
-     * Get all the articles tagged by the given tag name.
-     *
-     * @param $name
-     * @return \Illuminate\Database\Eloquent\Builder
-     */
-    protected function tag($name)
-    {
-        $tag = Tag::whereName($name)->first();
-
-        $articleIds = $tag ? $tag->articles()->pluck('article_id')->toArray() : [];
-
-        return $this->builder->whereIn('id', $articleIds);
+    // returns query for cards that contain all of the selected colors
+    //
+    // This query will include those that have other colors as as well
+    // ex. inupt [blue,black]
+    // return blue-black, blue-black-red, blue-black-white ect.
+    //
+    protected function containsColors($q, $nameArr =[]){
+      foreach($nameArr as $color){
+        $this->builder->whereHas('colors', function ($query) use($color){
+          $query->where('name', $color);
+        });
+      }
+      return $this->builder;
     }
+
+    // Retuns query-Cards that only have selected colors
+    protected function onlyColors($q, $colorsToFind = []){
+      $colors = Color::get()->pluck('name')->toArray();
+      $colorsToRemove = array_udiff($colors, $colorsToFind,'strcasecmp');
+
+      // Filters out ALL cards if it has chosen color
+      $this->builder->whereDoesntHave('colors', function($query) use($colorsToRemove){
+        $query->whereIn('name', $colorsToRemove);
+      });
+
+      // Must be foreach not whereIn
+      // Otherwise we get both colors seprate
+      // ex. [red-white] returns only red-php_strip_whitespace
+      foreach($colorsToFind as $color){
+        $this->builder->whereHas('colors', function ($query) use($color){
+          $query->where('name', $color);
+        });
+      }
+
+      return $this->builder;
+    }
+
 }

@@ -2377,6 +2377,7 @@ var CardForm = /*#__PURE__*/function () {
       $('#cards').empty();
       this.cardDisplaySection.reset(); //api call for new list
 
+      console.log(this.queryBuilder.currentQuery());
       Object(_service_api__WEBPACK_IMPORTED_MODULE_0__["default"])(this.queryBuilder.currentQuery()).then(function (res) {
         if (res.data.cards.length) {
           _this2.queryBuilder.setLastPage(res.data.lastPage);

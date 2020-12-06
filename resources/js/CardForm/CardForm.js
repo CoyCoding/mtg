@@ -93,6 +93,7 @@ class CardForm {
     this.cardDisplaySection.reset();
 
     //api call for new list
+    console.log(this.queryBuilder.currentQuery());
     sendRequest(this.queryBuilder.currentQuery()).then((res)=> {
       if(res.data.cards.length){
         this.queryBuilder.setLastPage(res.data.lastPage);

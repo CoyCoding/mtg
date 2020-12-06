@@ -4,11 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Filters\Filterable;
 use Exception;
 
 class Card extends Model
 {
-    use HasFactory;
+    use HasFactory, Filterable;
 
     protected $guarded = ['id'];
     protected $hidden = ['flipcard_id', 'rarity_id', 'updated_at', 'created_at'];
