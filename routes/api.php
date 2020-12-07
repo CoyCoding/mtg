@@ -44,7 +44,7 @@ Route::get('/get', function (Request $request) {
       'cards' => $pagedCards->getCollection()->map(function($card) {return $card->format();})
     );
   } catch(Exception $e) {
-    return $e->messageBag();
+    return $e;
   }
 });
 

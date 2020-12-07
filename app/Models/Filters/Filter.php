@@ -62,7 +62,6 @@ abstract class Filter
      * @return \Illuminate\Database\Eloquent\Builder
      */
     public function apply(Builder $builder){
-      error_log(print_r($this->getFilters()));
         $this->builder = $builder;
         foreach ($this->getFilters() as $name => $value) {
             if (method_exists($this, $name)) {

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Filters\CardFilter;
 use App\Models\Card;
+use App\Http\Resources\CardCollection;
 
 class CardController extends Controller
 {
@@ -27,7 +28,7 @@ class CardController extends Controller
      */
     public function index(CardFilter $filter)
     {
-        return Card::filter($filter)->with('flipcard')->paginate(30);
+        return new CardCollection(Card::filter($filter)->with('flipcard')->paginate(30));
     }
 
     /**
