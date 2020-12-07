@@ -8,8 +8,10 @@ export default class CardGrid{
     this.cardDisplaySection = cardDisplaySection;
     this.queryBuilder = queryBuilder;
     this.grid = $('#cards');
-    this.grid.on('click', '.magic-card img', (e) => {
-      this.cardDisplaySection.addCard(JSON.parse(decodeURIComponent($(e.target).data('cardInfo'))));
+    this.grid.on('click', '.magic-card-back', (e) => {
+      const cardInfo = $(e.target).closest('.magic-card').data('cardInfo');
+      console.log(cardInfo)
+      this.cardDisplaySection.addCard(JSON.parse(decodeURIComponent(cardInfo)));
       this.cardDisplaySection.open();
     });
     this.wrap = $('.card-wrap');

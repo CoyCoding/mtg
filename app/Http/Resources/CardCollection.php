@@ -41,7 +41,12 @@ class CardCollection extends ResourceCollection
     {
       return [
           'cards' => $this->collection,
-          'pageInfo' => $this->pagination
+          'total' => $this->pagination['total'],
+          'currentPage' => $this->pagination['currentPage'],
+          'lastPage' => $this->pagination['lastPage'],
+          'count' => $this->pagination['count'],
+          'perPage' => $this->pagination['perPage'],
+
       ];
     }
 }

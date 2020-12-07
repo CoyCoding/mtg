@@ -2172,10 +2172,10 @@ var CardDisplaySection = /*#__PURE__*/function () {
   }, {
     key: "appendNewImages",
     value: function appendNewImages(card) {
-      if (!card.image_url) {
+      if (!card.imageUrl) {
         this.removeImg(this.cardFace).addClass('no-image');
       } else {
-        this.cardFace.attr("src", "".concat(card.image_url)).removeClass('no-image');
+        this.cardFace.attr("src", "".concat(card.imageUrl)).removeClass('no-image');
       }
     }
   }, {
@@ -2381,7 +2381,6 @@ var CardForm = /*#__PURE__*/function () {
       $('#cards').empty();
       this.cardDisplaySection.reset(); //api call for new list
 
-      console.log(this.queryBuilder.currentQuery());
       Object(_service_api__WEBPACK_IMPORTED_MODULE_0__["default"])(this.queryBuilder.currentQuery()).then(function (res) {
         if (res.data.cards.length) {
           _this2.queryBuilder.setLastPage(res.data.lastPage);
@@ -2445,8 +2444,11 @@ var CardGrid = /*#__PURE__*/function () {
     this.cardDisplaySection = cardDisplaySection;
     this.queryBuilder = queryBuilder;
     this.grid = $('#cards');
-    this.grid.on('click', '.magic-card img', function (e) {
-      _this.cardDisplaySection.addCard(JSON.parse(decodeURIComponent($(e.target).data('cardInfo'))));
+    this.grid.on('click', '.magic-card-back', function (e) {
+      var cardInfo = $(e.target).closest('.magic-card').data('cardInfo');
+      console.log(cardInfo);
+
+      _this.cardDisplaySection.addCard(JSON.parse(decodeURIComponent(cardInfo)));
 
       _this.cardDisplaySection.open();
     });
@@ -2662,6 +2664,9 @@ $(document).ready(function () {
     $('.fixed-card-display').toggleClass('open');
   });
   $('body').addClass('active');
+  $(document).on('click', function (e) {
+    return console.log(e.target);
+  });
 });
 
 /***/ }),
@@ -2707,16 +2712,16 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 __webpack_require__.r(__webpack_exports__);
 var createDOMCard = function createDOMCard(card) {
   var renderCardFront = function renderCardFront() {
-    var frontCardImage = "<img data-card-info=".concat(encodeURIComponent(JSON.stringify(card)), " class=\"").concat(!card.image_url ? "missing" : "", "\"src=\"").concat(card.image_url || '/img/mtg-back-sm.jpg', "\" alt=\"").concat(card.name, " card\">");
+    var frontCardImage = "<img class=\"".concat(!card.imageUrl ? "missing" : "", "\"src=\"").concat(card.imageUrl || '/img/mtg-back-sm.jpg', "\" alt=\"").concat(card.name, " card\">");
 
-    if (!card.image_url) {
+    if (!card.imageUrl) {
       frontCardImage += "<div class=\"missing-card\"><p>".concat(card.name, "</p><p>Missing Image</p></div>");
     }
 
     return frontCardImage;
   };
 
-  return "<div class=\"magic-card\" key=\"".concat(card.id, "\">\n    <div class=\"magic-card-inner\">\n      <div class=\"magic-card-back\">\n        ").concat(renderCardFront(), "\n      </div>\n      <div class=\"magic-card-front\">\n        <img src=\"/img/mtg-back-sm.jpg\" alt=\"card back\">\n      </div>\n    </div>\n  </div>");
+  return "<div class=\"magic-card\" data-card-info=".concat(encodeURIComponent(JSON.stringify(card)), " key=\"").concat(card.id, "\">\n    <div class=\"magic-card-inner\">\n      <div class=\"magic-card-back\">\n        ").concat(renderCardFront(), "\n      </div>\n      <div class=\"magic-card-front\">\n        <img src=\"/img/mtg-back-sm.jpg\" alt=\"card back\">\n      </div>\n    </div>\n  </div>");
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (createDOMCard);

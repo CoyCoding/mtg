@@ -19,4 +19,5 @@ $(document).ready(()=> {
     $('.fixed-card-display').toggleClass('open');
   })
   $('body').addClass('active');
+  $(document).on('click', (e) => console.log(e.target))
 });

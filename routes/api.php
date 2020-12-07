@@ -24,29 +24,11 @@ use App\Http\Controllers\Api\CardController;
 //  -subtype string
 //  -supertype string
 //  -searchCondition string
-Route::apiResource('cards', CardController::class, [
+Route::apiResource('get', CardController::class, [
        'only' => [
            'index'
        ]
 ]);
-
-Route::get('/get', function (Request $request) {
-  try{
-    $query = QueryStringParser::Card($request->query());
-
-    $pagedCards = Card::filterColorsBy($query['colors'], $query['searchCondition'])
-      ->hasColumnId('rarity', $query['rarity'])->hasColumnId('types', $query['type'])
-      ->hasColumnId('subtypes', $query['subtype'])->hasColumnId('supertypes', $query['supertype'])->hasName($query['name'])->with('flipcard')->paginate(30);
-
-    return array(
-      'currentPage' => $pagedCards->currentPage(),
-      'lastPage' => $pagedCards->lastPage(),
-      'cards' => $pagedCards->getCollection()->map(function($card) {return $card->format();})
-    );
-  } catch(Exception $e) {
-    return $e;
-  }
-});
 
 Route::get('/byname', function(Request $request){
   $query = QueryStringParser::Card($request->query());

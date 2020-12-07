@@ -45,10 +45,10 @@ class CardDisplaySection {
   }
 
   appendNewImages(card){
-    if(!card.image_url){
+    if(!card.imageUrl){
       this.removeImg(this.cardFace).addClass('no-image');
     } else {
-      this.cardFace.attr("src",`${card.image_url}`).removeClass('no-image');
+      this.cardFace.attr("src",`${card.imageUrl}`).removeClass('no-image');
     }
   }
 
