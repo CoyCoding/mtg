@@ -7,7 +7,7 @@ const createDOMCardInfo = (card) =>{
   }
   return `<div class="card-info-wrap">
       <h2>${card.name}</h2>
-      <h3>${card.type_text}</h3>
+      <h3>${card.typeText}</h3>
       ${card.text ? `<p>${card.text}</p>` : ''}
       ${renderPowerTough()}
     </div>`

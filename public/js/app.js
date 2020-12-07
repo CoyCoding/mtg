@@ -2746,7 +2746,7 @@ var createDOMCardInfo = function createDOMCardInfo(card) {
     return '';
   };
 
-  return "<div class=\"card-info-wrap\">\n      <h2>".concat(card.name, "</h2>\n      <h3>").concat(card.type_text, "</h3>\n      ").concat(card.text ? "<p>".concat(card.text, "</p>") : '', "\n      ").concat(renderPowerTough(), "\n    </div>");
+  return "<div class=\"card-info-wrap\">\n      <h2>".concat(card.name, "</h2>\n      <h3>").concat(card.typeText, "</h3>\n      ").concat(card.text ? "<p>".concat(card.text, "</p>") : '', "\n      ").concat(renderPowerTough(), "\n    </div>");
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (createDOMCardInfo);
